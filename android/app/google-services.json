@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "435618052412",
+    "project_id": "sate-social-db",
+    "storage_bucket": "sate-social-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435618052412:android:f2b6e3fe398e75857cc639",
+        "android_client_info": {
+          "package_name": "com.satesocial.sate_social"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaBl9p_gx8jEEa3jrmghjeMvdNKk5FSGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
