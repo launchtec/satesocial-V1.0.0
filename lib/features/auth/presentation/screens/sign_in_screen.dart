@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+import 'package:sate_social/core/util/dimensions.dart';
 
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/use_cases/sign_in_use_case.dart';
@@ -73,13 +75,18 @@ class _SignInViewState extends State<SignInView> {
         },
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeDefault, horizontal: Dimensions.paddingSizeExtraLarge),
             child: Column(
               children: [
                 TextFormField(
                   key: const Key('signIn_emailInput_textField'),
                   decoration: InputDecoration(
-                    labelText: 'Email',
+                    contentPadding: const EdgeInsets.all(16),
+                    hintText: 'Email',
+                    hintStyle: const TextStyle(fontSize: 14),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                     errorText: state.emailStatus == EmailStatus.invalid
                         ? 'Invalid email'
                         : null,
@@ -91,11 +98,17 @@ class _SignInViewState extends State<SignInView> {
                     });
                   },
                 ),
+                const SizedBox(height: Dimensions.paddingSizeDefault),
                 TextFormField(
                   key: const Key('signIn_passwordInput_textField'),
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    contentPadding: const EdgeInsets.all(16),
+                    hintText: 'Password',
+                    hintStyle: const TextStyle(fontSize: 14),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                     errorText: state.passwordStatus == PasswordStatus.invalid
                         ? 'Invalid password'
                         : null,
@@ -104,17 +117,26 @@ class _SignInViewState extends State<SignInView> {
                     context.read<SignInCubit>().passwordChanged(value);
                   },
                 ),
-                const SizedBox(height: 8.0),
-                ElevatedButton(
-                  key: const Key('signIn_continue_elevatedButton'),
-                  onPressed: context.read<SignInCubit>().state.formStatus ==
-                      FormStatus.submissionInProgress
-                      ? null
-                      : () {
-                    context.read<SignInCubit>().signIn();
-                  },
-                  child: const Text('Sign In'),
-                ),
+                const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+                Center(
+                    child: SizedBox(
+                        width: context.width / 2,
+                        child: ElevatedButton(
+                          key: const Key('signIn_continue_elevatedButton'),
+                          onPressed:
+                              context.read<SignInCubit>().state.formStatus ==
+                                      FormStatus.submissionInProgress
+                                  ? null
+                                  : () {
+                                      context.read<SignInCubit>().signIn();
+                                    },
+                          child: const Text('Sign In'),
+                        ))),
+                const SizedBox(height: Dimensions.paddingSizeMiddleSmall),
+                InkWell(
+                    child: const Text('Forgot Password',
+                        style: TextStyle(color: Colors.blueAccent)),
+                    onTap: () {})
               ],
             ),
           );

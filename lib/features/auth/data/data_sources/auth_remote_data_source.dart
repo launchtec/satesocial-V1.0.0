@@ -13,5 +13,9 @@ abstract class AuthRemoteDataSource {
     required String password,
   });
 
+  Future<bool> recoveryPassword({
+    required String email
+  });
+
   Future<void> signOut();
 }

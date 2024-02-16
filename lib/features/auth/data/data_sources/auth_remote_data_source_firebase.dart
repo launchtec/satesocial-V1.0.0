@@ -65,6 +65,16 @@ class AuthRemoteDataSourceFirebase implements AuthRemoteDataSource {
   }
 
   @override
+  Future<bool> recoveryPassword({required String email}) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      return true;
+    } catch (error) {
+      throw Exception('Recovery password: $error');
+    }
+  }
+
+  @override
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();

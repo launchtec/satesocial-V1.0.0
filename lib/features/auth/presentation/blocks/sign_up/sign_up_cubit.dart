@@ -18,6 +18,14 @@ class SignUpCubit extends Cubit<SignUpState> {
   })  : _signUpUseCase = signUpUseCase,
         super(const SignUpState());
 
+  void nameChanged(String name) {
+    emit(
+      state.copyWith(
+        name: name,
+      ),
+    );
+  }
+
   void emailChanged(String value) {
     try {
       Email email = Email((email) => email..value = value);
@@ -46,6 +54,46 @@ class SignUpCubit extends Cubit<SignUpState> {
     }
   }
 
+  void genderChanged(String gender) {
+    emit(
+      state.copyWith(
+        gender: gender,
+      ),
+    );
+  }
+
+  void ethnicityChanged(String ethnicity) {
+    emit(
+      state.copyWith(
+        ethnicity: ethnicity,
+      ),
+    );
+  }
+
+  void sexualityChanged(String sexuality) {
+    emit(
+      state.copyWith(
+        sexuality: sexuality,
+      ),
+    );
+  }
+
+  void openToConnectToChanged(String openToConnectTo) {
+    emit(
+      state.copyWith(
+        openToConnectTo: openToConnectTo,
+      ),
+    );
+  }
+
+  void howDidYouKnowAboutUsChanged(String howDidYouKnowAboutUs) {
+    emit(
+      state.copyWith(
+        howDidYouKnowAboutUs: howDidYouKnowAboutUs,
+      ),
+    );
+  }
+
   Future<void> signUp() async {
     if (!(state.emailStatus == EmailStatus.valid) ||
         !(state.passwordStatus == PasswordStatus.valid)) {
@@ -57,7 +105,13 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(state.copyWith(formStatus: FormStatus.submissionInProgress));
     try {
       await _signUpUseCase(
-        SignUpParams(email: state.email!, password: state.password!),
+        SignUpParams(
+            name: state.name!,
+            email: state.email!,
+            password: state.password!,
+            gender: state.gender!,
+            howDidYouKnowAboutUs: state.howDidYouKnowAboutUs!
+        ),
       );
       emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
     } catch (err) {
