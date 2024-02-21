@@ -11,6 +11,7 @@ class SignUpState extends Equatable {
   final String? sexuality;
   final String? openToConnectTo;
   final String? howDidYouKnowAboutUs;
+  final bool? confirmRealPerson;
   final EmailStatus emailStatus;
   final PasswordStatus passwordStatus;
   final FormStatus formStatus;
@@ -26,6 +27,7 @@ class SignUpState extends Equatable {
     this.sexuality,
     this.openToConnectTo,
     this.howDidYouKnowAboutUs,
+    this.confirmRealPerson,
     this.emailStatus = EmailStatus.unknown,
     this.passwordStatus = PasswordStatus.unknown,
     this.formStatus = FormStatus.initial,
@@ -42,6 +44,7 @@ class SignUpState extends Equatable {
     String? sexuality,
     String? openToConnectTo,
     String? howDidYouKnowAboutUs,
+    bool? confirmRealPerson,
     EmailStatus? emailStatus,
     PasswordStatus? passwordStatus,
     FormStatus? formStatus,
@@ -57,6 +60,7 @@ class SignUpState extends Equatable {
       sexuality: sexuality ?? this.sexuality,
       openToConnectTo: openToConnectTo ?? this.openToConnectTo,
       howDidYouKnowAboutUs: howDidYouKnowAboutUs ?? this.howDidYouKnowAboutUs,
+      confirmRealPerson: confirmRealPerson ?? this.confirmRealPerson,
       emailStatus: emailStatus ?? this.emailStatus,
       passwordStatus: passwordStatus ?? this.passwordStatus,
       formStatus: formStatus ?? this.formStatus,
@@ -69,6 +73,11 @@ class SignUpState extends Equatable {
     email,
     password,
     gender,
+    age,
+    height,
+    ethnicity,
+    sexuality,
+    openToConnectTo,
     howDidYouKnowAboutUs,
     emailStatus,
     passwordStatus,

@@ -54,6 +54,22 @@ class SignUpCubit extends Cubit<SignUpState> {
     }
   }
 
+  void ageChanged(int age) {
+    emit(
+      state.copyWith(
+        age: age,
+      ),
+    );
+  }
+
+  void heightChanged(int height) {
+    emit(
+      state.copyWith(
+        height: height,
+      ),
+    );
+  }
+
   void genderChanged(String gender) {
     emit(
       state.copyWith(
@@ -94,6 +110,14 @@ class SignUpCubit extends Cubit<SignUpState> {
     );
   }
 
+  void confirmRealPersonChanged(bool confirmRealPerson) {
+    emit(
+      state.copyWith(
+        confirmRealPerson: confirmRealPerson,
+      ),
+    );
+  }
+
   Future<void> signUp() async {
     if (!(state.emailStatus == EmailStatus.valid) ||
         !(state.passwordStatus == PasswordStatus.valid)) {
@@ -110,7 +134,13 @@ class SignUpCubit extends Cubit<SignUpState> {
             email: state.email!,
             password: state.password!,
             gender: state.gender!,
-            howDidYouKnowAboutUs: state.howDidYouKnowAboutUs!
+            age: state.age!,
+            height: state.height,
+            ethnicity: state.ethnicity,
+            sexuality: state.sexuality!,
+            openToConnectTo: state.openToConnectTo!,
+            howDidYouKnowAboutUs: state.howDidYouKnowAboutUs,
+            confirmRealPerson: state.confirmRealPerson!
         ),
       );
       emit(state.copyWith(formStatus: FormStatus.submissionSuccess));

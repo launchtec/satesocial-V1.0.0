@@ -3,6 +3,7 @@ import 'package:sate_social/core/data/models/app_user.dart';
 
 import '../../domain/entities/auth_user.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../../domain/use_cases/sign_up_use_case.dart';
 import '../data_sources/auth_local_data_source.dart';
 import '../data_sources/auth_remote_data_source.dart';
 
@@ -32,14 +33,26 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthUser> signUp({
-    required String email,
-    required String password,
+    required SignUpParams signUpParams,
   }) async {
     final authModel = await remoteDataSource.signUpWithEmailAndPassword(
-      email: email,
-      password: password,
+      email: signUpParams.email.value,
+      password: signUpParams.password.value,
     );
-    firestoreDataSource.addUser(AppUser(id: authModel.id, name: name, age: age, profilePhotoPath: profilePhotoPath, bio: bio));
+    firestoreDataSource.addUser(AppUser(
+        id: authModel.id,
+        name: signUpParams.name,
+        email: signUpParams.email.value,
+        age: signUpParams.age,
+        gender: signUpParams.gender,
+        sexuality: signUpParams.sexuality,
+        openToConnectTo: signUpParams.openToConnectTo,
+        height: signUpParams.height,
+        ethnicity: signUpParams.ethnicity,
+        howDidYouKnowAboutUs: signUpParams.howDidYouKnowAboutUs,
+        confirmRealPerson: signUpParams.confirmRealPerson,
+        avatarUrl: null,
+    ));
 
     localDataSource.write(key: 'user', value: authModel);
 
@@ -59,6 +72,11 @@ class AuthRepositoryImpl implements AuthRepository {
     localDataSource.write(key: 'user', value: authModel);
 
     return authModel.toEntity();
+  }
+
+  @override
+  Future<bool> recoveryPass({required String email}) async {
+    return await remoteDataSource.recoveryPassword(email: email);
   }
 
   @override

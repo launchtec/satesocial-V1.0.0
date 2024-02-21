@@ -11,8 +11,7 @@ class SignUpUseCase {
   Future<AuthUser> call(SignUpParams params) async {
     try {
       AuthUser authUser = await authRepository.signUp(
-        email: params.email.value,
-        password: params.password.value,
+        signUpParams: params,
       );
       return authUser;
     } on ArgumentError catch (error) {
@@ -31,6 +30,7 @@ class SignUpParams {
   final String gender;
   final String sexuality;
   final String openToConnectTo;
+  final bool confirmRealPerson;
   final int? height;
   final String? ethnicity;
   final String? howDidYouKnowAboutUs;
@@ -43,6 +43,7 @@ class SignUpParams {
     required this.gender,
     required this.sexuality,
     required this.openToConnectTo,
+    required this.confirmRealPerson,
     this.height,
     this.ethnicity,
     this.howDidYouKnowAboutUs,

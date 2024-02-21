@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/core/util/dimensions.dart';
 
+import '../../../../core/route/route_helper.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/use_cases/sign_in_use_case.dart';
 import '../blocks/email_status.dart';
@@ -136,7 +137,8 @@ class _SignInViewState extends State<SignInView> {
                 InkWell(
                     child: const Text('Forgot Password',
                         style: TextStyle(color: Colors.blueAccent)),
-                    onTap: () {})
+                    onTap: () => Get.toNamed(RouteHelper
+                        .getRecoveryPassRoute()))
               ],
             ),
           );
