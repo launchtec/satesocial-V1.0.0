@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:sate_social/features/auth/domain/use_cases/recovery_pass_use_case.dart';
 import 'package:sate_social/features/auth/presentation/blocks/recovery_pass/recovery_pass_cubit.dart';
 
@@ -96,7 +97,22 @@ class _RecoveryPassViewState extends State<RecoveryPassView> {
                       context.read<RecoveryPassCubit>().emailChanged(value);
                     });
                   },
-                )
+                ),
+                const SizedBox(height: Dimensions.paddingSizeExtraLarge),
+                Center(
+                    child: SizedBox(
+                        width: context.width / 2,
+                        child: ElevatedButton(
+                          key: const Key('recoveryPass_continue_elevatedButton'),
+                          onPressed:
+                          context.read<RecoveryPassCubit>().state.formStatus ==
+                              FormStatus.submissionInProgress
+                              ? null
+                              : () {
+                            context.read<RecoveryPassCubit>().accountRecovery();
+                          },
+                          child: const Text('Send Recovery Link'),
+                        ))),
               ]));
         }));
   }

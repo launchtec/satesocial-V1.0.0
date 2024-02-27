@@ -67,7 +67,6 @@ class App extends StatelessWidget {
         theme: ThemeData.light(useMaterial3: true),
         getPages: RouteHelper.routes,
         initialRoute: RouteHelper.welcome,
-        home: const WelcomeScreen(),
       ),
     );
   }
