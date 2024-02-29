@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
-import 'package:sate_social/features/auth/presentation/screens/welcome_screen.dart';
 
 import 'core/route/route_helper.dart';
 import 'core/util/app_constants.dart';

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/dimensions.dart';
 
 class HomeScreen extends StatefulWidget {
