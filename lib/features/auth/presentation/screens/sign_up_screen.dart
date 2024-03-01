@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_pickers/helpers/show_number_picker.dart';
+import 'package:flutter_selfie_liveness/selfie_liveness.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
 import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/dimensions.dart';
 
@@ -41,6 +42,7 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
+  String value = "";
   int currentStep = 0;
   Timer? debounce;
   final TextEditingController _ageController = TextEditingController();
@@ -72,8 +74,8 @@ class _SignUpViewState extends State<SignUpView> {
             onStepContinue: () {
               bool isLastStep = (currentStep == getSteps().length - 1);
               if (isLastStep) {
-                Get.toNamed(RouteHelper
-                    .getDashboardRoute());
+                context.read<SignUpCubit>().signUp();
+                Get.toNamed(RouteHelper.getDashboardRoute());
               } else {
                 setState(() {
                   currentStep += 1;
@@ -219,6 +221,8 @@ class _SignUpViewState extends State<SignUpView> {
                 TextFormField(
                   key: const Key('signUp_ageInput_textField'),
                   controller: _ageController,
+                  showCursor: true,
+                  readOnly: true,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(16),
                     hintText: 'Age',
@@ -243,6 +247,8 @@ class _SignUpViewState extends State<SignUpView> {
                 TextFormField(
                   key: const Key('signUp_heightInput_textField'),
                   controller: _heightController,
+                  showCursor: true,
+                  readOnly: true,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(16),
                     hintText: 'Height',
@@ -254,8 +260,9 @@ class _SignUpViewState extends State<SignUpView> {
                   onTap: () async {
                     final result = await showMaterialNumberPicker(
                         context: context,
-                        minNumber: 100,
+                        minNumber: 120,
                         maxNumber: 250,
+                        selectedNumber: 175,
                         title: 'Select Height');
                     if (result != null) {
                       _heightController.text = "Height: $result";
@@ -382,9 +389,43 @@ class _SignUpViewState extends State<SignUpView> {
         content: BlocConsumer<SignUpCubit, SignUpState>(
             listener: (context, state) {},
             builder: (context, state) {
-              return Column(children: [
-
-              ]);
+              return value != ""
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: Dimensions.paddingSizeDefault),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/image/complete.png'),
+                            SizedBox(height: Dimensions.paddingSizeDefault),
+                            Text("Identification completed successfully", textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: Dimensions.fontSizeLarge)),
+                          ]))
+                  : Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: Dimensions.paddingSizeDefault),
+                      child: Column(
+                          children: [
+                            Text("Click on the button to complete the check", textAlign: TextAlign.center, style: TextStyle(
+                          fontSize: Dimensions.fontSizeLarge)),
+                            SizedBox(height: Dimensions.paddingSizeDefault),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  value = await SelfieLiveness.detectLiveness(
+                                    poweredBy: "Sate Social",
+                                    assetLogo: "assets/image/logo.png",
+                                    compressQualityandroid: 88,
+                                    compressQualityiOS: 88,
+                                  );
+                                  setState(() {
+                                    context
+                                        .read<SignUpCubit>()
+                                        .confirmRealPersonChanged(true);
+                                  });
+                                },
+                                child: const Text("Detect Liveness")),
+                          ]));
             }),
       ),
     ];

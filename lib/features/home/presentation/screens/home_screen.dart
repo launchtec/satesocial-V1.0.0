@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../core/util/dimensions.dart';
 
@@ -25,16 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               const SizedBox(height: Dimensions.paddingSizeDefault),
-              Image.asset("assets/image/logo.png", height: 150),
+              Image.asset("assets/image/logo.png", height: context.height / 6),
               IconButton(
                 icon: Stack(alignment: Alignment.center, children: [
-                  Image.asset('assets/image/buble.png', height: 200),
+                  Image.asset('assets/image/buble.png', height: context.height / 5),
                   Column(children: [
                     Image.asset('assets/image/connect.png', height: 50),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                     Text('CONNECT',
                         style: TextStyle(
-                            fontSize: Dimensions.fontSizeExtraLarge,
+                            fontSize: Dimensions.fontSizeLarge,
                             color: Colors.white,
                             fontWeight: FontWeight.bold))
                   ])
@@ -43,13 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               IconButton(
                 icon: Stack(alignment: Alignment.center, children: [
-                  Image.asset('assets/image/purple_buble.png', height: 200),
+                  Image.asset('assets/image/purple_buble.png', height: context.height / 5),
                   Column(children: [
                     Image.asset('assets/image/community.png', height: 50),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                     Text('COMMUNITY',
                         style: TextStyle(
-                            fontSize: Dimensions.fontSizeExtraLarge,
+                            fontSize: Dimensions.fontSizeLarge,
                             color: Colors.white,
                             fontWeight: FontWeight.bold))
                   ])
@@ -58,13 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               IconButton(
                 icon: Stack(alignment: Alignment.center, children: [
-                  Image.asset('assets/image/buble.png', height: 200),
+                  Image.asset('assets/image/buble.png', height: context.height / 5),
                   Column(children: [
                     Image.asset('assets/image/match.png', height: 50),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                     Text('MATCH',
                         style: TextStyle(
-                            fontSize: Dimensions.fontSizeExtraLarge,
+                            fontSize: Dimensions.fontSizeLarge,
                             color: Colors.white,
                             fontWeight: FontWeight.bold))
                   ])
