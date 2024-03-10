@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:sate_social/core/util/images.dart';
 
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/dimensions.dart';
@@ -39,14 +40,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             width: double.infinity,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/image/welcome_back.png"),
+                image: AssetImage(Images.welcomeBack),
                 fit: BoxFit.cover,
               ),
             ),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               const SizedBox(height: Dimensions.paddingSizeOverLarge),
-              Image.asset("assets/image/logo.png", height: 200),
+              Image.asset(Images.logo, height: 200),
               SizedBox(
                   width: context.width / 2.5,
                   child: ElevatedButton(
@@ -63,7 +64,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       onPressed: () =>
                           Get.toNamed(RouteHelper.getSignInRoute()),
                       child: Row(children: [
-                        Image.asset("assets/image/sign_in_icon.png",
+                        Image.asset(Images.signInIcon,
                             height: 32),
                         Text('Sign In',
                             style: TextStyle(
@@ -87,7 +88,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       onPressed: () =>
                           Get.toNamed(RouteHelper.getSignUpRoute()),
                       child: Row(children: [
-                        Image.asset("assets/image/sign_up_icon.png",
+                        Image.asset(Images.signUpIcon,
                             height: 32),
                         Text('Sign Up',
                             style: TextStyle(

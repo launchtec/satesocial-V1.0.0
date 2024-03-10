@@ -10,6 +10,7 @@ import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/dimensions.dart';
 
 import '../../../../core/route/route_helper.dart';
+import '../../../../core/util/images.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/use_cases/sign_up_use_case.dart';
 import '../blocks/email_status.dart';
@@ -350,7 +351,7 @@ class _SignUpViewState extends State<SignUpView> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Image.asset('assets/image/complete.png'),
+                            Image.asset(Images.complete),
                             const SizedBox(height: Dimensions.paddingSizeDefault),
                             Text("Identification completed successfully", textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -368,7 +369,7 @@ class _SignUpViewState extends State<SignUpView> {
                                 onPressed: () async {
                                   value = await SelfieLiveness.detectLiveness(
                                     poweredBy: "Sate Social",
-                                    assetLogo: "assets/image/logo.png",
+                                    assetLogo: Images.logo,
                                     compressQualityandroid: 88,
                                     compressQualityiOS: 88,
                                   );

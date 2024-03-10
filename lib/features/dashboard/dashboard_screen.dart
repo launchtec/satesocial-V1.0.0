@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sate_social/core/util/dimensions.dart';
+import 'package:sate_social/core/util/images.dart';
 import 'package:sate_social/core/util/styles.dart';
 import 'package:sate_social/features/community/presentation/screens/community_screen.dart';
 import 'package:sate_social/features/home/presentation/screens/home_screen.dart';
@@ -78,7 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             BottomNavigationBarItem(
               icon: Container(
                   padding: EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                  child: Image.asset('assets/image/home_nav.png',
+                  child: Image.asset(Images.homeNav,
                       height: 24,
                       color: _selectedIndex == 0 ? ColorConstants.primaryColor : Colors.grey)),
               label: 'Home',
@@ -86,7 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             BottomNavigationBarItem(
               icon: Container(
                   padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                  child: Image.asset('assets/image/notification_nav.png',
+                  child: Image.asset(Images.notificationNav,
                       height: 24,
                       color: _selectedIndex == 1 ? ColorConstants.primaryColor : Colors.grey)),
               label: 'Notifications',
@@ -94,7 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             BottomNavigationBarItem(
               icon: Container(
                   padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                  child: Image.asset('assets/image/connect_nav.png',
+                  child: Image.asset(Images.connectNav,
                       height: 24,
                       color: _selectedIndex == 2 ? ColorConstants.primaryColor : Colors.grey)),
               label: 'Connect',
@@ -102,7 +102,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             BottomNavigationBarItem(
               icon: Container(
                   padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                  child: Image.asset('assets/image/community_nav.png',
+                  child: Image.asset(Images.communityNav,
                       height: 24,
                       color: _selectedIndex == 3 ? ColorConstants.primaryColor : Colors.grey)),
               label: 'Community',
@@ -110,7 +110,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             BottomNavigationBarItem(
               icon: Container(
                   padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                  child: Image.asset('assets/image/match_nav.png',
+                  child: Image.asset(Images.match,
                       height: 24,
                       color: _selectedIndex == 4 ? ColorConstants.primaryColor : Colors.grey)),
               label: 'Match',
@@ -118,7 +118,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             BottomNavigationBarItem(
               icon: Container(
                   padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
-                  child: Image.asset('assets/image/settings_nav.png',
+                  child: Image.asset(Images.settingsNav,
                       height: 24,
                       color: _selectedIndex == 5 ? ColorConstants.primaryColor : Colors.grey)),
               label: 'Settings',

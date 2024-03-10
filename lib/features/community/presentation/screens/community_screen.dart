@@ -1,7 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sate_social/core/util/dimensions.dart';
 import 'package:sate_social/core/util/styles.dart';
+
+import '../../../../core/util/images.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -21,13 +23,13 @@ class _CommunityScreenState extends State<CommunityScreen> {
             width: double.infinity,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/image/back_community.png"),
+                  image: AssetImage(Images.backCommunity),
                   fit: BoxFit.fitHeight,
                   opacity: 0.5),
             ),
             child: Column(children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Image.asset("assets/image/logo.png", height: 80),
+                Image.asset(Images.logo, height: 80),
                 Padding(
                     padding: const EdgeInsets.only(
                         right: Dimensions.paddingSizeExtraLarge),
@@ -44,10 +46,31 @@ class _CommunityScreenState extends State<CommunityScreen> {
                             color: ColorConstants.primaryColor)))
               ]),
               const Divider(color: Colors.grey, thickness: 6),
-              Row(children: [
-                Column(children: []),
-                Column(children: []),
-                Column(children: [])
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                const SizedBox(width: Dimensions.paddingSizeDefault),
+                Column(children: [
+                  Image.asset(Images.bublePost, height: 54),
+                  const Text('Post', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                ]),
+                Expanded(child: Column(children: [
+                  Image.asset(Images.bubleActivities, width: context.width / 3),
+                  const Text('Activities', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                ])),
+                Column(children: [
+                  Image.asset(Images.bubleManage, height: 54),
+                  const Text('Manage\nListings', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                ]),
+                const SizedBox(width: Dimensions.paddingSizeDefault),
+              ]),
+              Row(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
+                Column(children: [
+                  Image.asset(Images.bubleLove, width: context.width / 3),
+                  const Text('Love', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                ]),
+                Column(children: [
+                  Image.asset(Images.bubleGig, width: context.width / 3),
+                  const Text('Gig', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                ])
               ])
             ])));
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/util/dimensions.dart';
+import '../../../../core/util/images.dart';
 
 class HomeScreen extends StatefulWidget {
   final PageController navController;
@@ -20,19 +21,19 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/image/back.png"),
+                image: AssetImage(Images.background),
                 fit: BoxFit.cover,
               ),
             ),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               const SizedBox(height: Dimensions.paddingSizeDefault),
-              Image.asset("assets/image/logo.png", height: context.height / 6),
+              Image.asset(Images.logo, height: context.height / 6),
               IconButton(
                 icon: Stack(alignment: Alignment.center, children: [
-                  Image.asset('assets/image/buble.png', height: context.height / 5),
+                  Image.asset(Images.buble, height: context.height / 5),
                   Column(children: [
-                    Image.asset('assets/image/connect.png', height: 50),
+                    Image.asset(Images.connect, height: 50),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                     Text('CONNECT',
                         style: TextStyle(
@@ -45,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               IconButton(
                 icon: Stack(alignment: Alignment.center, children: [
-                  Image.asset('assets/image/purple_buble.png', height: context.height / 5),
+                  Image.asset(Images.purpleBuble, height: context.height / 5),
                   Column(children: [
-                    Image.asset('assets/image/community.png', height: 50),
+                    Image.asset(Images.community, height: 50),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                     Text('COMMUNITY',
                         style: TextStyle(
@@ -60,9 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               IconButton(
                 icon: Stack(alignment: Alignment.center, children: [
-                  Image.asset('assets/image/buble.png', height: context.height / 5),
+                  Image.asset(Images.buble, height: context.height / 5),
                   Column(children: [
-                    Image.asset('assets/image/match.png', height: 50),
+                    Image.asset(Images.match, height: 50),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
                     Text('MATCH',
                         style: TextStyle(
