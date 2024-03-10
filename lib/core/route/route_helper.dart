@@ -2,7 +2,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:sate_social/features/auth/presentation/screens/recovery_pass_screen.dart';
 import 'package:sate_social/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:sate_social/features/auth/presentation/screens/welcome_screen.dart';
-import 'package:sate_social/features/home/presentation/screens/dashboard_screen.dart';
+import 'package:sate_social/features/dashboard/dashboard_screen.dart';
 
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 

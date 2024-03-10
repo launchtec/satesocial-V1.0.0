@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
+import 'package:sate_social/core/services/push_notification_service.dart';
 
 import 'core/route/route_helper.dart';
 import 'core/util/app_constants.dart';
@@ -25,16 +25,19 @@ Future<void> bootstrap(AppBuilder builder) async {
 
 void main() {
   bootstrap(
-        () async {
+    () async {
       AuthLocalDataSource authLocalDataSource = AuthLocalDataSource();
-      AuthRemoteDataSource authRemoteDataSource = AuthRemoteDataSourceFirebase();
+      AuthRemoteDataSource authRemoteDataSource =
+          AuthRemoteDataSourceFirebase();
       FirestoreDataSource firestoreDataSource = FirestoreDataSource();
+      PushNotificationService pushNotificationService = PushNotificationService();
 
       AuthRepository authRepository = AuthRepositoryImpl(
-        localDataSource: authLocalDataSource,
-        remoteDataSource: authRemoteDataSource,
-        firestoreDataSource: firestoreDataSource
-      );
+          localDataSource: authLocalDataSource,
+          remoteDataSource: authRemoteDataSource,
+          firestoreDataSource: firestoreDataSource);
+
+      pushNotificationService.initialize();
 
       return App(
         authRepository: authRepository,
@@ -66,7 +69,8 @@ class App extends StatelessWidget {
         navigatorKey: Get.key,
         theme: ThemeData.light(useMaterial3: true),
         getPages: RouteHelper.routes,
-        initialRoute: RouteHelper.welcome,
+        initialRoute: authUser == null ? RouteHelper.welcome
+            : RouteHelper.dashboard,
       ),
     );
   }

@@ -79,6 +79,7 @@ class SignUpState extends Equatable {
     sexuality,
     openToConnectTo,
     howDidYouKnowAboutUs,
+    confirmRealPerson,
     emailStatus,
     passwordStatus,
     formStatus,

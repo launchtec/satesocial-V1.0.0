@@ -129,7 +129,8 @@ class _SignInViewState extends State<SignInView> {
                                       FormStatus.submissionInProgress
                                   ? null
                                   : () {
-                                      context.read<SignInCubit>().signIn();
+                                      context.read<SignInCubit>().signIn().then((value) => Get.toNamed(RouteHelper
+                                          .getDashboardRoute()));
                                     },
                           child: const Text('Sign In'),
                         ))),

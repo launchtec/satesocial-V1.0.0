@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import '../../../../core/util/dimensions.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final PageController navController;
+  const HomeScreen({super.key, required this.navController});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.bold))
                   ])
                 ]),
-                onPressed: () {},
+                onPressed: () => widget.navController.jumpToPage(2),
               ),
               IconButton(
                 icon: Stack(alignment: Alignment.center, children: [
@@ -55,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.bold))
                   ])
                 ]),
-                onPressed: () {},
+                onPressed: () => widget.navController.jumpToPage(3),
               ),
               IconButton(
                 icon: Stack(alignment: Alignment.center, children: [
@@ -70,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.bold))
                   ])
                 ]),
-                onPressed: () {},
+                onPressed: () => widget.navController.jumpToPage(4),
               )
             ])));
   }

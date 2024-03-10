@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +73,16 @@ class _SignUpViewState extends State<SignUpView> {
             onStepContinue: () {
               bool isLastStep = (currentStep == getSteps().length - 1);
               if (isLastStep) {
-                context.read<SignUpCubit>().signUp();
-                Get.toNamed(RouteHelper.getDashboardRoute());
+                context.read<SignUpCubit>().state.formStatus ==
+                    FormStatus.submissionInProgress
+                    ? null
+                    : () {
+                  context
+                      .read<SignUpCubit>()
+                      .confirmRealPersonChanged(true);
+                  context.read<SignUpCubit>().signUp().then((value) => Get.toNamed(RouteHelper
+                      .getDashboardRoute()));
+                };
               } else {
                 setState(() {
                   currentStep += 1;
@@ -87,59 +94,6 @@ class _SignUpViewState extends State<SignUpView> {
             }),
             steps: getSteps(),
           )),
-    );
-  }
-
-  Widget bodyWithFields() {
-    return BlocConsumer<SignUpCubit, SignUpState>(
-      listener: (context, state) {
-        if (state.formStatus == FormStatus.invalid) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                content: Text('Invalid form: please fill in all fields'),
-              ),
-            );
-        }
-        if (state.formStatus == FormStatus.submissionFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'There was an error with the sign up process. Try again.',
-                ),
-              ),
-            );
-        }
-      },
-      builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-              vertical: Dimensions.paddingSizeDefault,
-              horizontal: Dimensions.paddingSizeExtraLarge),
-          child: ListView(
-            children: [
-              const SizedBox(height: Dimensions.paddingSizeExtraLarge),
-              Center(
-                  child: SizedBox(
-                      width: context.width / 2,
-                      child: ElevatedButton(
-                        key: const Key('signUp_continue_elevatedButton'),
-                        onPressed:
-                            context.read<SignUpCubit>().state.formStatus ==
-                                    FormStatus.submissionInProgress
-                                ? null
-                                : () {
-                                    context.read<SignUpCubit>().signUp();
-                                  },
-                        child: const Text('Sign Up'),
-                      ))),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -391,25 +345,25 @@ class _SignUpViewState extends State<SignUpView> {
             builder: (context, state) {
               return value != ""
                   ? Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                           vertical: Dimensions.paddingSizeDefault),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image.asset('assets/image/complete.png'),
-                            SizedBox(height: Dimensions.paddingSizeDefault),
+                            const SizedBox(height: Dimensions.paddingSizeDefault),
                             Text("Identification completed successfully", textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: Dimensions.fontSizeLarge)),
                           ]))
                   : Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                           vertical: Dimensions.paddingSizeDefault),
                       child: Column(
                           children: [
                             Text("Click on the button to complete the check", textAlign: TextAlign.center, style: TextStyle(
                           fontSize: Dimensions.fontSizeLarge)),
-                            SizedBox(height: Dimensions.paddingSizeDefault),
+                            const SizedBox(height: Dimensions.paddingSizeDefault),
                             ElevatedButton(
                                 onPressed: () async {
                                   value = await SelfieLiveness.detectLiveness(
