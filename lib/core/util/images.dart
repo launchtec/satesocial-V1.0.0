@@ -1,4 +1,5 @@
 class Images {
+  static const String arrow = 'assets/image/arrow.png';
   static const String background = 'assets/image/back.png';
   static const String backCommunity = 'assets/image/back_community.png';
   static const String buble = 'assets/image/buble.png';
