@@ -5,6 +5,10 @@ class AppConstants {
   static const double appVersion = 1.0;
 
   static const List<String> genderList = ['Male', 'Female', 'Non Binary'];
+  static const List<String> heightList = ['4 FT 11 IN', '5 FT 0 IN', '5 FT 1 IN', '5 FT 2 IN',
+    '5 FT 3 IN', '5 FT 4 IN', '5 FT 5 IN', '5 FT 6 IN', '5 FT 7 IN', '5 FT 8 IN', '5 FT 10 IN',
+    '5 FT 11 IN', '6 FT 0 IN', '6 FT 1 IN', '6 FT 2 IN', '6 FT 3 IN', '6 FT 4 IN', '6 FT 5 IN',
+    '6 FT 6 IN', '6 FT 7 IN', '6 FT 8 IN', '6 FT 9 IN', '6 FT 10 IN'];
   static const List<String> ethnicityList = ['American Indian', 'White', 'Black', 'Asian',
     'Hispanic/Latino', 'Pacific Islander', 'No Preference'
   ];

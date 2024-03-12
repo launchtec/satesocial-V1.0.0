@@ -69,8 +69,8 @@ class App extends StatelessWidget {
         navigatorKey: Get.key,
         theme: ThemeData.light(useMaterial3: true),
         getPages: RouteHelper.routes,
-        initialRoute: authUser == null ? RouteHelper.welcome
-            : RouteHelper.dashboard,
+        initialRoute: authUser != null && authUser!.id.isNotEmpty  ? RouteHelper.dashboard
+            : RouteHelper.welcome,
       ),
     );
   }

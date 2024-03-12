@@ -6,7 +6,7 @@ class SignUpState extends Equatable {
   final Password? password;
   final String? gender;
   final int? age;
-  final int? height;
+  final String? height;
   final String? ethnicity;
   final String? sexuality;
   final String? openToConnectTo;
@@ -39,7 +39,7 @@ class SignUpState extends Equatable {
     Password? password,
     String? gender,
     int? age,
-    int? height,
+    String? height,
     String? ethnicity,
     String? sexuality,
     String? openToConnectTo,

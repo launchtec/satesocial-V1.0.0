@@ -146,12 +146,12 @@ class _CommunityScreenState extends State<CommunityScreen> {
                             Text(AppConstants.postModals[index].created,
                                 style: TextStyle(
                                     color: ColorConstants.primaryColor,
-                                    fontSize: Dimensions.fontSizeSmall)),
+                                    fontSize: Dimensions.fontSizeExtraSmall)),
                             const SizedBox(width: Dimensions.paddingSizeExtraSmall),
                             Text(AppConstants.postModals[index].location,
                                 style: TextStyle(
                                     color: ColorConstants.primaryColor,
-                                    fontSize: Dimensions.fontSizeSmall)),
+                                    fontSize: Dimensions.fontSizeExtraSmall)),
                           ])));
                     }),
               )),

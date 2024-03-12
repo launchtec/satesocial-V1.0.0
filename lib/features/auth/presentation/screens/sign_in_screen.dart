@@ -73,6 +73,10 @@ class _SignInViewState extends State<SignInView> {
                 ),
               );
           }
+          if (state.formStatus == FormStatus.submissionSuccess) {
+            Get.toNamed(RouteHelper
+                .getDashboardRoute());
+          }
         },
         builder: (context, state) {
           return Padding(
@@ -129,8 +133,7 @@ class _SignInViewState extends State<SignInView> {
                                       FormStatus.submissionInProgress
                                   ? null
                                   : () {
-                                      context.read<SignInCubit>().signIn().then((value) => Get.toNamed(RouteHelper
-                                          .getDashboardRoute()));
+                                      context.read<SignInCubit>().signIn();
                                     },
                           child: const Text('Sign In'),
                         ))),

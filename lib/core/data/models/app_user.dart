@@ -9,7 +9,7 @@ class AppUser {
   final String sexuality;
   final String openToConnectTo;
   final bool confirmRealPerson;
-  final int? height;
+  final String? height;
   final String? ethnicity;
   final String? howDidYouKnowAboutUs;
   final String? avatarUrl;

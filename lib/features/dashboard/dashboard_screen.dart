@@ -5,6 +5,7 @@ import 'package:sate_social/core/util/styles.dart';
 import 'package:sate_social/features/community/presentation/screens/community_screen.dart';
 import 'package:sate_social/features/home/presentation/screens/home_screen.dart';
 import 'package:sate_social/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:sate_social/features/settings/presentation/screens/settings_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
      Container(),
      const CommunityScreen(),
      Container(),
-     Container(),
+     SettingsScreen(),
    ];
   }
 
