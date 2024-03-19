@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/core/util/dimensions.dart';
 import 'package:sate_social/core/util/styles.dart';
-import 'package:sate_social/features/community/data/models/post_model.dart';
+import 'package:sate_social/features/community/presentation/widgets/post_item_widget.dart';
 
 import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/images.dart';
@@ -131,28 +130,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                         horizontal: Dimensions.paddingSizeExtraSmall),
                     itemCount: AppConstants.postModals.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: Dimensions.paddingSizeMinimal),
-                          child: InkWell(onTap: (){}, child: Row(children: [
-                            Image.asset(Images.arrow, height: 24),
-                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                            Text(AppConstants.postModals[index].title,
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: Colors.black,
-                                    fontSize: Dimensions.fontSizeSmall)),
-                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                            Text(AppConstants.postModals[index].created,
-                                style: TextStyle(
-                                    color: ColorConstants.primaryColor,
-                                    fontSize: Dimensions.fontSizeExtraSmall)),
-                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                            Text(AppConstants.postModals[index].location,
-                                style: TextStyle(
-                                    color: ColorConstants.primaryColor,
-                                    fontSize: Dimensions.fontSizeExtraSmall)),
-                          ])));
+                      return PostItemWidget(postModel: AppConstants.postModals[index]);
                     }),
               )),
               const SizedBox(height: Dimensions.paddingSizeSmall),

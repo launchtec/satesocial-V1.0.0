@@ -1,3 +1,5 @@
+import 'package:sate_social/features/notifications/data/models/notification_model.dart';
+
 import '../../features/community/data/models/post_model.dart';
 
 class AppConstants {
@@ -20,6 +22,23 @@ class AppConstants {
   ];
 
   static const List<String> openToConnectToList = ['Romantically', 'Friends/ Activity Partners', 'Professionally'];
+
+  static List<NotificationModel> notificationModals = [
+    NotificationModel(
+        id: '1',
+        title: 'Based on gig filters',
+        content: 'New request to connect to your card',
+        created: '5 mins ago',
+        location: '5 miles away'
+    ),
+    NotificationModel(
+        id: '2',
+        title: 'Based on love filters',
+        content: 'New request to connect to your card',
+        created: '15 mins ago',
+        location: '2 miles away'
+    )
+  ];
 
   static const List<PostModel> postModals = [
     PostModel(

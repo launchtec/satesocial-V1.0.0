@@ -60,6 +60,7 @@ dependencies:
   flutter_material_pickers: ^3.1.2
   package_info_plus: ^5.0.1
   flutter_selfie_liveness: ^1.0.18
+  flutter_local_notifications: ^17.0.0
 
 dev_dependencies:
   flutter_test:

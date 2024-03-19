@@ -3,6 +3,7 @@ class Images {
   static const String background = 'assets/image/back.png';
   static const String backCommunity = 'assets/image/back_community.png';
   static const String backNotification = 'assets/image/back_notification.png';
+  static const String bell = 'assets/image/bell.png';
   static const String buble = 'assets/image/buble.png';
   static const String bubleActivities = 'assets/image/buble_activities.png';
   static const String bubleGig = 'assets/image/buble_gig.png';

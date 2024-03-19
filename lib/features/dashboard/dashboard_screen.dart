@@ -8,7 +8,8 @@ import 'package:sate_social/features/notifications/presentation/screens/notifica
 import 'package:sate_social/features/settings/presentation/screens/settings_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  final bool openNotification;
+  const DashboardScreen({Key? key, this.openNotification = false}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -22,16 +23,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    if (widget.openNotification) {
+      _selectedIndex = 1;
+    }
     _pageController = PageController(
       initialPage: _selectedIndex,
     );
     super.initState();
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 
   List<Widget> widgetOptions(PageController navController) {
@@ -41,7 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
      Container(),
      const CommunityScreen(),
      Container(),
-     SettingsScreen(),
+     const SettingsScreen(),
    ];
   }
 
@@ -78,7 +76,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Container(
-                  padding: EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
+                  padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
                   child: Image.asset(Images.homeNav,
                       height: 24,
                       color: _selectedIndex == 0 ? ColorConstants.primaryColor : Colors.grey)),

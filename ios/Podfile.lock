@@ -795,6 +795,8 @@ PODS:
     - Mantle
     - SDWebImage
     - SDWebImageWebPCoder
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_selfie_liveness (0.0.1):
     - Flutter
     - GoogleMLKit/FaceDetection
@@ -1008,6 +1010,7 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_selfie_liveness (from `.symlinks/plugins/flutter_selfie_liveness/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -1079,6 +1082,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_image_compress:
     :path: ".symlinks/plugins/flutter_image_compress/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_selfie_liveness:
     :path: ".symlinks/plugins/flutter_selfie_liveness/ios"
   package_info_plus:
@@ -1115,6 +1120,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: bc7bddc743548a89cfb896843a77cf4bdde2c231
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
+  flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_selfie_liveness: 8b3a2567b16ef135562a2dea11eac2bcd18eb934
   GoogleAppMeasurement: ccefe3eac9b0aa27f96066809fb1a7fe4b462626
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a

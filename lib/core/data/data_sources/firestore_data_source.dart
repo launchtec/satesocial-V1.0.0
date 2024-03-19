@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
 import '../models/app_user.dart';
 import '../models/chat.dart';
@@ -13,6 +14,24 @@ class FirestoreDataSource {
     instance.collection('users').doc(user.id).set(user.toMap());
   }
 
+  Future<void> addOrUpdateNotification(String userId, NotificationModel notification) {
+    return instance
+        .collection('users')
+        .doc(userId)
+        .collection('notifications')
+        .doc(notification.id)
+        .set(notification.toMap());
+  }
+
+  Future<QuerySnapshot> getNotifications(String userId) {
+    return instance.collection('users').doc(userId).collection('notifications').get();
+  }
+
+  Stream<QuerySnapshot> getStreamNotifications(String userId) {
+    return instance.collection('users').doc(userId).collection('notifications').snapshots();
+  }
+
+  // Future functions
   void addMatch(String userId, Match match) {
     instance
         .collection('users')

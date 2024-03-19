@@ -12,12 +12,14 @@ class RouteHelper {
   static const String signUp = '/sign-up';
   static const String recoveryPass = '/recovery-pass';
   static const String dashboard = '/dashboard';
+  static const String dashboardToNotification = '/dashboard-to-notification';
 
   static String getWelcomeRoute() => welcome;
   static String getSignInRoute() => signIn;
   static String getSignUpRoute() => signUp;
   static String getRecoveryPassRoute() => recoveryPass;
   static String getDashboardRoute() => dashboard;
+  static String getDashboardToNotificationRoute() => dashboardToNotification;
 
   static List<GetPage> routes = [
     GetPage(name: welcome, page: () => const WelcomeScreen()),
@@ -25,5 +27,6 @@ class RouteHelper {
     GetPage(name: signUp, page: () => const SignUpScreen()),
     GetPage(name: recoveryPass, page: () => const RecoveryPassScreen()),
     GetPage(name: dashboard, page: () => const DashboardScreen()),
+    GetPage(name: dashboardToNotification, page: () => const DashboardScreen(openNotification: true)),
   ];
 }
