@@ -29,7 +29,7 @@ class PostItemWidget extends StatelessWidget {
                   color: ColorConstants.primaryColor,
                   fontSize: Dimensions.fontSizeExtraSmall)),
           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-          Text(postModel.location,
+          Text(postModel.zipCode,
               style: TextStyle(
                   color: ColorConstants.primaryColor,
                   fontSize: Dimensions.fontSizeExtraSmall)),

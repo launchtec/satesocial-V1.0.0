@@ -57,7 +57,7 @@ class PushNotificationService {
         id: message.messageId!,
         title: message.notification?.title ?? "",
         content: message.notification?.body ?? "",
-        created: message.data["created"],
+        created: message.sentTime?.toIso8601String() ?? "",
         location: message.data["location"]
     );
     notificationRepository.addOrUpdateNotification(userId: FirebaseAuth.instance.currentUser!.uid, notification: notificationModel);

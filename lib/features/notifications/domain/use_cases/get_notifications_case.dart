@@ -2,10 +2,10 @@ import 'package:sate_social/features/notifications/data/models/notification_mode
 
 import '../repositories/notification_repository.dart';
 
-class NotificationsUseCase {
+class GetNotificationsCase {
   final NotificationRepository notificationRepository;
 
-  NotificationsUseCase({required this.notificationRepository});
+  GetNotificationsCase({required this.notificationRepository});
 
   Stream<Iterable<NotificationModel>> call(String userId) {
     return notificationRepository.getStreamNotifications(

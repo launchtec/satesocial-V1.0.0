@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
 import '../models/app_user.dart';
@@ -29,6 +30,21 @@ class FirestoreDataSource {
 
   Stream<QuerySnapshot> getStreamNotifications(String userId) {
     return instance.collection('users').doc(userId).collection('notifications').snapshots();
+  }
+
+  Future<void> addOrUpdatePost(PostModel postModel) {
+    return instance
+        .collection('posts')
+        .doc(postModel.id)
+        .set(postModel.toMap());
+  }
+
+  Future<QuerySnapshot> getPosts() {
+    return instance.collection('posts').get();
+  }
+
+  Stream<QuerySnapshot> getStreamPosts() {
+    return instance.collection('posts').snapshots();
   }
 
   // Future functions

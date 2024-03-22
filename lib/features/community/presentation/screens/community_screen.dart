@@ -4,8 +4,10 @@ import 'package:sate_social/core/util/dimensions.dart';
 import 'package:sate_social/core/util/styles.dart';
 import 'package:sate_social/features/community/presentation/widgets/post_item_widget.dart';
 
+import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/images.dart';
+import '../../data/models/post_model.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -15,6 +17,8 @@ class CommunityScreen extends StatefulWidget {
 }
 
 class _CommunityScreenState extends State<CommunityScreen> {
+  List<PostModel> featurePosts = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,9 +132,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
                     padding: const EdgeInsets.symmetric(
                         vertical: Dimensions.paddingSizeSmall,
                         horizontal: Dimensions.paddingSizeExtraSmall),
-                    itemCount: AppConstants.postModals.length,
+                    itemCount: featurePosts.length,
                     itemBuilder: (context, index) {
-                      return PostItemWidget(postModel: AppConstants.postModals[index]);
+                      return PostItemWidget(postModel: featurePosts[index]);
                     }),
               )),
               const SizedBox(height: Dimensions.paddingSizeSmall),
@@ -139,7 +143,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 Column(children: [
                   IconButton(
                       icon: Image.asset(Images.bublePost, height: 40),
-                      onPressed: () {}),
+                      onPressed: () {
+                        Get.toNamed(RouteHelper
+                            .getCreatePostRoute());
+                      }),
                   const Text('Post',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))

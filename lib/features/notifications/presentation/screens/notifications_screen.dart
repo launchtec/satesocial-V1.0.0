@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
-import 'package:sate_social/features/notifications/domain/use_cases/notifications_use_case.dart';
+import 'package:sate_social/features/notifications/domain/use_cases/get_notifications_case.dart';
 import 'package:sate_social/features/notifications/presentation/blocks/notifications_state.dart';
 import 'package:sate_social/features/notifications/presentation/widgets/notification_item_widget.dart';
 
@@ -41,7 +41,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             child: BlocProvider(
                 create: (context) => NotificationsCubit(
-                    notificationsUseCase: NotificationsUseCase(
+                    notificationsUseCase: GetNotificationsCase(
                         notificationRepository:
                             context.read<NotificationRepository>()))
                   ..init(FirebaseAuth.instance.currentUser!.uid),

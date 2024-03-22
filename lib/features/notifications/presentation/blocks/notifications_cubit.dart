@@ -4,14 +4,14 @@ import 'package:bloc/bloc.dart';
 import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 import 'package:sate_social/features/notifications/presentation/blocks/notifications_state.dart';
 
-import '../../domain/use_cases/notifications_use_case.dart';
+import '../../domain/use_cases/get_notifications_case.dart';
 
 class NotificationsCubit extends Cubit<NotificationsState> {
   StreamSubscription? _myNotificationsSubscription;
-  final NotificationsUseCase _notificationsUseCase;
+  final GetNotificationsCase _notificationsUseCase;
 
   NotificationsCubit({
-    required NotificationsUseCase notificationsUseCase,
+    required GetNotificationsCase notificationsUseCase,
   })  : _notificationsUseCase = notificationsUseCase,
         super(const NotificationsState());
 
