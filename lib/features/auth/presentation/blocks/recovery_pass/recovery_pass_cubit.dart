@@ -4,7 +4,7 @@ import 'package:sate_social/features/auth/presentation/blocks/recovery_pass/reco
 import '../../../domain/use_cases/recovery_pass_use_case.dart';
 import '../../../domain/value_objects/email.dart';
 import '../email_status.dart';
-import '../form_status.dart';
+import '../../../../../core/data/blocks/form_status.dart';
 
 class RecoveryPassCubit extends Cubit<RecoveryPassState> {
   final RecoveryPassUseCase _recoveryPassUseCase;

@@ -9,7 +9,7 @@ import '../../../../core/route/route_helper.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/use_cases/sign_in_use_case.dart';
 import '../blocks/email_status.dart';
-import '../blocks/form_status.dart';
+import '../../../../core/data/blocks/form_status.dart';
 import '../blocks/password_status.dart';
 import '../blocks/sign_in/sign_in_cubit.dart';
 

@@ -9,7 +9,7 @@ import 'package:sate_social/features/auth/presentation/blocks/recovery_pass/reco
 import '../../../../core/util/dimensions.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../blocks/email_status.dart';
-import '../blocks/form_status.dart';
+import '../../../../core/data/blocks/form_status.dart';
 import '../blocks/recovery_pass/recovery_pass_state.dart';
 
 class RecoveryPassScreen extends StatelessWidget {

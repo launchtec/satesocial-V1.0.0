@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../domain/value_objects/email.dart';
 import '../email_status.dart';
-import '../form_status.dart';
+import '../../../../../core/data/blocks/form_status.dart';
 
 class RecoveryPassState extends Equatable {
   final Email? email;

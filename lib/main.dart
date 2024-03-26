@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
 import 'package:sate_social/core/services/push_notification_service.dart';
+import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
 import 'package:sate_social/features/notifications/data/repositories/notification_repository_impl.dart';
 import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
 
@@ -16,6 +17,7 @@ import 'features/auth/data/data_sources/auth_remote_data_source_firebase.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/entities/auth_user.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
+import 'features/community/data/repositories/post_repository_impl.dart';
 import 'firebase_options.dart';
 
 typedef AppBuilder = Future<Widget> Function();
@@ -43,6 +45,9 @@ void main() {
       NotificationRepository notificationRepository = NotificationRepositoryImpl(
           firestoreDataSource: firestoreDataSource);
 
+      PostRepository postRepository = PostRepositoryImpl(
+          firestoreDataSource: firestoreDataSource);
+
       AuthUser user = await authRepository.authUser.first;
 
       if (user.id.isNotEmpty) {
@@ -53,6 +58,7 @@ void main() {
       return App(
         authRepository: authRepository,
         notificationRepository: notificationRepository,
+        postRepository: postRepository,
         authUser: user,
       );
     },
@@ -64,11 +70,13 @@ class App extends StatelessWidget {
     super.key,
     required this.authRepository,
     required this.notificationRepository,
+    required this.postRepository,
     this.authUser,
   });
 
   final AuthRepository authRepository;
   final NotificationRepository notificationRepository;
+  final PostRepository postRepository;
   final AuthUser? authUser;
 
   @override
@@ -77,6 +85,7 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider.value(value: authRepository),
         RepositoryProvider.value(value: notificationRepository),
+        RepositoryProvider.value(value: postRepository),
       ],
       child: GetMaterialApp(
         title: AppConstants.appName,

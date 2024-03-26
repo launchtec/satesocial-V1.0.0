@@ -39,6 +39,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
             title: doc.get("title"),
             content: doc.get("content"),
             created: doc.get("created"),
-            location: doc.get("location"))));
+            location: doc.get("location"),
+            isOpen: doc.get("isOpen") as bool
+        )));
   }
 }

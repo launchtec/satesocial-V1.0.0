@@ -1,15 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sate_social/core/data/blocks/request_status.dart';
 import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
 import 'package:sate_social/features/notifications/domain/use_cases/get_notifications_case.dart';
-import 'package:sate_social/features/notifications/presentation/blocks/notifications_state.dart';
+import 'package:sate_social/features/notifications/domain/use_cases/read_notification_case.dart';
+import 'package:sate_social/features/notifications/presentation/blocks/get_notifications/notifications_state.dart';
+import 'package:sate_social/features/notifications/presentation/blocks/read_notification/read_notification_cubit.dart';
+import 'package:sate_social/features/notifications/presentation/blocks/read_notification/read_notification_state.dart';
 import 'package:sate_social/features/notifications/presentation/widgets/notification_item_widget.dart';
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../data/models/notification_model.dart';
-import '../blocks/notifications_cubit.dart';
+import '../blocks/get_notifications/notifications_cubit.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -39,15 +43,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   image: AssetImage(Images.backNotification),
                   fit: BoxFit.cover),
             ),
-            child: BlocProvider(
-                create: (context) => NotificationsCubit(
-                    notificationsUseCase: GetNotificationsCase(
-                        notificationRepository:
-                            context.read<NotificationRepository>()))
-                  ..init(FirebaseAuth.instance.currentUser!.uid),
+            child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                      create: (context) => NotificationsCubit(
+                            notificationsUseCase: GetNotificationsCase(
+                                notificationRepository:
+                                    context.read<NotificationRepository>()),
+                          )..init()),
+                  BlocProvider(
+                      create: (context) => ReadNotificationCubit(
+                            readNotificationCase: ReadNotificationCase(
+                                notificationRepository:
+                                    context.read<NotificationRepository>()),
+                          ))
+                ],
                 child: BlocBuilder<NotificationsCubit, NotificationsState>(
                     builder: (context, state) {
-                      notifications = state.notificationModels.toList();
+                  notifications = state.notificationModels.toList();
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -78,28 +91,46 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     vertical: Dimensions.paddingSizeSmall),
                                 itemCount: notifications.length,
                                 itemBuilder: (context, index) {
-                                  return InkWell(
-                                      child: NotificationItemWidget(
-                                          notificationModel:
-                                              notifications[index],
-                                          isLastItem: index ==
-                                              notifications.length - 1),
-                                      onTap: () {
-                                        if (!notifications[index].isOpen) {
-                                          ScaffoldMessenger.of(context)
-                                            ..hideCurrentSnackBar()
-                                            ..showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                  'The notification was successfully read',
-                                                ),
-                                              ),
-                                            );
-                                          setState(() {
-                                            notifications[index].isOpen = true;
-                                          });
-                                        }
-                                      });
+                                  return BlocConsumer<ReadNotificationCubit, ReadNotificationState>(
+                                  listener: (context, state) {
+                                    if (state.requestStatus == RequestStatus.submissionFailure) {
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'There was an error with the sign in process. Try again.',
+                                            ),
+                                          ),
+                                        );
+                                    }
+                                    if (state.requestStatus == RequestStatus.submissionSuccess) {
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'The notification was successfully read',
+                                            ),
+                                          ),
+                                        );
+                                    }
+                                  }, builder: (context, state) {
+                                    return InkWell(
+                                        child: NotificationItemWidget(
+                                            notificationModel:
+                                            notifications[index],
+                                            isLastItem: index ==
+                                                notifications.length - 1),
+                                        onTap: () {
+                                          if (!notifications[index].isOpen) {
+                                            context
+                                                .read<ReadNotificationCubit>()
+                                                .readNotification(
+                                                notifications[index]);
+                                          }
+                                        });
+                                  });
                                 },
                                 separatorBuilder:
                                     (BuildContext context, int index) {

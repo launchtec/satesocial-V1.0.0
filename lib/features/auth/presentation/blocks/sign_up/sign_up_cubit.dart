@@ -5,7 +5,7 @@ import '../../../domain/use_cases/sign_up_use_case.dart';
 import '../../../domain/value_objects/email.dart';
 import '../../../domain/value_objects/password.dart';
 import '../email_status.dart';
-import '../form_status.dart';
+import '../../../../../core/data/blocks/form_status.dart';
 import '../password_status.dart';
 
 part 'sign_up_state.dart';
