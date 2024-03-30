@@ -1,6 +1,8 @@
+import 'package:sate_social/features/community/data/models/post_category.dart';
 import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
 import '../../features/community/data/models/post_model.dart';
+import 'images.dart';
 
 class AppConstants {
   static const String appName = 'Sate Social';
@@ -28,11 +30,35 @@ class AppConstants {
     'Professional & Gig Economy'];
   static const List<String> romanceGroups = ['Couples', 'Group', 'Threeway', 'FF', 'MM', 'MF',
     'FFM', 'MMF', 'FFF+', 'MMM+', 'MFMF'];
-  static const List<String> socialGroups = ['Science & Space', 'Snowboard or Skiing', 'Clubbing or Nightlife',
-    'Cocktail', 'Coffee or Tea', 'Park', 'Mountain Sports', 'Museum or Art', 'Comics or Anime', 'Smoking', 'Restaurants',
-    'Gardening', 'Gaming', 'Movie', 'Music', 'Cooking or Baking', 'Carshare or Errands', 'Alumni', 'Cycling',
-    'Book Club', 'Board & Card Game', 'Animals', 'All things Dog', 'Mom\'s Meet-up', 'Recreational Sports', 'Running & Walking',
-    'Beer'];
+  static const List<PostCategory> socialGroups = [
+    PostCategory(name: 'Science &\nSpace', imagePath: Images.flaskIcon),
+    PostCategory(name: 'Snowboard\nor Skiing', imagePath: Images.skiLiftIcon),
+    PostCategory(name: 'Clubbing\nor Nightlife', imagePath: Images.dancingIcon),
+    PostCategory(name: 'Cocktail', imagePath: Images.cocktailIcon),
+    PostCategory(name: 'Coffee\nor Tea', imagePath: Images.coffeeCupIcon),
+    PostCategory(name: 'Park', imagePath: Images.parkIcon),
+    PostCategory(name: 'Mountain\nSports', imagePath: Images.mountainIcon),
+    PostCategory(name: 'Museum\nor Art', imagePath: Images.galleryIcon),
+    PostCategory(name: 'Comics\nor Anime', imagePath: Images.comicBookIcon),
+    PostCategory(name: 'Smoking', imagePath: Images.marijuanaIcon),
+    PostCategory(name: 'Restaurants', imagePath: Images.dinnerIcon),
+    PostCategory(name: 'Gardening', imagePath: Images.gardeningIcon),
+    PostCategory(name: 'Gaming', imagePath: Images.gameControllerIcon),
+    PostCategory(name: 'Movie', imagePath: Images.videoPlayerIcon),
+    PostCategory(name: 'Music', imagePath: Images.pianoIcon),
+    PostCategory(name: 'Cooking\nor Baking', imagePath: Images.chefIcon),
+    PostCategory(name: 'Carshare\nor Errands', imagePath: Images.carSharingIcon),
+    PostCategory(name: 'Alumni', imagePath: Images.studentsIcon),
+    PostCategory(name: 'Cycling', imagePath: Images.bicycleIcon),
+    PostCategory(name: 'Book\nClub', imagePath: Images.agendaIcon),
+    PostCategory(name: 'Board\n& Card Game', imagePath: Images.chessIcon),
+    PostCategory(name: 'Animals', imagePath: Images.petCareIcon),
+    PostCategory(name: 'All things\nDog', imagePath: Images.dogIcon),
+    PostCategory(name: 'Mom\'s\nMeet-up', imagePath: Images.motherAndSonIcon),
+    PostCategory(name: 'Recreational\nSports', imagePath: Images.ballsSportsIcon),
+    PostCategory(name: 'Running\n& Walking', imagePath: Images.runnerIcon),
+    PostCategory(name: 'Beer', imagePath: Images.beerIcon)
+  ];
   static const List<String> gigIndustries = ['Aerospace', 'Agriculture', 'Automotive', 'Business', 'Construction', 'Education',
     'Energy', 'Entertainment', 'Fashion', 'Finance', 'Food industry', 'Food service', 'Forestry or Mountain services',
     'Health Science & Medical Technology', 'Healthcare', 'Industrial Electronics', 'Insurance', 'IT', 'Manufacturing',
