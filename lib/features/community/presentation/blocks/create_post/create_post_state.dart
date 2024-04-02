@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:sate_social/core/data/blocks/form_status.dart';
 
@@ -7,6 +9,9 @@ class CreatePostState extends Equatable {
   final String? category;
   final String? group;
   final String? zipCode;
+  final String? rate;
+  final String? employmentType;
+  final File? uploadDoc;
   final FormStatus formStatus;
 
   const CreatePostState({
@@ -15,16 +20,22 @@ class CreatePostState extends Equatable {
     this.category,
     this.group,
     this.zipCode,
+    this.rate,
+    this.employmentType,
+    this.uploadDoc,
     this.formStatus = FormStatus.initial,
   });
 
-  CreatePostState copyWith({String? title, String? content, String? category, String? group, String? zipCode, FormStatus? formStatus}) {
+  CreatePostState copyWith({String? title, String? content, String? category, String? group, String? zipCode, String? rate, String? employmentType, File? uploadDoc, FormStatus? formStatus}) {
     return CreatePostState(
       title: title ?? this.title,
       content: content ?? this.content,
       category: category ?? this.category,
       group: group ?? this.group,
       zipCode: zipCode ?? this.zipCode,
+      rate: rate ?? this.rate,
+      employmentType: employmentType ?? this.employmentType,
+      uploadDoc: uploadDoc ?? this.uploadDoc,
       formStatus: formStatus ?? this.formStatus
     );
   }
@@ -32,6 +43,6 @@ class CreatePostState extends Equatable {
 
   @override
   List<Object?> get props => [
-    title, content, category, group, zipCode, formStatus
+    title, content, category, group, zipCode, rate, employmentType, uploadDoc, formStatus
   ];
 }

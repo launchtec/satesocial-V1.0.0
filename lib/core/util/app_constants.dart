@@ -1,7 +1,6 @@
 import 'package:sate_social/features/community/data/models/post_category.dart';
 import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
-import '../../features/community/data/models/post_model.dart';
 import 'images.dart';
 
 class AppConstants {
@@ -63,6 +62,7 @@ class AppConstants {
     'Energy', 'Entertainment', 'Fashion', 'Finance', 'Food industry', 'Food service', 'Forestry or Mountain services',
     'Health Science & Medical Technology', 'Healthcare', 'Industrial Electronics', 'Insurance', 'IT', 'Manufacturing',
     'Transportation', 'Other type'];
+  static const List<String> employmentTypes = ["Full time", "Part time", "Contract", "Temporary", "Freelancer"];
 
   static List<NotificationModel> notificationModals = [
     NotificationModel(

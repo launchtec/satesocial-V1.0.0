@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path/path.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:sate_social/features/community/domain/use_cases/add_post_use_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/create_post/create_post_state.dart';
@@ -7,14 +10,17 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../../core/data/blocks/form_status.dart';
 import '../../../../../core/util/app_constants.dart';
+import '../../../domain/use_cases/upload_doc_case.dart';
 
 class CreatePostCubit extends Cubit<CreatePostState> {
   final AddPostUseCase _addPostUseCase;
+  final UploadDocUseCase _uploadDocCase;
 
   CreatePostCubit({
     required AddPostUseCase addPostUseCase,
-  })  : _addPostUseCase = addPostUseCase,
-        super(const CreatePostState());
+    required UploadDocUseCase uploadDocUseCase,
+  })  : _addPostUseCase = addPostUseCase, _uploadDocCase = uploadDocUseCase,
+        super(const CreatePostState(category: 'Romance Posting', group: 'Couples'));
 
   void titleChanged(String title) {
     emit(
@@ -56,20 +62,64 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     );
   }
 
+  void rateChanged(String rate) {
+    emit(
+      state.copyWith(
+        rate: rate,
+      ),
+    );
+  }
+
+  void uploadDocChanged(File uploadDoc) {
+    emit(
+      state.copyWith(
+        uploadDoc: uploadDoc,
+      ),
+    );
+  }
+
+  void employmentTypeChanged(String employmentType) {
+    emit(
+      state.copyWith(
+        employmentType: employmentType,
+      ),
+    );
+  }
+
+  bool isRomanticCategory() {
+    return state.category == 'Romance Posting';
+  }
+
+  bool isSocialCategory() {
+    return state.category == 'Social & Activity Posting';
+  }
+
+  bool isGigCategory() {
+    return state.category == 'Professional & Gig Economy';
+  }
 
   Future<void> submitPost() async {
     emit(state.copyWith(formStatus: FormStatus.submissionInProgress));
+    String? urlDoc;
+    if (isGigCategory() && state.uploadDoc != null) {
+      urlDoc = await _uploadDocCase.call(state.uploadDoc!.path, basename(state.uploadDoc!.path), FirebaseAuth.instance.currentUser!.uid);
+    }
     try {
       await _addPostUseCase(
         PostModel(
-            id: Uuid().v4(),
+            id: const Uuid().v4(),
             userId: FirebaseAuth.instance.currentUser!.uid,
             title: state.title ?? '',
             content: state.content ?? '',
             category: state.category ?? AppConstants.postCategories[0],
             group: state.group ?? AppConstants.romanceGroups[0],
             zipCode: state.zipCode ?? '',
-            created: DateTime.now().toIso8601String()),
+            created: DateTime.now().toIso8601String(),
+            rate: state.rate,
+            employmentType: state.employmentType,
+            urlDoc: urlDoc,
+            isFeatured: false
+        ),
       );
       emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
     } catch (err) {

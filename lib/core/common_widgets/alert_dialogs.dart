@@ -4,14 +4,14 @@ class AlertDialogs {
   static showLoaderDialog(BuildContext context){
     showDialog(
         context: context,
-        builder: (_) => new Dialog(
+        builder: (_) => Dialog(
           backgroundColor: Colors.transparent,
           elevation: 0,
           shadowColor: Colors.transparent,
-          child: new Container(
+          child: Container(
               alignment: FractionalOffset.center,
               height: 50.0,
-              child:  CircularProgressIndicator()
+              child: const CircularProgressIndicator()
           ),
         ));
   }

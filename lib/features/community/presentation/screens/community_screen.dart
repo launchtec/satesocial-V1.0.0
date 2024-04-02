@@ -5,7 +5,6 @@ import 'package:sate_social/core/util/styles.dart';
 import 'package:sate_social/features/community/presentation/widgets/post_item_widget.dart';
 
 import '../../../../core/route/route_helper.dart';
-import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/images.dart';
 import '../../data/models/post_model.dart';
 

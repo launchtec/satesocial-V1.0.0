@@ -86,7 +86,6 @@ class PushNotificationService {
 
   Future<String?> getToken() async {
     String? token = await _fcm.getToken();
-    print('Token: $token');
     return token;
   }
 }

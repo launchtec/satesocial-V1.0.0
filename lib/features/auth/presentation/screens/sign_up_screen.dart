@@ -46,7 +46,6 @@ class _SignUpViewState extends State<SignUpView> {
   int currentStep = 0;
   Timer? debounce;
   final TextEditingController _ageController = TextEditingController();
-  final TextEditingController _heightController = TextEditingController();
 
   @override
   void dispose() {

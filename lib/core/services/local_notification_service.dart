@@ -59,15 +59,13 @@ class LocalNotificationService {
       iOS: iosNotificationDetails,
     );
 
-    try {
-      await FlutterLocalNotificationsPlugin().show(
-        notification.id,
-        notification.title,
-        notification.body,
-        platformChannelSpecifics,
-        payload: json.encode(notification.toJson()),
-      );
-    } catch (e) {}
+    await FlutterLocalNotificationsPlugin().show(
+      notification.id,
+      notification.title,
+      notification.body,
+      platformChannelSpecifics,
+      payload: json.encode(notification.toJson()),
+    );
   }
 }
 
@@ -95,10 +93,10 @@ class LocalNotificationModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['body'] = this.body;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['title'] = title;
+    data['body'] = body;
     return data;
   }
 

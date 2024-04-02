@@ -96,7 +96,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                 color: Colors.black))
                       ]))),
                   Expanded(child: Container()),
-                  _version != null ? Text('Version $_version', style: TextStyle(color: Colors.white, fontSize: Dimensions.fontSizeLarge)) : SizedBox(),
+                  _version != null ? Text('Version $_version', style: TextStyle(color: Colors.white, fontSize: Dimensions.fontSizeLarge)) : const SizedBox(),
                   const SizedBox(height: Dimensions.paddingSizeOverLarge),
                 ])));
   }

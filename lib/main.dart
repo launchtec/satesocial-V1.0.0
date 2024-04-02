@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
+import 'package:sate_social/core/data/data_sources/storage_data_source.dart';
 import 'package:sate_social/core/services/push_notification_service.dart';
 import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
 import 'package:sate_social/features/notifications/data/repositories/notification_repository_impl.dart';
@@ -35,6 +36,7 @@ void main() {
       AuthRemoteDataSource authRemoteDataSource =
           AuthRemoteDataSourceFirebase();
       FirestoreDataSource firestoreDataSource = FirestoreDataSource();
+      StorageDataSource storageDataSource = StorageDataSource();
       PushNotificationService pushNotificationService = PushNotificationService();
 
       AuthRepository authRepository = AuthRepositoryImpl(
@@ -46,7 +48,9 @@ void main() {
           firestoreDataSource: firestoreDataSource);
 
       PostRepository postRepository = PostRepositoryImpl(
-          firestoreDataSource: firestoreDataSource);
+          firestoreDataSource: firestoreDataSource,
+          storageDataSource: storageDataSource
+      );
 
       AuthUser user = await authRepository.authUser.first;
 

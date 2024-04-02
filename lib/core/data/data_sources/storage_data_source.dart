@@ -18,4 +18,17 @@ class StorageDataSource {
       return Response.error(((e as FirebaseException).message ?? e.toString()));
     }
   }
+
+  Future<Response<String>> uploadUserGigDocument(
+      String filePath, String fileName, String userId) async {
+    String userFilePath = "user_docs/$userId/$fileName";
+
+    try {
+      await instance.ref(userFilePath).putFile(File(filePath));
+      String downloadUrl = await instance.ref(userFilePath).getDownloadURL();
+      return Response.success(downloadUrl);
+    } catch (e) {
+      return Response.error(((e as FirebaseException).message ?? e.toString()));
+    }
+  }
 }

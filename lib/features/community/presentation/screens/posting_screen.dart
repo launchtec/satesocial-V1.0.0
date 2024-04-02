@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
+import 'package:sate_social/features/community/domain/use_cases/upload_doc_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/create_post/create_post_cubit.dart';
 import 'package:sate_social/features/community/presentation/blocks/create_post/create_post_state.dart';
 import 'package:sate_social/features/community/presentation/widgets/groups_view_dialog.dart';
@@ -23,10 +27,12 @@ class PostingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CreatePostCubit(
-        addPostUseCase: AddPostUseCase(
-          postRepository: context.read<PostRepository>(),
-        ),
-      ),
+          addPostUseCase: AddPostUseCase(
+            postRepository: context.read<PostRepository>(),
+          ),
+          uploadDocUseCase: UploadDocUseCase(
+            postRepository: context.read<PostRepository>()
+          )),
       child: const PostingView(),
     );
   }
@@ -119,8 +125,28 @@ class _PostingViewState extends State<PostingView> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                                height: Dimensions.paddingSizeDefault),
+                            const SizedBox(height: Dimensions.paddingSizeSmall),
+                            cubitContext.read<CreatePostCubit>().isGigCategory()
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                        Text('POST A JOB',
+                                            style: TextStyle(
+                                                fontSize: Dimensions
+                                                    .fontSizeExtraLarge,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold)),
+                                        const SizedBox(
+                                            width: Dimensions.paddingSizeSmall),
+                                        Text('\$4.99/per post',
+                                            style: TextStyle(
+                                                fontSize: Dimensions
+                                                    .fontSizeExtraLarge,
+                                                color:
+                                                    ColorConstants.greenAccent,
+                                                fontWeight: FontWeight.bold)),
+                                      ])
+                                : const SizedBox(),
                             Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: Dimensions.paddingSizeDefault),
@@ -148,9 +174,13 @@ class _PostingViewState extends State<PostingView> {
                                                 Radius.circular(
                                                     Dimensions.radiusSmall))),
                                         padding: EdgeInsets.zero),
-                                    value: AppConstants.postCategories[0],
+                                    value: cubitContext
+                                        .read<CreatePostCubit>()
+                                        .state
+                                        .category,
                                     onChanged: (String? value) {
-                                      updatePostGroupsList(cubitContext, value!);
+                                      updatePostGroupsList(
+                                          cubitContext, value!);
                                       cubitContext
                                           .read<CreatePostCubit>()
                                           .categoryChanged(value);
@@ -167,7 +197,12 @@ class _PostingViewState extends State<PostingView> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: Dimensions.paddingSizeDefault),
                                 child: Row(children: [
-                                  Text('Select Post Group: ',
+                                  Text(
+                                      cubitContext
+                                              .read<CreatePostCubit>()
+                                              .isGigCategory()
+                                          ? 'Select Industry: '
+                                          : 'Select Post Group: ',
                                       style: TextStyle(
                                           fontSize:
                                               Dimensions.fontSizeExtraLarge,
@@ -175,11 +210,53 @@ class _PostingViewState extends State<PostingView> {
                                           fontWeight: FontWeight.bold)),
                                   Expanded(
                                       child: cubitContext
-                                                  .read<CreatePostCubit>()
-                                                  .state
-                                                  .category !=
-                                              'Social & Activity Posting'
-                                          ? DropdownButtonFormField2<String>(
+                                              .read<CreatePostCubit>()
+                                              .isSocialCategory()
+                                          ? ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: Colors.white,
+                                                  textStyle: TextStyle(
+                                                      fontSize: Dimensions
+                                                          .fontSizeSmall),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            Dimensions
+                                                                .radiusMiddle),
+                                                  )),
+                                              onPressed: () {
+                                                showDialog(
+                                                    barrierDismissible: true,
+                                                    context: cubitContext,
+                                                    builder: (context) {
+                                                      return GroupsViewDialog(
+                                                        socialGroups:
+                                                            AppConstants
+                                                                .socialGroups,
+                                                        postState: cubitContext
+                                                            .read<
+                                                                CreatePostCubit>()
+                                                            .state,
+                                                        selectCategory:
+                                                            (category) {
+                                                          cubitContext
+                                                              .read<
+                                                                  CreatePostCubit>()
+                                                              .groupChanged(
+                                                                  category
+                                                                      .name);
+                                                        },
+                                                      );
+                                                    });
+                                              },
+                                              child: Text(
+                                                  context
+                                                      .read<CreatePostCubit>()
+                                                      .state
+                                                      .group!,
+                                                  textAlign: TextAlign.center))
+                                          : DropdownButtonFormField2<String>(
                                               isExpanded: true,
                                               decoration: const InputDecoration(
                                                   contentPadding:
@@ -198,7 +275,10 @@ class _PostingViewState extends State<PostingView> {
                                                               Dimensions
                                                                   .radiusSmall))),
                                                   padding: EdgeInsets.zero),
-                                              value: postGroups[0],
+                                              value: cubitContext
+                                                  .read<CreatePostCubit>()
+                                                  .state
+                                                  .group,
                                               onChanged: (String? value) {
                                                 cubitContext
                                                     .read<CreatePostCubit>()
@@ -211,42 +291,96 @@ class _PostingViewState extends State<PostingView> {
                                                     value: value,
                                                     child: Text(value));
                                               }).toList(),
-                                            )
-                                          : ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                foregroundColor: Colors.black,
-                                                backgroundColor: Colors.white,
-                                                textStyle: TextStyle(fontSize: Dimensions.fontSizeSmall),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(Dimensions.radiusMiddle),
-                                                )
-                                              ),
-                                              onPressed: () {
-                                                showDialog(
-                                                    barrierDismissible: true,
-                                                    context: cubitContext,
-                                                    builder: (context) {
-                                                      return GroupsViewDialog(
-                                                          socialGroups: AppConstants.socialGroups,
-                                                          postState: cubitContext
-                                                              .read<CreatePostCubit>()
-                                                              .state,
-                                                          selectCategory: (category) {
-                                                            cubitContext
-                                                                .read<CreatePostCubit>()
-                                                                .groupChanged(category.name);
-                                                          },
-                                                      );
-                                                    });
-                                              },
-                                              child: Text(context
-                                                      .read<CreatePostCubit>()
-                                                      .state
-                                                      .group ??
-                                                  AppConstants
-                                                      .socialGroups[0].name, textAlign: TextAlign.center))),
+                                            ))
                                 ])),
+                            cubitContext.read<CreatePostCubit>().isGigCategory()
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal:
+                                            Dimensions.paddingSizeDefault),
+                                    child: Row(children: [
+                                      Text('Rate: ',
+                                          style: TextStyle(
+                                              fontSize:
+                                                  Dimensions.fontSizeExtraLarge,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold)),
+                                      Expanded(
+                                          child: TextField(
+                                        key:
+                                            const Key('post_zipCode_textField'),
+                                        style: TextStyle(
+                                            fontSize:
+                                                Dimensions.fontSizeDefault),
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          isDense: true,
+                                          fillColor: Colors.white,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: Dimensions
+                                                      .paddingSizeSmall,
+                                                  horizontal: Dimensions
+                                                      .paddingSizeSmall),
+                                          hintText: 'Type In',
+                                          hintStyle: TextStyle(
+                                              fontSize:
+                                                  Dimensions.fontSizeDefault),
+                                          border: InputBorder.none,
+                                        ),
+                                        onChanged: (String value) {
+                                          context
+                                              .read<CreatePostCubit>()
+                                              .rateChanged(value);
+                                        },
+                                      ))
+                                    ]))
+                                : const SizedBox(),
+                            cubitContext.read<CreatePostCubit>().isGigCategory()
+                                ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: Dimensions.paddingSizeDefault),
+                                child: Row(children: [
+                                  Text('Employment type: ',
+                                      style: TextStyle(
+                                          fontSize:
+                                              Dimensions.fontSizeExtraLarge,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
+                                  Expanded(
+                                      child: DropdownButtonFormField2<String>(
+                                    isExpanded: true,
+                                    decoration: const InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        border: InputBorder.none),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: Dimensions.fontSizeSmall),
+                                    buttonStyleData: const ButtonStyleData(
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                    Dimensions.radiusSmall))),
+                                        padding: EdgeInsets.zero),
+                                    value: cubitContext
+                                        .read<CreatePostCubit>()
+                                        .state
+                                        .employmentType,
+                                    onChanged: (String? value) {
+                                      cubitContext
+                                          .read<CreatePostCubit>()
+                                          .employmentTypeChanged(value!);
+                                    },
+                                    items: AppConstants.employmentTypes
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                          value: value, child: Text(value));
+                                    }).toList(),
+                                  ))
+                                ])) : const SizedBox(),
                             Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: Dimensions.paddingSizeDefault),
@@ -255,7 +389,7 @@ class _PostingViewState extends State<PostingView> {
                                         fontSize: Dimensions.fontSizeExtraLarge,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold))),
-                            SizedBox(height: Dimensions.paddingSizeSmall),
+                            const SizedBox(height: Dimensions.paddingSizeSmall),
                             Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: Dimensions.paddingSizeDefault),
@@ -265,9 +399,10 @@ class _PostingViewState extends State<PostingView> {
                                       fontSize: Dimensions.fontSizeDefault),
                                   decoration: InputDecoration(
                                     filled: true,
+                                    isDense: true,
                                     fillColor: Colors.white,
                                     contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 0,
+                                        vertical: Dimensions.paddingSizeSmall,
                                         horizontal:
                                             Dimensions.paddingSizeSmall),
                                     hintText: 'Type In',
@@ -276,7 +411,7 @@ class _PostingViewState extends State<PostingView> {
                                     border: InputBorder.none,
                                   ),
                                   onChanged: (String value) {
-                                    context
+                                    cubitContext
                                         .read<CreatePostCubit>()
                                         .titleChanged(value);
                                   },
@@ -285,41 +420,44 @@ class _PostingViewState extends State<PostingView> {
                             Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: Dimensions.paddingSizeDefault),
-                                child: Text('Zip Code:',
+                                child: Row(children: [
+                                  Text('Zip Code: ',
+                                      style: TextStyle(
+                                          fontSize:
+                                              Dimensions.fontSizeExtraLarge,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
+                                  Expanded(
+                                      child: TextField(
+                                    key: const Key('post_zipCode_textField'),
                                     style: TextStyle(
-                                        fontSize: Dimensions.fontSizeExtraLarge,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold))),
-                            const SizedBox(height: Dimensions.paddingSizeSmall),
-                            Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: Dimensions.paddingSizeDefault),
-                                child: TextField(
-                                  key: const Key('post_zipCode_textField'),
-                                  style: TextStyle(
-                                      fontSize: Dimensions.fontSizeDefault),
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 0,
-                                        horizontal:
-                                            Dimensions.paddingSizeSmall),
-                                    hintText: 'Type In',
-                                    hintStyle: TextStyle(
                                         fontSize: Dimensions.fontSizeDefault),
-                                    border: InputBorder.none,
-                                  ),
-                                  onChanged: (String value) {
-                                    context
-                                        .read<CreatePostCubit>()
-                                        .zipCodeChanged(value);
-                                  },
-                                )),
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      isDense: true,
+                                      fillColor: Colors.white,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical:
+                                                  Dimensions.paddingSizeSmall,
+                                              horizontal:
+                                                  Dimensions.paddingSizeSmall),
+                                      hintText: 'Type In',
+                                      hintStyle: TextStyle(
+                                          fontSize: Dimensions.fontSizeDefault),
+                                      border: InputBorder.none,
+                                    ),
+                                    onChanged: (String value) {
+                                      cubitContext
+                                          .read<CreatePostCubit>()
+                                          .zipCodeChanged(value);
+                                    },
+                                  ))
+                                ])),
                             const SizedBox(
                                 height: Dimensions.paddingSizeDefault),
                           ]),
@@ -344,7 +482,7 @@ class _PostingViewState extends State<PostingView> {
                           focusNode: focusNode,
                           style:
                               TextStyle(fontSize: Dimensions.fontSizeDefault),
-                          maxLines: 7,
+                          maxLines: 4,
                           keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
                             filled: true,
@@ -361,22 +499,56 @@ class _PostingViewState extends State<PostingView> {
                             ),
                           ),
                           onChanged: (String value) {
-                            context
+                            cubitContext
                                 .read<CreatePostCubit>()
                                 .contentChanged(value);
                           },
                         )),
-                    const SizedBox(height: Dimensions.paddingSizeSmall),
+                    const SizedBox(height: Dimensions.paddingSizeLarge),
                     Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: Dimensions.paddingSizeExtraLarge),
                         child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              cubitContext
+                                      .read<CreatePostCubit>()
+                                      .isGigCategory()
+                                  ? cubitContext
+                                  .read<CreatePostCubit>().state.uploadDoc == null ? InkWell(
+                                      child: Column(children: [
+                                        Image.asset(Images.addDoc),
+                                        Text('Add Doc',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    Dimensions.fontSizeSmall,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold))
+                                      ]),
+                                      onTap: () async {
+                                        FilePickerResult? result =
+                                            await FilePicker.platform
+                                                .pickFiles();
+
+                                        if (result != null) {
+                                          File file = File(result.files.single.path!);
+                                          cubitContext.read<CreatePostCubit>()
+                                              .uploadDocChanged(file);
+                                        }
+                                      }) : Column(children: [
+                                const Icon(Icons.check, color: ColorConstants.greenAccent),
+                                Text('File selected',
+                                    style: TextStyle(
+                                        fontSize:
+                                        Dimensions.fontSizeSmall,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold))
+                              ])
+                                  : const SizedBox(),
                               ElevatedButton(
                                   onPressed: () {
-                                    AlertDialogs.showLoaderDialog(context);
-                                    context
+                                    AlertDialogs.showLoaderDialog(cubitContext);
+                                    cubitContext
                                         .read<CreatePostCubit>()
                                         .submitPost();
                                   },
@@ -395,6 +567,9 @@ class _PostingViewState extends State<PostingView> {
     setState(() {
       if (value == 'Romance Posting') {
         postGroups = AppConstants.romanceGroups;
+        context
+            .read<CreatePostCubit>()
+            .groupChanged(AppConstants.romanceGroups[0]);
       } else if (value == 'Social & Activity Posting') {
         postGroups = [];
         context
@@ -402,6 +577,9 @@ class _PostingViewState extends State<PostingView> {
             .groupChanged(AppConstants.socialGroups[0].name);
       } else {
         postGroups = AppConstants.gigIndustries;
+        context
+            .read<CreatePostCubit>()
+            .groupChanged(AppConstants.gigIndustries[0]);
       }
     });
   }

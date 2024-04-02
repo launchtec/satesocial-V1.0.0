@@ -6,4 +6,5 @@ class ColorConstants {
   static const Color backColor = Color(0xFF131313);
   static const Color shapeColor = Color(0xFF9A9A9A);
   static const Color cardAlertColor = Color(0xFFE8CFF4);
+  static const Color greenAccent = Color(0xFF2DEC34);
 }

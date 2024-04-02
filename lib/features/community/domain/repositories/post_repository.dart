@@ -8,4 +8,6 @@ abstract class PostRepository {
   Stream<Iterable<PostModel>> getStreamPosts();
 
   Future<List<PostModel>> getPosts();
+
+  Future<String?> uploadDoc(String filePath, String fileName, String userId);
 }

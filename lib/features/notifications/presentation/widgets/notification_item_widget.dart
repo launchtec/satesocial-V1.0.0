@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_time_ago/get_time_ago.dart';
@@ -35,7 +34,7 @@ class NotificationItemWidget extends StatelessWidget {
                               fontSize: Dimensions.fontSizeSmall)),
                     ]),
                     Column(children: [
-                      Container(
+                      SizedBox(
                           width: context.width / 2,
                           child: Text(notificationModel.content,
                               textAlign: TextAlign.center,
@@ -64,7 +63,7 @@ class NotificationItemWidget extends StatelessWidget {
                     )
                   ]),
               if (isLastItem)
-                Divider()
+                const Divider()
             ]));
   }
 }
