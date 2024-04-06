@@ -9,5 +9,7 @@ abstract class PostRepository {
 
   Future<List<PostModel>> getPosts();
 
+  Future<List<PostModel>> getPostsCategory(String category);
+
   Future<String?> uploadDoc(String filePath, String fileName, String userId);
 }

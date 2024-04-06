@@ -43,6 +43,10 @@ class FirestoreDataSource {
     return instance.collection('posts').get();
   }
 
+  Future<QuerySnapshot> getPostsCategory(String category) {
+    return instance.collection('posts').where("category", isEqualTo: category).get();
+  }
+
   Stream<QuerySnapshot> getStreamPosts() {
     return instance.collection('posts').snapshots();
   }

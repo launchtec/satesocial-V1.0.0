@@ -141,11 +141,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 const SizedBox(width: Dimensions.paddingSizeDefault),
                 Column(children: [
                   IconButton(
-                      icon: Image.asset(Images.bublePost, height: 40),
-                      onPressed: () {
-                        Get.toNamed(RouteHelper
-                            .getCreatePostRoute());
-                      }),
+                      icon: Image.asset(Images.bublePost, height: 60),
+                      onPressed: () => Get.toNamed(RouteHelper
+                          .getCreatePostRoute())),
                   const Text('Post',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))
@@ -162,7 +160,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 ])),
                 Column(children: [
                   IconButton(
-                      icon: Image.asset(Images.bubleManage, height: 40),
+                      icon: Image.asset(Images.bubleManage, height: 45),
                       onPressed: () {}),
                   const Text('Manage\nListings',
                       style: TextStyle(
@@ -187,7 +185,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       IconButton(
                           icon: Image.asset(Images.bubleGig,
                               width: context.width / 4),
-                          onPressed: () {}),
+                          onPressed: () => Get.toNamed(RouteHelper
+                              .getMapPostRoute())),
                       const Text('Gig',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold))

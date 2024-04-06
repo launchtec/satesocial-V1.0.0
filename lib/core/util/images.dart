@@ -18,8 +18,10 @@ class Images {
   static const String connectNav = 'assets/image/connect_nav.png';
   static const String homeNav = 'assets/image/home_nav.png';
   static const String logo = 'assets/image/logo.png';
+  static const String list = 'assets/image/list.png';
   static const String match = 'assets/image/match.png';
   static const String matchNav = 'assets/image/match_nav.png';
+  static const String marker = 'assets/image/marker.png';
   static const String notificationNav = 'assets/image/notification_nav.png';
   static const String purpleBuble = 'assets/image/purple_buble.png';
   static const String settingsNav = 'assets/image/settings_nav.png';

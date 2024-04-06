@@ -34,8 +34,29 @@ class PostRepositoryImpl implements PostRepository {
             created: doc.get("created"),
             isFeatured: doc.get("isFeatured") as bool,
             rate: doc.get("rate"),
-            employmentType: doc.get("employmentType")))
-        .toList();
+            employmentType: doc.get("employmentType"),
+            urlDoc: doc.get("urlDoc")
+    )).toList();
+  }
+
+  @override
+  Future<List<PostModel>> getPostsCategory(String category) async {
+    final postsSnapshot = await firestoreDataSource.getPostsCategory(category);
+    return postsSnapshot.docs
+        .map((doc) => PostModel(
+        id: doc.get("id"),
+        userId: doc.get("userId"),
+        title: doc.get("title"),
+        content: doc.get("content"),
+        category: doc.get("category"),
+        group: doc.get("group"),
+        zipCode: doc.get("zipCode"),
+        created: doc.get("created"),
+        isFeatured: doc.get("isFeatured") as bool,
+        rate: doc.get("rate"),
+        employmentType: doc.get("employmentType"),
+        urlDoc: doc.get("urlDoc")
+    )).toList();
   }
 
   @override
