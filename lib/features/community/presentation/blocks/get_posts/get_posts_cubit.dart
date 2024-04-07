@@ -1,18 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
-import 'package:sate_social/features/community/domain/use_cases/posts_category_case.dart';
-import 'package:sate_social/features/community/presentation/blocks/get_posts/get_posts_state.dart';
+
+import '../../../domain/use_cases/get_posts_case.dart';
+import 'get_posts_state.dart';
 
 class GetPostsCubit extends Cubit<GetPostsState> {
-  final PostsCategoryCase _postsCategoryCase;
+  final GetPostsCase _getPostsCase;
 
   GetPostsCubit({
-    required PostsCategoryCase postsCategoryCase,
-  }): _postsCategoryCase = postsCategoryCase,
+    required GetPostsCase getPostsCase,
+  }): _getPostsCase = getPostsCase,
         super(const GetPostsState());
 
-  Future<void> getCategoryPosts(String category) async {
-    List<PostModel> postModels = await _postsCategoryCase.call(category);
+  Future<void> getPosts() async {
+    List<PostModel> postModels = await _getPostsCase.call();
     emit(GetPostsState(isLoading: false, postModels: postModels));
   }
 }

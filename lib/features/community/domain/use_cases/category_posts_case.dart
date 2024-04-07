@@ -1,12 +1,11 @@
-
 import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
 
 import '../../data/models/post_model.dart';
 
-class PostsCategoryCase {
+class CategoryPostsCase {
   final PostRepository postRepository;
 
-  PostsCategoryCase({required this.postRepository});
+  CategoryPostsCase({required this.postRepository});
 
   Future<List<PostModel>> call(String category) {
     return postRepository.getPostsCategory(category);

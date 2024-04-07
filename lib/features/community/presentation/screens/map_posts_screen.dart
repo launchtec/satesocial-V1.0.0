@@ -6,8 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sate_social/core/util/maps_util.dart';
-import 'package:sate_social/features/community/domain/use_cases/posts_category_case.dart';
-import 'package:sate_social/features/community/presentation/blocks/get_posts/get_posts_cubit.dart';
+import 'package:sate_social/features/community/domain/use_cases/category_posts_case.dart';
+import 'package:sate_social/features/community/presentation/blocks/category_posts/category_posts_cubit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:sate_social/features/community/presentation/widgets/post_info_dialog.dart';
 import 'package:uuid/uuid.dart';
@@ -17,7 +17,7 @@ import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
 import '../../data/models/post_model.dart';
 import '../../domain/repositories/post_repository.dart';
-import '../blocks/get_posts/get_posts_state.dart';
+import '../blocks/category_posts/category_posts_state.dart';
 
 class MapPostsScreen extends StatelessWidget {
   const MapPostsScreen({super.key});
@@ -25,8 +25,8 @@ class MapPostsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GetPostsCubit(
-        postsCategoryCase: PostsCategoryCase(
+      create: (context) => CategoryPostsCubit(
+        postsCategoryCase: CategoryPostsCase(
           postRepository: context.read<PostRepository>(),
         ),
       ),
@@ -63,7 +63,7 @@ class _MapPostsViewState extends State<MapPostsView> {
       );
     }
     context
-        .read<GetPostsCubit>()
+        .read<CategoryPostsCubit>()
         .getCategoryPosts('Professional & Gig Economy');
     super.initState();
   }
@@ -73,7 +73,7 @@ class _MapPostsViewState extends State<MapPostsView> {
     return Scaffold(
         appBar: null,
         backgroundColor: Colors.black,
-        body: BlocConsumer<GetPostsCubit, GetPostsState>(
+        body: BlocConsumer<CategoryPostsCubit, CategoryPostsState>(
             listener: (context, state) {},
             builder: (context, state) {
               if (markers.isEmpty && state.postModels.isNotEmpty) {
