@@ -8,6 +8,7 @@ import 'package:sate_social/core/util/maps_util.dart';
 import 'package:sate_social/features/community/domain/use_cases/posts_category_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/get_posts/get_posts_cubit.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:sate_social/features/community/presentation/widgets/post_info_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/util/dimensions.dart';
@@ -183,7 +184,14 @@ class _MapPostsViewState extends State<MapPostsView> {
               locations.first.longitude,
             ),
             icon: await getCustomIcon(),
-            infoWindow: InfoWindow(title: post.title, snippet: post.content),
+            onTap: (){
+              showDialog(
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (context) {
+                    return PostInfoDialog(post: post);
+                  });
+            },
           ));
         }
       }

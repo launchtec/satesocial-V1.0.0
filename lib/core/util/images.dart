@@ -16,17 +16,20 @@ class Images {
   static const String complete = 'assets/image/complete.png';
   static const String connect = 'assets/image/connect.png';
   static const String connectNav = 'assets/image/connect_nav.png';
+  static const String gigCircle = 'assets/image/gig_circle.png';
   static const String homeNav = 'assets/image/home_nav.png';
   static const String logo = 'assets/image/logo.png';
   static const String list = 'assets/image/list.png';
   static const String match = 'assets/image/match.png';
   static const String matchNav = 'assets/image/match_nav.png';
   static const String marker = 'assets/image/marker.png';
+  static const String message = 'assets/image/message.png';
   static const String notificationNav = 'assets/image/notification_nav.png';
   static const String purpleBuble = 'assets/image/purple_buble.png';
   static const String settingsNav = 'assets/image/settings_nav.png';
   static const String signInIcon = 'assets/image/sign_in_icon.png';
   static const String signUpIcon = 'assets/image/sign_up_icon.png';
+  static const String vectorIcon = 'assets/image/vector.png';
   static const String welcomeBack = 'assets/image/welcome_back.png';
 
   // Post group images
