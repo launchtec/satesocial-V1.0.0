@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
 import 'package:sate_social/core/data/data_sources/storage_data_source.dart';
+import 'package:sate_social/core/services/location_service.dart';
 import 'package:sate_social/core/services/push_notification_service.dart';
 import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
 import 'package:sate_social/features/notifications/data/repositories/notification_repository_impl.dart';
@@ -32,6 +33,7 @@ Future<void> bootstrap(AppBuilder builder) async {
 void main() {
   bootstrap(
     () async {
+      final getIt = GetInstance();
       AuthLocalDataSource authLocalDataSource = AuthLocalDataSource();
       AuthRemoteDataSource authRemoteDataSource =
           AuthRemoteDataSourceFirebase();

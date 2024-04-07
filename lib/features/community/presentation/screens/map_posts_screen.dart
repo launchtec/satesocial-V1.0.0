@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sate_social/core/util/maps_util.dart';
@@ -45,13 +46,22 @@ class _MapPostsViewState extends State<MapPostsView> {
   Set<Marker> markers = {};
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(39.7413907, -104.9982888),
-    zoom: 12,
-  );
+  late CameraPosition _currentPosition;
 
   @override
   void initState() {
+    try {
+      Position position = Get.find<Position>(tag: 'coordinates');
+      _currentPosition = CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 12,
+      );
+    } on Exception {
+      _currentPosition = const CameraPosition(
+        target: LatLng(39.7413907, -104.9982888),
+        zoom: 12,
+      );
+    }
     context
         .read<GetPostsCubit>()
         .getCategoryPosts('Professional & Gig Economy');
@@ -90,7 +100,7 @@ class _MapPostsViewState extends State<MapPostsView> {
                               Padding(
                                   padding: const EdgeInsets.only(
                                       right: Dimensions.paddingSizeExtraLarge),
-                                  child: Text('DENVER',
+                                  child: Text(Get.find<String>(tag: 'city') ?? '',
                                       style: TextStyle(
                                           fontSize: Dimensions.fontSizeTitle,
                                           shadows: const [
@@ -113,7 +123,9 @@ class _MapPostsViewState extends State<MapPostsView> {
                             child: Stack(children: [
                           GoogleMap(
                             mapType: MapType.normal,
-                            initialCameraPosition: _kGooglePlex,
+                            initialCameraPosition: _currentPosition,
+                            myLocationEnabled: true,
+                            myLocationButtonEnabled: true,
                             padding: const EdgeInsets.all(
                                 Dimensions.paddingSizeDefault),
                             markers: markers,
@@ -175,7 +187,8 @@ class _MapPostsViewState extends State<MapPostsView> {
     Set<Marker> tempMarkers = {};
     for (PostModel post in postModels) {
       if (post.zipCode.isNotEmpty) {
-        List<Location> locations = await locationFromAddress("USA, ${post.zipCode}");
+        List<Location> locations =
+            await locationFromAddress("USA, ${post.zipCode}");
         if (locations.isNotEmpty) {
           tempMarkers.add(Marker(
             markerId: MarkerId(const Uuid().v4()),
@@ -184,7 +197,7 @@ class _MapPostsViewState extends State<MapPostsView> {
               locations.first.longitude,
             ),
             icon: await getCustomIcon(),
-            onTap: (){
+            onTap: () {
               showDialog(
                   barrierDismissible: true,
                   context: context,

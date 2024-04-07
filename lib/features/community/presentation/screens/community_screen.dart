@@ -19,6 +19,11 @@ class _CommunityScreenState extends State<CommunityScreen> {
   List<PostModel> featurePosts = [];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: null,
@@ -41,7 +46,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 Padding(
                     padding: const EdgeInsets.only(
                         right: Dimensions.paddingSizeExtraLarge),
-                    child: Text('DENVER',
+                    child: Text(Get.find<String>(tag: 'city') ?? '',
                         style: TextStyle(
                             fontSize: Dimensions.fontSizeTitle,
                             shadows: const [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sate_social/core/services/location_service.dart';
 import 'package:sate_social/core/util/dimensions.dart';
 import 'package:sate_social/core/util/images.dart';
 import 'package:sate_social/core/util/styles.dart';
@@ -23,6 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    LocationService().determinePosition();
     if (widget.openNotification) {
       _selectedIndex = 1;
     }
