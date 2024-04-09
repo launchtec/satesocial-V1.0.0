@@ -9,10 +9,8 @@ class PostRepositoryImpl implements PostRepository {
   final FirestoreDataSource firestoreDataSource;
   final StorageDataSource storageDataSource;
 
-  const PostRepositoryImpl({
-    required this.firestoreDataSource,
-    required this.storageDataSource
-  });
+  const PostRepositoryImpl(
+      {required this.firestoreDataSource, required this.storageDataSource});
 
   @override
   Future<void> addOrUpdatePost({required PostModel postModel}) async {
@@ -33,10 +31,14 @@ class PostRepositoryImpl implements PostRepository {
             zipCode: doc.get("zipCode"),
             created: doc.get("created"),
             isFeatured: doc.get("isFeatured") as bool,
-            rate: doc.get("rate"),
-            employmentType: doc.get("employmentType"),
-            urlDoc: doc.get("urlDoc")
-    )).toList();
+            rate: doc.data().toString().contains('rate') ? doc.get('rate') : '',
+            employmentType: doc.data().toString().contains('employmentType')
+                ? doc.get('employmentType')
+                : '',
+            urlDoc: doc.data().toString().contains('urlDoc')
+                ? doc.get('urlDoc')
+                : ''))
+        .toList();
   }
 
   @override
@@ -44,19 +46,23 @@ class PostRepositoryImpl implements PostRepository {
     final postsSnapshot = await firestoreDataSource.getPostsCategory(category);
     return postsSnapshot.docs
         .map((doc) => PostModel(
-        id: doc.get("id"),
-        userId: doc.get("userId"),
-        title: doc.get("title"),
-        content: doc.get("content"),
-        category: doc.get("category"),
-        group: doc.get("group"),
-        zipCode: doc.get("zipCode"),
-        created: doc.get("created"),
-        isFeatured: doc.get("isFeatured") as bool,
-        rate: doc.get("rate"),
-        employmentType: doc.get("employmentType"),
-        urlDoc: doc.get("urlDoc")
-    )).toList();
+            id: doc.get("id"),
+            userId: doc.get("userId"),
+            title: doc.get("title"),
+            content: doc.get("content"),
+            category: doc.get("category"),
+            group: doc.get("group"),
+            zipCode: doc.get("zipCode"),
+            created: doc.get("created"),
+            isFeatured: doc.get("isFeatured") as bool,
+            rate: doc.data().toString().contains('rate') ? doc.get('rate') : '',
+            employmentType: doc.data().toString().contains('employmentType')
+                ? doc.get('employmentType')
+                : '',
+            urlDoc: doc.data().toString().contains('urlDoc')
+                ? doc.get('urlDoc')
+                : ''))
+        .toList();
   }
 
   @override
@@ -72,13 +78,20 @@ class PostRepositoryImpl implements PostRepository {
             zipCode: doc.get("zipCode"),
             created: doc.get("created"),
             isFeatured: doc.get("isFeatured") as bool,
-            rate: doc.get("rate"),
-            employmentType: doc.get("employmentType"))));
+            rate: doc.data().toString().contains('rate') ? doc.get('rate') : '',
+            employmentType: doc.data().toString().contains('employmentType')
+                ? doc.get('employmentType')
+                : '',
+            urlDoc: doc.data().toString().contains('urlDoc')
+                ? doc.get('urlDoc')
+                : '')));
   }
 
   @override
-  Future<String?> uploadDoc(String filePath, String fileName, String userId) async {
-    Response<String> response = await storageDataSource.uploadUserGigDocument(filePath, fileName, userId);
+  Future<String?> uploadDoc(
+      String filePath, String fileName, String userId) async {
+    Response<String> response = await storageDataSource.uploadUserGigDocument(
+        filePath, fileName, userId);
     if (response is Success<String>) {
       return response.value;
     } else {

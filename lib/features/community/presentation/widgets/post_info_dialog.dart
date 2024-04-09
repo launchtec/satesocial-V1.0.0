@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get_time_ago/get_time_ago.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
@@ -25,8 +24,8 @@ class PostInfoDialog extends StatelessWidget {
                 width: double.maxFinite,
                 color: ColorConstants.darkGrey,
                 child: Column(children: [
-                  Image.asset(Images.gigCircle, height: 100),
-                  Text('Community Gig Posting',
+                  Image.asset(post.imageCircleCategory(), height: 100),
+                  Text(post.category,
                       style: TextStyle(
                           color: Colors.white,
                           shadows: const [
@@ -70,7 +69,7 @@ class PostInfoDialog extends StatelessWidget {
                               const SizedBox(
                                   width: Dimensions.paddingSizeMinimal),
                               Text(
-                                  'Posted: ${GetTimeAgo.parse(DateTime.parse(post.created))}',
+                                  'Posted: ${timeago.format(DateTime.parse(post.created))}',
                                   style: TextStyle(
                                       fontSize: Dimensions.fontSizeOverSmall))
                             ]),

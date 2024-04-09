@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/maps_util.dart';
 import 'package:sate_social/features/community/domain/use_cases/category_posts_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/category_posts/category_posts_cubit.dart';
@@ -20,7 +21,8 @@ import '../../domain/repositories/post_repository.dart';
 import '../blocks/category_posts/category_posts_state.dart';
 
 class MapPostsScreen extends StatelessWidget {
-  const MapPostsScreen({super.key});
+  final String category;
+  const MapPostsScreen({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +32,14 @@ class MapPostsScreen extends StatelessWidget {
           postRepository: context.read<PostRepository>(),
         ),
       ),
-      child: const MapPostsView(),
+      child: MapPostsView(category: category),
     );
   }
 }
 
 class MapPostsView extends StatefulWidget {
-  const MapPostsView({super.key});
+  final String category;
+  const MapPostsView({super.key, required this.category});
 
   @override
   State<MapPostsView> createState() => _MapPostsViewState();
@@ -62,9 +65,12 @@ class _MapPostsViewState extends State<MapPostsView> {
         zoom: 12,
       );
     }
-    context
-        .read<CategoryPostsCubit>()
-        .getCategoryPosts('Professional & Gig Economy');
+    final queryCategory = widget.category == 'romance'
+        ? AppConstants.postCategories[0]
+        : (widget.category == 'social'
+            ? AppConstants.postCategories[1]
+            : AppConstants.postCategories[2]);
+    context.read<CategoryPostsCubit>().getCategoryPosts(queryCategory);
     super.initState();
   }
 
@@ -100,7 +106,8 @@ class _MapPostsViewState extends State<MapPostsView> {
                               Padding(
                                   padding: const EdgeInsets.only(
                                       right: Dimensions.paddingSizeExtraLarge),
-                                  child: Text(Get.find<String>(tag: 'city') ?? '',
+                                  child: Text(
+                                      Get.find<String>(tag: 'city') ?? '',
                                       style: TextStyle(
                                           fontSize: Dimensions.fontSizeTitle,
                                           shadows: const [
@@ -196,7 +203,7 @@ class _MapPostsViewState extends State<MapPostsView> {
               locations.first.latitude,
               locations.first.longitude,
             ),
-            icon: await getCustomIcon(),
+            icon: await getCustomIcon(post),
             onTap: () {
               showDialog(
                   barrierDismissible: true,
@@ -214,11 +221,11 @@ class _MapPostsViewState extends State<MapPostsView> {
     });
   }
 
-  Future<BitmapDescriptor> getCustomIcon() async {
+  Future<BitmapDescriptor> getCustomIcon(PostModel postModel) async {
     return SizedBox(
-      height: 150,
-      width: 150,
-      child: Image.asset(Images.marker),
+      height: 125,
+      width: 125,
+      child: Image.asset(postModel.imageCategory(), fit: BoxFit.contain),
     ).toBitmapDescriptor();
   }
 }

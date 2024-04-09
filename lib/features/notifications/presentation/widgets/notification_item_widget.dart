@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_time_ago/get_time_ago.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
 import '../../../../core/util/dimensions.dart';
@@ -28,7 +28,7 @@ class NotificationItemWidget extends StatelessWidget {
                     Column(children: [
                       Image.asset(Images.bell, height: 28),
                       const SizedBox(height: Dimensions.paddingSizeSmall),
-                      Text(GetTimeAgo.parse(DateTime.parse(notificationModel.created)),
+                      Text(timeago.format(DateTime.parse(notificationModel.created)),
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: Dimensions.fontSizeSmall)),

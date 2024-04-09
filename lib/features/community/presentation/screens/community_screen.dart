@@ -158,7 +158,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                   IconButton(
                       icon: Image.asset(Images.bubleActivities,
                           width: context.width / 4),
-                      onPressed: () {}),
+                      onPressed: () => Get.toNamed(RouteHelper
+                          .getMapPostRoute(category: 'social'))),
                   const Text('Activities',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))
@@ -181,7 +182,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       IconButton(
                           icon: Image.asset(Images.bubleLove,
                               width: context.width / 4),
-                          onPressed: () {}),
+                          onPressed: () => Get.toNamed(RouteHelper
+                              .getMapPostRoute(category: 'romance'))),
                       const Text('Love',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold))
@@ -191,7 +193,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                           icon: Image.asset(Images.bubleGig,
                               width: context.width / 4),
                           onPressed: () => Get.toNamed(RouteHelper
-                              .getMapPostRoute())),
+                              .getMapPostRoute(category: 'gig'))),
                       const Text('Gig',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold))

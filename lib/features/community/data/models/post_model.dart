@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/util/images.dart';
+
 class PostModel extends Equatable {
   final String id;
   final String userId;
@@ -44,6 +46,26 @@ class PostModel extends Equatable {
       'employmentType': employmentType,
       'urlDoc': urlDoc
     };
+  }
+
+  String imageCategory() {
+    if (category == 'Romance Posting') {
+      return Images.romanMarker;
+    } else if (category == 'Social & Activity Posting') {
+      return Images.socialMarker;
+    } else {
+      return Images.gigMarker;
+    }
+  }
+
+  String imageCircleCategory() {
+    if (category == 'Romance Posting') {
+      return Images.romanceCircle;
+    } else if (category == 'Social & Activity Posting') {
+      return Images.socialCircle;
+    } else {
+      return Images.gigCircle;
+    }
   }
 
   @override
