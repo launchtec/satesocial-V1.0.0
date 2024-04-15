@@ -5,11 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:haversine_distance/haversine_distance.dart' as havers;
 import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/maps_util.dart';
 import 'package:sate_social/features/community/domain/use_cases/category_posts_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/category_posts/category_posts_cubit.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:sate_social/features/community/presentation/widgets/list_posts_dialog.dart';
 import 'package:sate_social/features/community/presentation/widgets/post_info_dialog.dart';
 import 'package:uuid/uuid.dart';
 
@@ -50,13 +52,15 @@ class _MapPostsViewState extends State<MapPostsView> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   late CameraPosition _currentPosition;
+  Position? _position;
+  List<PostModel> posts = [];
 
   @override
   void initState() {
     try {
-      Position position = Get.find<Position>(tag: 'coordinates');
+      _position = Get.find<Position>(tag: 'coordinates');
       _currentPosition = CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
+        target: LatLng(_position!.latitude, _position!.longitude),
         zoom: 12,
       );
     } on Exception {
@@ -83,7 +87,8 @@ class _MapPostsViewState extends State<MapPostsView> {
             listener: (context, state) {},
             builder: (context, state) {
               if (markers.isEmpty && state.postModels.isNotEmpty) {
-                addingMarkersInMap(state.postModels);
+                posts = state.postModels;
+                addingMarkersInMap();
               }
               return Container(
                   padding: const EdgeInsets.only(
@@ -144,24 +149,48 @@ class _MapPostsViewState extends State<MapPostsView> {
                             bottom: 50,
                             left: 20,
                             child: Column(children: [
-                              InkWell(
-                                  child: Image.asset(Images.list, height: 50),
-                                  onTap: () {}),
-                              Text('List View',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      shadows: const [
-                                        Shadow(
-                                          color: Colors
-                                              .black, // Choose the color of the shadow
-                                          blurRadius:
-                                              4.0, // Adjust the blur radius for the shadow effect
-                                          offset: Offset(0,
-                                              4.0), // Set the horizontal and vertical offset for the shadow
-                                        ),
-                                      ],
-                                      fontSize: Dimensions.fontSizeLarge,
-                                      fontWeight: FontWeight.bold)),
+                              state.postModels.isNotEmpty
+                                  ? Column(children: [
+                                      InkWell(
+                                          child: Image.asset(Images.list,
+                                              height: 50),
+                                          onTap: () {
+                                            showDialog(
+                                                barrierDismissible: true,
+                                                context: context,
+                                                builder: (context) {
+                                                  return ListPostsDialog(
+                                                      posts: state.postModels,
+                                                      selectPost: (post) {
+                                                        showDialog(
+                                                            barrierDismissible: true,
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return PostInfoDialog(post: post);
+                                                            });
+                                                      },
+                                                  );
+                                                });
+                                          }),
+                                      Text('List View',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              shadows: const [
+                                                Shadow(
+                                                  color: Colors
+                                                      .black, // Choose the color of the shadow
+                                                  blurRadius:
+                                                      4.0, // Adjust the blur radius for the shadow effect
+                                                  offset: Offset(0,
+                                                      4.0), // Set the horizontal and vertical offset for the shadow
+                                                ),
+                                              ],
+                                              fontSize:
+                                                  Dimensions.fontSizeLarge,
+                                              fontWeight: FontWeight.bold)
+                                      )
+                                    ])
+                                  : Container(),
                               const SizedBox(
                                   height: Dimensions.paddingSizeDefault),
                               InkWell(
@@ -190,35 +219,55 @@ class _MapPostsViewState extends State<MapPostsView> {
             }));
   }
 
-  Future<void> addingMarkersInMap(List<PostModel> postModels) async {
+  Future<void> addingMarkersInMap() async {
     Set<Marker> tempMarkers = {};
-    for (PostModel post in postModels) {
-      if (post.zipCode.isNotEmpty) {
-        List<Location> locations =
-            await locationFromAddress("USA, ${post.zipCode}");
-        if (locations.isNotEmpty) {
-          tempMarkers.add(Marker(
-            markerId: MarkerId(const Uuid().v4()),
-            position: LatLng(
-              locations.first.latitude,
-              locations.first.longitude,
-            ),
-            icon: await getCustomIcon(post),
-            onTap: () {
-              showDialog(
-                  barrierDismissible: true,
-                  context: context,
-                  builder: (context) {
-                    return PostInfoDialog(post: post);
-                  });
-            },
-          ));
-        }
+    await updatePostsLocation();
+    for (PostModel post in posts) {
+      if (post.location != null) {
+        tempMarkers.add(Marker(
+          markerId: MarkerId(const Uuid().v4()),
+          position: LatLng(
+            post.location!.latitude,
+            post.location!.longitude,
+          ),
+          icon: await getCustomIcon(post),
+          onTap: () {
+            showDialog(
+                barrierDismissible: true,
+                context: context,
+                builder: (context) {
+                  return PostInfoDialog(post: post);
+                });
+          },
+        ));
       }
     }
     setState(() {
       markers = tempMarkers;
     });
+  }
+
+  Future<void> updatePostsLocation() async {
+    final haversineDistance = havers.HaversineDistance();
+    for (PostModel post in posts) {
+      if (post.zipCode.isNotEmpty) {
+        List<Location> locations =
+            await locationFromAddress("USA, ${post.zipCode}");
+        if (locations.isNotEmpty) {
+          post.location = locations.first;
+          if (_position != null) {
+            int miDistance = haversineDistance
+                .haversine(
+                    havers.Location(_position!.latitude, _position!.longitude),
+                    havers.Location(
+                        post.location!.latitude, post.location!.longitude),
+                    havers.Unit.MILE)
+                .floor();
+            post.strLocation = '$miDistance mi.';
+          }
+        }
+      }
+    }
   }
 
   Future<BitmapDescriptor> getCustomIcon(PostModel postModel) async {

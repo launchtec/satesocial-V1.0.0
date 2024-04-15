@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
@@ -24,7 +25,7 @@ class PostItemWidget extends StatelessWidget {
                   color: Colors.black,
                   fontSize: Dimensions.fontSizeSmall)),
           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-          Text(postModel.created,
+          Text(timeago.format(DateTime.parse(postModel.created)),
               style: TextStyle(
                   color: ColorConstants.primaryColor,
                   fontSize: Dimensions.fontSizeExtraSmall)),

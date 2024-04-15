@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:geocoding/geocoding.dart';
 
 import '../../../../core/util/images.dart';
 
@@ -15,8 +16,10 @@ class PostModel extends Equatable {
   final String? rate;
   final String? employmentType;
   final String? urlDoc;
+  Location? location;
+  String? strLocation;
 
-  const PostModel({
+  PostModel({
     required this.id,
     required this.userId,
     required this.title,
@@ -28,7 +31,9 @@ class PostModel extends Equatable {
     required this.isFeatured,
     this.rate,
     this.employmentType,
-    this.urlDoc
+    this.urlDoc,
+    this.location,
+    this.strLocation
   });
 
   Map<String, dynamic> toMap() {
@@ -65,6 +70,26 @@ class PostModel extends Equatable {
       return Images.socialCircle;
     } else {
       return Images.gigCircle;
+    }
+  }
+
+  String imageBubleCategory() {
+    if (category == 'Romance Posting') {
+      return Images.bubleLove;
+    } else if (category == 'Social & Activity Posting') {
+      return Images.bubleActivities;
+    } else {
+      return Images.bubleGig;
+    }
+  }
+
+  String titleListView() {
+    if (category == 'Romance Posting') {
+      return 'Romance List\n View';
+    } else if (category == 'Social & Activity Posting') {
+      return 'Social List\n View';
+    } else {
+      return 'Gig List\n View';
     }
   }
 

@@ -40,7 +40,7 @@ class PostInfoDialog extends StatelessWidget {
                           ],
                           fontSize: Dimensions.fontSizeLarge,
                           fontWeight: FontWeight.bold)),
-                  SizedBox(height: Dimensions.paddingSizeDefault),
+                  const SizedBox(height: Dimensions.paddingSizeDefault),
                   Container(
                       decoration: BoxDecoration(
                           border: Border.all(
