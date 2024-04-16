@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -8,28 +9,29 @@ import '../../../../core/util/styles.dart';
 
 class ListItemWidget extends StatelessWidget {
   final PostModel postModel;
+  final Function onTap;
 
-  const ListItemWidget({super.key, required this.postModel});
+  const ListItemWidget({super.key, required this.postModel, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(
-            vertical: Dimensions.paddingSizeMinimal, horizontal: Dimensions.paddingSizeDefault),
-        child: InkWell(onTap: (){}, child: Row(children: [
+            vertical: Dimensions.paddingSizeMinimal, horizontal: Dimensions.paddingSizeMinimal),
+        child: InkWell(onTap: () => onTap(), child: Row(children: [
           Image.asset(Images.arrow, height: 32),
           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-          Text(postModel.title,
+          Flexible(child: Text(postModel.title,
               style: TextStyle(
                   decoration: TextDecoration.underline,
                   decorationColor: Colors.white,
                   color: Colors.white,
-                  fontSize: Dimensions.fontSizeDefault)),
+                  fontSize: Dimensions.fontSizeDefault))),
           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
           Text(timeago.format(DateTime.parse(postModel.created)),
               style: TextStyle(
                   color: ColorConstants.primaryColor,
-                  fontSize: Dimensions.fontSizeSmall)),
+                  fontSize: Dimensions.fontSizeExtraSmall)),
           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
           Text(postModel.strLocation ?? '',
               style: TextStyle(
@@ -44,7 +46,7 @@ class ListItemWidget extends StatelessWidget {
                     ),
                   ],
                   fontSize:
-                  Dimensions.fontSizeSmall,
+                  Dimensions.fontSizeExtraSmall,
                   fontWeight: FontWeight.bold)),
         ])));
   }

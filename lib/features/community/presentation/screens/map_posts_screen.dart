@@ -5,12 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:haversine_distance/haversine_distance.dart' as havers;
 import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/maps_util.dart';
 import 'package:sate_social/features/community/domain/use_cases/category_posts_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/category_posts/category_posts_cubit.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:sate_social/features/community/presentation/widgets/list_posts_dialog.dart';
 import 'package:sate_social/features/community/presentation/widgets/post_info_dialog.dart';
 import 'package:uuid/uuid.dart';
@@ -88,7 +86,7 @@ class _MapPostsViewState extends State<MapPostsView> {
             builder: (context, state) {
               if (markers.isEmpty && state.postModels.isNotEmpty) {
                 posts = state.postModels;
-                addingMarkersInMap();
+                addingMarkersInMap(context);
               }
               return Container(
                   padding: const EdgeInsets.only(
@@ -160,15 +158,17 @@ class _MapPostsViewState extends State<MapPostsView> {
                                                 context: context,
                                                 builder: (context) {
                                                   return ListPostsDialog(
-                                                      posts: state.postModels,
-                                                      selectPost: (post) {
-                                                        showDialog(
-                                                            barrierDismissible: true,
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return PostInfoDialog(post: post);
-                                                            });
-                                                      },
+                                                    posts: state.postModels,
+                                                    selectPost: (post) {
+                                                      showDialog(
+                                                          barrierDismissible:
+                                                              true,
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return PostInfoDialog(
+                                                                post: post);
+                                                          });
+                                                    },
                                                   );
                                                 });
                                           }),
@@ -187,8 +187,7 @@ class _MapPostsViewState extends State<MapPostsView> {
                                               ],
                                               fontSize:
                                                   Dimensions.fontSizeLarge,
-                                              fontWeight: FontWeight.bold)
-                                      )
+                                              fontWeight: FontWeight.bold))
                                     ])
                                   : Container(),
                               const SizedBox(
@@ -219,9 +218,8 @@ class _MapPostsViewState extends State<MapPostsView> {
             }));
   }
 
-  Future<void> addingMarkersInMap() async {
+  Future<void> addingMarkersInMap(BuildContext context) async {
     Set<Marker> tempMarkers = {};
-    await updatePostsLocation();
     for (PostModel post in posts) {
       if (post.location != null) {
         tempMarkers.add(Marker(
@@ -232,12 +230,33 @@ class _MapPostsViewState extends State<MapPostsView> {
           ),
           icon: await getCustomIcon(post),
           onTap: () {
-            showDialog(
-                barrierDismissible: true,
-                context: context,
-                builder: (context) {
-                  return PostInfoDialog(post: post);
-                });
+            final commonPosts =
+                context.read<CategoryPostsCubit>().postsWithSameLocation(post);
+            if (commonPosts.length == 1) {
+              showDialog(
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (context) {
+                    return PostInfoDialog(post: post);
+                  });
+            } else {
+              showDialog(
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (context) {
+                    return ListPostsDialog(
+                      posts: commonPosts,
+                      selectPost: (post) {
+                        showDialog(
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (context) {
+                              return PostInfoDialog(post: post);
+                            });
+                      },
+                    );
+                  });
+            }
           },
         ));
       }
@@ -245,29 +264,6 @@ class _MapPostsViewState extends State<MapPostsView> {
     setState(() {
       markers = tempMarkers;
     });
-  }
-
-  Future<void> updatePostsLocation() async {
-    final haversineDistance = havers.HaversineDistance();
-    for (PostModel post in posts) {
-      if (post.zipCode.isNotEmpty) {
-        List<Location> locations =
-            await locationFromAddress("USA, ${post.zipCode}");
-        if (locations.isNotEmpty) {
-          post.location = locations.first;
-          if (_position != null) {
-            int miDistance = haversineDistance
-                .haversine(
-                    havers.Location(_position!.latitude, _position!.longitude),
-                    havers.Location(
-                        post.location!.latitude, post.location!.longitude),
-                    havers.Unit.MILE)
-                .floor();
-            post.strLocation = '$miDistance mi.';
-          }
-        }
-      }
-    }
   }
 
   Future<BitmapDescriptor> getCustomIcon(PostModel postModel) async {

@@ -69,7 +69,7 @@ class PostInfoDialog extends StatelessWidget {
                               const SizedBox(
                                   width: Dimensions.paddingSizeMinimal),
                               Text(
-                                  'Posted: ${timeago.format(DateTime.parse(post.created))}',
+                                  timeago.format(DateTime.parse(post.created)),
                                   style: TextStyle(
                                       fontSize: Dimensions.fontSizeOverSmall))
                             ]),
