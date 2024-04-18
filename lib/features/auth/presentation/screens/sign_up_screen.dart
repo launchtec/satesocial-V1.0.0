@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_pickers/helpers/show_number_picker.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_selfie_liveness/selfie_liveness.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/dimensions.dart';
+import 'package:sate_social/core/util/styles.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/images.dart';
@@ -60,72 +63,81 @@ class _SignUpViewState extends State<SignUpView> {
       appBar: AppBar(
         title: const Text('Sign Up'),
       ),
-      body: BlocConsumer<SignUpCubit, SignUpState>(
-          listener: (context, state) {
-            if (state.formStatus == FormStatus.invalid) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    content: Text('Invalid form: please fill in all fields'),
-                  ),
-                );
-            }
-            if (state.formStatus == FormStatus.faceNotValid) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    content: Text('Invalid form: go through identity verification'),
-                  ),
-                );
-            }
-            if (state.formStatus == FormStatus.submissionFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'There was an error with the sign in process. Try again.',
-                    ),
-                  ),
-                );
-            }
-            if (state.formStatus == FormStatus.submissionSuccess) {
-              Get.toNamed(
-                  RouteHelper.getDashboardRoute());
-            }
-          },
-          builder: (context, state) {
-            return Container(
-                padding: const EdgeInsets.all(20),
-                child: Stepper(
-                  type: StepperType.horizontal,
-                  currentStep: currentStep,
-                  onStepCancel: () => currentStep == 0
-                      ? null
-                      : setState(() {
-                          currentStep -= 1;
-                        }),
-                  onStepContinue: () {
-                    bool completeStep = context.read<SignUpCubit>().checkStepComplete(currentStep);
-                    if (completeStep) {
-                      bool isLastStep = (currentStep == 2);
-                      if (isLastStep) {
-                        context.read<SignUpCubit>().signUp();
-                      } else {
-                        setState(() {
-                          currentStep += 1;
-                        });
+      body: BlocConsumer<SignUpCubit, SignUpState>(listener: (context, state) {
+        if (state.formStatus == FormStatus.invalid) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Invalid form: please fill in all fields'),
+              ),
+            );
+        }
+        if (state.formStatus == FormStatus.faceNotValid) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Invalid form: go through identity verification'),
+              ),
+            );
+        }
+        if (state.formStatus == FormStatus.submissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'There was an error with the sign in process. Try again.',
+                ),
+              ),
+            );
+        }
+        if (state.formStatus == FormStatus.submissionSuccess) {
+          Get.toNamed(RouteHelper.getDashboardRoute());
+        }
+      }, builder: (context, state) {
+        return SafeArea(
+            child: Container(
+                padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+                child: Column(children: [
+                  Expanded(
+                      child: Stepper(
+                    type: StepperType.horizontal,
+                    currentStep: currentStep,
+                    onStepCancel: () => currentStep == 0
+                        ? null
+                        : setState(() {
+                            currentStep -= 1;
+                          }),
+                    onStepContinue: () {
+                      bool completeStep = context
+                          .read<SignUpCubit>()
+                          .checkStepComplete(currentStep);
+                      if (completeStep) {
+                        bool isLastStep = (currentStep == 2);
+                        if (isLastStep) {
+                          context.read<SignUpCubit>().signUp();
+                        } else {
+                          setState(() {
+                            currentStep += 1;
+                          });
+                        }
                       }
-                    }
-                  },
-                  onStepTapped: (step) => setState(() {
-                    currentStep = step;
-                  }),
-                  steps: getSteps(state),
-                ));
-          }),
+                    },
+                    onStepTapped: null,
+                    steps: getSteps(state),
+                  )),
+                  InkWell(
+                      child: Text('Sate Social Terms of Use',
+                          style: TextStyle(
+                              fontSize: Dimensions.fontSizeLarge,
+                              color: ColorConstants.primaryColor)),
+                      onTap: () {
+                        launchUrlString(AppConstants.termOfUseLink);
+                      }),
+                ])));
+      }),
     );
   }
 

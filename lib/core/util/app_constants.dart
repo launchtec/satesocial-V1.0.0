@@ -6,6 +6,7 @@ import 'images.dart';
 class AppConstants {
   static const String appName = 'Sate Social';
   static const double appVersion = 1.0;
+  static const String termOfUseLink = 'https://satesocial.com/sate-social-terms-of-use/';
 
   // Sign Up constants
   static const List<String> genderList = ['Male', 'Female', 'Non Binary'];
