@@ -51,6 +51,14 @@ class FirestoreDataSource {
     return instance.collection('posts').snapshots();
   }
 
+  Stream<QuerySnapshot> getExistingUserPosts(String userId) {
+    return instance.collection('posts').where("userId", isEqualTo: userId).snapshots();
+  }
+
+  Future<void> deletePost(String postId) {
+    return instance.collection('posts').doc(postId).delete();
+  }
+
   // Future functions
   void addMatch(String userId, Match match) {
     instance

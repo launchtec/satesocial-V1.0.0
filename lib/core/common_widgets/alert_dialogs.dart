@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../features/community/presentation/blocks/delete_post/delete_post_cubit.dart';
+import '../util/dimensions.dart';
 
 class AlertDialogs {
   static showLoaderDialog(BuildContext context){

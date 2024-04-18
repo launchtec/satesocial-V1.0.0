@@ -35,7 +35,7 @@ class CategoryPostsCubit extends Cubit<CategoryPostsState> {
             post.location = locations.first;
             int miDistance = haversineDistance
                 .haversine(
-                havers.Location(position!.latitude, position!.longitude),
+                havers.Location(position.latitude, position.longitude),
                 havers.Location(
                     post.location!.latitude, post.location!.longitude),
                 havers.Unit.MILE)

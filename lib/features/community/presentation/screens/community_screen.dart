@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/dimensions.dart';
 import 'package:sate_social/core/util/styles.dart';
 import 'package:sate_social/features/community/presentation/widgets/post_item_widget.dart';
@@ -7,19 +9,43 @@ import 'package:sate_social/features/community/presentation/widgets/post_item_wi
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/images.dart';
 import '../../data/models/post_model.dart';
+import '../../domain/repositories/post_repository.dart';
+import '../../domain/use_cases/category_posts_case.dart';
+import '../blocks/category_posts/category_posts_cubit.dart';
+import '../blocks/category_posts/category_posts_state.dart';
+import '../widgets/post_info_dialog.dart';
 
-class CommunityScreen extends StatefulWidget {
+class CommunityScreen extends StatelessWidget {
   const CommunityScreen({super.key});
 
   @override
-  State<CommunityScreen> createState() => _CommunityScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => CategoryPostsCubit(
+        postsCategoryCase: CategoryPostsCase(
+          postRepository: context.read<PostRepository>(),
+        ),
+      ),
+      child: const CommunityView(),
+    );
+  }
 }
 
-class _CommunityScreenState extends State<CommunityScreen> {
+class CommunityView extends StatefulWidget {
+  const CommunityView({super.key});
+
+  @override
+  State<CommunityView> createState() => _CommunityViewState();
+}
+
+class _CommunityViewState extends State<CommunityView> {
   List<PostModel> featurePosts = [];
 
   @override
   void initState() {
+    context
+        .read<CategoryPostsCubit>()
+        .getCategoryPosts(AppConstants.postCategories[2]);
     super.initState();
   }
 
@@ -122,33 +148,55 @@ class _CommunityScreenState extends State<CommunityScreen> {
                           fontWeight: FontWeight.bold,
                           fontSize: Dimensions.fontSizeExtraLarge))),
               const SizedBox(height: Dimensions.paddingSizeSmall),
-              Expanded(
-                  child: Container(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: Dimensions.paddingSizeDefault),
-                decoration: const BoxDecoration(
-                  color: Colors.white70,
-                  shape: BoxShape.rectangle,
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(Dimensions.radiusLarge)),
-                ),
-                child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Dimensions.paddingSizeSmall,
-                        horizontal: Dimensions.paddingSizeExtraSmall),
-                    itemCount: featurePosts.length,
-                    itemBuilder: (context, index) {
-                      return PostItemWidget(postModel: featurePosts[index]);
-                    }),
-              )),
+              BlocConsumer<CategoryPostsCubit, CategoryPostsState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (featurePosts.isEmpty) {
+                      featurePosts = state.postModels;
+                    }
+                    return Expanded(
+                        child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.paddingSizeDefault),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: Dimensions.paddingSizeExtraSmall),
+                      decoration: const BoxDecoration(
+                        color: Colors.white70,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(Dimensions.radiusLarge)),
+                      ),
+                      child: featurePosts.isNotEmpty
+                          ? ListView.builder(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: Dimensions.paddingSizeSmall,
+                                  horizontal: Dimensions.paddingSizeExtraSmall),
+                              itemCount: featurePosts.length,
+                              itemBuilder: (context, index) {
+                                return PostItemWidget(
+                                  postModel: featurePosts[index],
+                                  onTap: () => showDialog(
+                                      barrierDismissible: true,
+                                      context: context,
+                                      builder: (context) {
+                                        return PostInfoDialog(
+                                            post: featurePosts[index]);
+                                      }),
+                                );
+                              })
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                  color: Colors.white, strokeWidth: 2.0)),
+                    ));
+                  }),
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const SizedBox(width: Dimensions.paddingSizeDefault),
                 Column(children: [
                   IconButton(
                       icon: Image.asset(Images.bublePost, height: 60),
-                      onPressed: () => Get.toNamed(RouteHelper
-                          .getCreatePostRoute())),
+                      onPressed: () =>
+                          Get.toNamed(RouteHelper.getCreatePostRoute())),
                   const Text('Post',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))
@@ -158,8 +206,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                   IconButton(
                       icon: Image.asset(Images.bubleActivities,
                           width: context.width / 4),
-                      onPressed: () => Get.toNamed(RouteHelper
-                          .getMapPostRoute(category: 'social'))),
+                      onPressed: () => Get.toNamed(
+                          RouteHelper.getMapPostRoute(category: 'social'))),
                   const Text('Activities',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))
@@ -167,7 +215,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 Column(children: [
                   IconButton(
                       icon: Image.asset(Images.bubleManage, height: 45),
-                      onPressed: () {}),
+                      onPressed: () =>
+                          Get.toNamed(RouteHelper.getManageListingsRoute())),
                   const Text('Manage\nListings',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))
@@ -182,8 +231,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       IconButton(
                           icon: Image.asset(Images.bubleLove,
                               width: context.width / 4),
-                          onPressed: () => Get.toNamed(RouteHelper
-                              .getMapPostRoute(category: 'romance'))),
+                          onPressed: () => Get.toNamed(
+                              RouteHelper.getMapPostRoute(
+                                  category: 'romance'))),
                       const Text('Love',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold))
@@ -192,8 +242,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       IconButton(
                           icon: Image.asset(Images.bubleGig,
                               width: context.width / 4),
-                          onPressed: () => Get.toNamed(RouteHelper
-                              .getMapPostRoute(category: 'gig'))),
+                          onPressed: () => Get.toNamed(
+                              RouteHelper.getMapPostRoute(category: 'gig'))),
                       const Text('Gig',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold))

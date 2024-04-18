@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 
 import '../../../../core/util/images.dart';
@@ -12,7 +13,7 @@ class PostModel extends Equatable {
   final String group;
   final String zipCode;
   final String created;
-  final bool isFeatured;
+  final bool isConfirmed;
   final String? rate;
   final String? employmentType;
   final String? urlDoc;
@@ -28,7 +29,7 @@ class PostModel extends Equatable {
     required this.group,
     required this.zipCode,
     required this.created,
-    required this.isFeatured,
+    required this.isConfirmed,
     this.rate,
     this.employmentType,
     this.urlDoc,
@@ -46,7 +47,7 @@ class PostModel extends Equatable {
       'group': group,
       'zipCode': zipCode,
       'created': created,
-      'isFeatured': isFeatured,
+      'isConfirmed': isConfirmed,
       'rate': rate,
       'employmentType': employmentType,
       'urlDoc': urlDoc
@@ -93,6 +94,26 @@ class PostModel extends Equatable {
     }
   }
 
+  String shortCategory() {
+    if (category == 'Romance Posting') {
+      return 'Romance';
+    } else if (category == 'Social & Activity Posting') {
+      return 'Social';
+    } else {
+      return 'Gig';
+    }
+  }
+
+  Color colorCategory() {
+    if (category == 'Romance Posting') {
+      return Colors.red;
+    } else if (category == 'Social & Activity Posting') {
+      return Colors.blue;
+    } else {
+      return Colors.green;
+    }
+  }
+
   @override
-  List<Object?> get props => [id, userId, title, content, category, group, zipCode, created, isFeatured];
+  List<Object?> get props => [id, userId, title, content, category, group, zipCode, created, isConfirmed];
 }

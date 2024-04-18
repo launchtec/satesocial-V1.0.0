@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:sate_social/features/auth/presentation/screens/recovery_pass_screen.dart';
 import 'package:sate_social/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:sate_social/features/auth/presentation/screens/welcome_screen.dart';
+import 'package:sate_social/features/community/presentation/screens/manage_listings_screen.dart';
 import 'package:sate_social/features/community/presentation/screens/map_posts_screen.dart';
 import 'package:sate_social/features/community/presentation/screens/posting_screen.dart';
 import 'package:sate_social/features/dashboard/dashboard_screen.dart';
@@ -18,6 +18,7 @@ class RouteHelper {
   static const String dashboardToNotification = '/dashboard-to-notification';
   static const String createPost = '/create-post';
   static const String mapPost = '/map-post';
+  static const String manageListings = '/manage-listings';
 
   static String getWelcomeRoute() => welcome;
   static String getSignInRoute() => signIn;
@@ -27,6 +28,7 @@ class RouteHelper {
   static String getDashboardToNotificationRoute() => dashboardToNotification;
   static String getCreatePostRoute() => createPost;
   static String getMapPostRoute({required String category}) => '$mapPost?category=$category';
+  static String getManageListingsRoute() => manageListings;
 
   static List<GetPage> routes = [
     GetPage(name: welcome, page: () => const WelcomeScreen()),
@@ -37,5 +39,6 @@ class RouteHelper {
     GetPage(name: dashboardToNotification, page: () => const DashboardScreen(openNotification: true)),
     GetPage(name: createPost, page: () => const PostingScreen()),
     GetPage(name: mapPost, page: () => MapPostsScreen(category: Get.parameters['category'] ?? '')),
+    GetPage(name: manageListings, page: () => const ManageListingsScreen()),
   ];
 }

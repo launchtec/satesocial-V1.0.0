@@ -20,6 +20,7 @@ class PostInfoDialog extends StatelessWidget {
       content: SizedBox(
           width: double.maxFinite,
           child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Stack(children: [
             Container(
                 width: double.maxFinite,
                 color: ColorConstants.darkGrey,
@@ -82,6 +83,14 @@ class PostInfoDialog extends StatelessWidget {
                           ])),
                   const SizedBox(height: Dimensions.paddingSizeSmall)
                 ])),
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white60, size: 28),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+            ]),
+          ]),
             Container(
                 padding: const EdgeInsets.symmetric(
                     vertical: Dimensions.paddingSizeDefault),

@@ -30,7 +30,7 @@ class PostRepositoryImpl implements PostRepository {
             group: doc.get("group"),
             zipCode: doc.get("zipCode"),
             created: doc.get("created"),
-            isFeatured: doc.get("isFeatured") as bool,
+            isConfirmed: doc.get("isConfirmed") as bool,
             rate: doc.data().toString().contains('rate') ? doc.get('rate') : '',
             employmentType: doc.data().toString().contains('employmentType')
                 ? doc.get('employmentType')
@@ -54,7 +54,7 @@ class PostRepositoryImpl implements PostRepository {
             group: doc.get("group"),
             zipCode: doc.get("zipCode"),
             created: doc.get("created"),
-            isFeatured: doc.get("isFeatured") as bool,
+            isConfirmed: doc.get("isConfirmed") as bool,
             rate: doc.data().toString().contains('rate') ? doc.get('rate') : '',
             employmentType: doc.data().toString().contains('employmentType')
                 ? doc.get('employmentType')
@@ -66,9 +66,9 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Stream<Iterable<PostModel>> getStreamPosts() {
-    return firestoreDataSource.getStreamPosts().map((snapshot) => snapshot.docs
-        .map((doc) => PostModel(
+  Stream<Iterable<PostModel>> getMyStreamPosts(String userId) {
+    return firestoreDataSource.getExistingUserPosts(userId).map((snapshot) =>
+        snapshot.docs.map((doc) => PostModel(
             id: doc.get("id"),
             userId: doc.get("userId"),
             title: doc.get("title"),
@@ -77,7 +77,7 @@ class PostRepositoryImpl implements PostRepository {
             group: doc.get("group"),
             zipCode: doc.get("zipCode"),
             created: doc.get("created"),
-            isFeatured: doc.get("isFeatured") as bool,
+            isConfirmed: doc.get("isConfirmed") as bool,
             rate: doc.data().toString().contains('rate') ? doc.get('rate') : '',
             employmentType: doc.data().toString().contains('employmentType')
                 ? doc.get('employmentType')
@@ -97,5 +97,10 @@ class PostRepositoryImpl implements PostRepository {
     } else {
       return null;
     }
+  }
+
+  @override
+  Future<void> deletePost({required String postId}) async {
+    await firestoreDataSource.deletePost(postId);
   }
 }

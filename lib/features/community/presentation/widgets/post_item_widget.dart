@@ -8,15 +8,16 @@ import '../../../../core/util/styles.dart';
 
 class PostItemWidget extends StatelessWidget {
   final PostModel postModel;
+  final Function onTap;
 
-  const PostItemWidget({super.key, required this.postModel});
+  const PostItemWidget({super.key, required this.postModel, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(
-            vertical: Dimensions.paddingSizeMinimal),
-        child: InkWell(onTap: (){}, child: Row(children: [
+            vertical: Dimensions.paddingSizeMinimal, horizontal: Dimensions.paddingSizeSmall),
+        child: InkWell(onTap: () => onTap(), child: Row(children: [
           Image.asset(Images.arrow, height: 24),
           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
           Text(postModel.title,
@@ -28,11 +29,13 @@ class PostItemWidget extends StatelessWidget {
           Text(timeago.format(DateTime.parse(postModel.created)),
               style: TextStyle(
                   color: ColorConstants.primaryColor,
+                  fontStyle: FontStyle.italic,
                   fontSize: Dimensions.fontSizeExtraSmall)),
           const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-          Text(postModel.zipCode,
+          Text(postModel.strLocation ?? '',
               style: TextStyle(
                   color: ColorConstants.primaryColor,
+                  fontStyle: FontStyle.italic,
                   fontSize: Dimensions.fontSizeExtraSmall)),
         ])));
   }

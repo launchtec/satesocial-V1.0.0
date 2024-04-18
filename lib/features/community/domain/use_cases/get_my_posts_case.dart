@@ -2,12 +2,12 @@ import 'package:sate_social/features/community/domain/repositories/post_reposito
 
 import '../../data/models/post_model.dart';
 
-class GetPostsCase {
+class GetMyPostsCase {
   final PostRepository postRepository;
 
-  GetPostsCase({required this.postRepository});
+  GetMyPostsCase({required this.postRepository});
 
-  Future<List<PostModel>> call() {
-    return postRepository.getPosts();
+  Stream<Iterable<PostModel>> call(String userId) {
+    return postRepository.getMyStreamPosts(userId);
   }
 }
