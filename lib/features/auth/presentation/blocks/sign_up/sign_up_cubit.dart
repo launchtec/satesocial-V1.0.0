@@ -16,7 +16,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit({
     required SignUpUseCase signUpUseCase,
   })  : _signUpUseCase = signUpUseCase,
-        super(const SignUpState());
+        super(SignUpState());
 
   void nameChanged(String name) {
     emit(
@@ -94,10 +94,22 @@ class SignUpCubit extends Cubit<SignUpState> {
     );
   }
 
-  void openToConnectToChanged(String openToConnectTo) {
+  void addOpenToConnectToChanged(String openToConnectTo) {
+    var openToConnectList = state.openToConnectTo.toList();
+    openToConnectList.add(openToConnectTo);
     emit(
       state.copyWith(
-        openToConnectTo: openToConnectTo,
+        openToConnectTo: openToConnectList,
+      ),
+    );
+  }
+
+  void removeOpenToConnectToChanged(String openToConnectTo) {
+    var openToConnectList = state.openToConnectTo.toList();
+    openToConnectList.remove(openToConnectTo);
+    emit(
+      state.copyWith(
+        openToConnectTo: openToConnectList,
       ),
     );
   }

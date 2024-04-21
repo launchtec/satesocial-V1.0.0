@@ -4,6 +4,7 @@ import 'package:sate_social/core/util/dimensions.dart';
 import 'package:sate_social/core/util/images.dart';
 import 'package:sate_social/core/util/styles.dart';
 import 'package:sate_social/features/community/presentation/screens/community_screen.dart';
+import 'package:sate_social/features/connect/presentation/screens/profile_screen.dart';
 import 'package:sate_social/features/home/presentation/screens/home_screen.dart';
 import 'package:sate_social/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:sate_social/features/settings/presentation/screens/settings_screen.dart';
@@ -38,7 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
    return <Widget>[
      HomeScreen(navController: _pageController),
      const NotificationScreen(),
-     Container(),
+     const ProfileScreen(),
      const CommunityScreen(),
      Container(),
      const SettingsScreen(),

@@ -11,6 +11,7 @@ class Images {
   static const String bubleLove = 'assets/image/buble_love.png';
   static const String bubleManage = 'assets/image/buble_manage.png';
   static const String bublePost = 'assets/image/buble_post.png';
+  static const String bubleMessage = 'assets/image/buble_message.png';
   static const String community = 'assets/image/community.png';
   static const String communityNav = 'assets/image/community_nav.png';
   static const String complete = 'assets/image/complete.png';

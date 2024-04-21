@@ -96,7 +96,7 @@ class _SignUpViewState extends State<SignUpView> {
         if (state.formStatus == FormStatus.submissionSuccess) {
           Get.toNamed(RouteHelper.getDashboardRoute());
         }
-      }, builder: (context, state) {
+      }, builder: (blocContext, state) {
         return SafeArea(
             child: Container(
                 padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
@@ -126,7 +126,7 @@ class _SignUpViewState extends State<SignUpView> {
                       }
                     },
                     onStepTapped: null,
-                    steps: getSteps(state),
+                    steps: getSteps(state, blocContext),
                   )),
                   InkWell(
                       child: Text('Sate Social Terms of Use',
@@ -141,7 +141,7 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
-  List<Step> getSteps(SignUpState state) {
+  List<Step> getSteps(SignUpState state, BuildContext blocContext) {
     return <Step>[
       Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
@@ -159,7 +159,7 @@ class _SignUpViewState extends State<SignUpView> {
                 ),
               ),
               onChanged: (String value) {
-                context.read<SignUpCubit>().nameChanged(value);
+                blocContext.read<SignUpCubit>().nameChanged(value);
               },
             ),
             const SizedBox(height: Dimensions.paddingSizeDefault),
@@ -179,7 +179,7 @@ class _SignUpViewState extends State<SignUpView> {
               onChanged: (String value) {
                 if (debounce?.isActive ?? false) debounce?.cancel();
                 debounce = Timer(const Duration(milliseconds: 500), () {
-                  context.read<SignUpCubit>().emailChanged(value);
+                  blocContext.read<SignUpCubit>().emailChanged(value);
                 });
               },
             ),
@@ -199,7 +199,7 @@ class _SignUpViewState extends State<SignUpView> {
                     : null,
               ),
               onChanged: (String value) {
-                context.read<SignUpCubit>().passwordChanged(value);
+                blocContext.read<SignUpCubit>().passwordChanged(value);
               },
             ),
             const SizedBox(height: Dimensions.paddingSizeDefault),
@@ -230,7 +230,7 @@ class _SignUpViewState extends State<SignUpView> {
                   title: 'Select Age');
               if (result != null) {
                 _ageController.text = "Age: $result";
-                context.read<SignUpCubit>().ageChanged(result);
+                blocContext.read<SignUpCubit>().ageChanged(result);
               }
             },
           ),
@@ -249,7 +249,7 @@ class _SignUpViewState extends State<SignUpView> {
               style: TextStyle(fontSize: 14),
             ),
             onChanged: (String? value) {
-              context.read<SignUpCubit>().heightChanged(value!);
+              blocContext.read<SignUpCubit>().heightChanged(value!);
             },
             items: AppConstants.heightList
                 .map<DropdownMenuItem<String>>((String value) {
@@ -271,7 +271,7 @@ class _SignUpViewState extends State<SignUpView> {
               style: TextStyle(fontSize: 14),
             ),
             onChanged: (String? value) {
-              context.read<SignUpCubit>().genderChanged(value!);
+              blocContext.read<SignUpCubit>().genderChanged(value!);
             },
             items: AppConstants.genderList
                 .map<DropdownMenuItem<String>>((String value) {
@@ -293,7 +293,7 @@ class _SignUpViewState extends State<SignUpView> {
               style: TextStyle(fontSize: 14),
             ),
             onChanged: (String? value) {
-              context.read<SignUpCubit>().ethnicityChanged(value!);
+              blocContext.read<SignUpCubit>().ethnicityChanged(value!);
             },
             items: AppConstants.ethnicityList
                 .map<DropdownMenuItem<String>>((String value) {
@@ -315,7 +315,7 @@ class _SignUpViewState extends State<SignUpView> {
               style: TextStyle(fontSize: 14),
             ),
             onChanged: (String? value) {
-              context.read<SignUpCubit>().sexualityChanged(value!);
+              blocContext.read<SignUpCubit>().sexualityChanged(value!);
             },
             items: AppConstants.sexualityList
                 .map<DropdownMenuItem<String>>((String value) {
@@ -336,13 +336,71 @@ class _SignUpViewState extends State<SignUpView> {
               'Open To Connect To?\*',
               style: TextStyle(fontSize: 14),
             ),
-            onChanged: (String? value) {
-              context.read<SignUpCubit>().openToConnectToChanged(value!);
+            value: blocContext.read<SignUpCubit>().state.openToConnectTo.isEmpty ? null : blocContext.read<SignUpCubit>().state.openToConnectTo.last,
+            onChanged: (value) {},
+            selectedItemBuilder: (context) {
+              return AppConstants.openToConnectToList.map(
+                    (item) {
+                  return Container(
+                    alignment: AlignmentDirectional.center,
+                    child: Text(
+                      blocContext.read<SignUpCubit>().state.openToConnectTo.join(', '),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      maxLines: 1,
+                    ),
+                  );
+                },
+              ).toList();
             },
-            items: AppConstants.openToConnectToList
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(value: value, child: Text(value));
+            items: AppConstants.openToConnectToList.map((item) {
+              return DropdownMenuItem(
+                value: item,
+                //disable default onTap to avoid closing menu when selecting an item
+                enabled: false,
+                child: StatefulBuilder(
+                  builder: (context, menuSetState) {
+                    final isSelected = blocContext.read<SignUpCubit>().state.openToConnectTo.contains(item);
+                    return InkWell(
+                      onTap: () {
+                        isSelected ? blocContext.read<SignUpCubit>().removeOpenToConnectToChanged(item) : blocContext.read<SignUpCubit>().addOpenToConnectToChanged(item);
+                        //This rebuilds the StatefulWidget to update the button's text
+                        setState(() {});
+                        //This rebuilds the dropdownMenu Widget to update the check mark
+                        menuSetState(() {});
+                      },
+                      child: Container(
+                        height: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: [
+                            if (isSelected)
+                              const Icon(Icons.check_box_outlined)
+                            else
+                              const Icon(Icons.check_box_outline_blank),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                item,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
             }).toList(),
+            // items: AppConstants.openToConnectToList
+            //     .map<DropdownMenuItem<String>>((String value) {
+            //   return DropdownMenuItem<String>(value: value, child: Text(value));
+            // }).toList(),
           ),
           const SizedBox(height: Dimensions.paddingSizeDefault),
           TextFormField(

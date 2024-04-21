@@ -42,6 +42,31 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
+  Future<PostModel> getPost(String postId) async {
+    final postDocument = await firestoreDataSource.getPost(postId);
+    return PostModel(
+        id: postDocument.get("id"),
+        userId: postDocument.get("userId"),
+        title: postDocument.get("title"),
+        content: postDocument.get("content"),
+        category: postDocument.get("category"),
+        group: postDocument.get("group"),
+        zipCode: postDocument.get("zipCode"),
+        created: postDocument.get("created"),
+        isConfirmed: postDocument.get("isConfirmed") as bool,
+        rate: postDocument.data().toString().contains('rate')
+            ? postDocument.get('rate')
+            : '',
+        employmentType:
+            postDocument.data().toString().contains('employmentType')
+                ? postDocument.get('employmentType')
+                : '',
+        urlDoc: postDocument.data().toString().contains('urlDoc')
+            ? postDocument.get('urlDoc')
+            : '');
+  }
+
+  @override
   Future<List<PostModel>> getPostsCategory(String category) async {
     final postsSnapshot = await firestoreDataSource.getPostsCategory(category);
     return postsSnapshot.docs

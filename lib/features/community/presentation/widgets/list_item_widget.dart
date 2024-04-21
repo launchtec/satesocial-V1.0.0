@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:timeago/timeago.dart' as timeago;

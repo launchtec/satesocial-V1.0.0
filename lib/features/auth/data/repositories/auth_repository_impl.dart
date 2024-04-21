@@ -1,5 +1,5 @@
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
-import 'package:sate_social/core/data/models/app_user.dart';
+import 'package:sate_social/features/auth/data/models/app_user.dart';
 
 import '../../domain/entities/auth_user.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -32,6 +32,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<AppUser> getUserInfo({required String userId}) async {
+    final userDocument = await firestoreDataSource.getUserInfo(userId);
+    return AppUser.fromSnapshot(userDocument);
+  }
+
+  @override
   Future<AuthUser> signUp({
     required SignUpParams signUpParams,
   }) async {
@@ -40,18 +46,18 @@ class AuthRepositoryImpl implements AuthRepository {
       password: signUpParams.password.value,
     );
     firestoreDataSource.addUser(AppUser(
-        id: authModel.id,
-        name: signUpParams.name,
-        email: signUpParams.email.value,
-        age: signUpParams.age,
-        gender: signUpParams.gender,
-        sexuality: signUpParams.sexuality,
-        openToConnectTo: signUpParams.openToConnectTo,
-        height: signUpParams.height,
-        ethnicity: signUpParams.ethnicity,
-        howDidYouKnowAboutUs: signUpParams.howDidYouKnowAboutUs,
-        confirmRealPerson: signUpParams.confirmRealPerson,
-        avatarUrl: null,
+      id: authModel.id,
+      name: signUpParams.name,
+      email: signUpParams.email.value,
+      age: signUpParams.age,
+      gender: signUpParams.gender,
+      sexuality: signUpParams.sexuality,
+      openToConnectTo: signUpParams.openToConnectTo,
+      height: signUpParams.height,
+      ethnicity: signUpParams.ethnicity,
+      howDidYouKnowAboutUs: signUpParams.howDidYouKnowAboutUs,
+      confirmRealPerson: signUpParams.confirmRealPerson,
+      avatarUrl: null,
     ));
 
     localDataSource.write(key: 'user', value: authModel);

@@ -39,10 +39,14 @@ class CommunityView extends StatefulWidget {
 }
 
 class _CommunityViewState extends State<CommunityView> {
+  String city = '';
   List<PostModel> featurePosts = [];
 
   @override
   void initState() {
+    try {
+      city = Get.find<String>(tag: 'city');
+    } catch (exception) {}
     context
         .read<CategoryPostsCubit>()
         .getCategoryPosts(AppConstants.postCategories[2]);
@@ -72,7 +76,7 @@ class _CommunityViewState extends State<CommunityView> {
                 Padding(
                     padding: const EdgeInsets.only(
                         right: Dimensions.paddingSizeExtraLarge),
-                    child: Text(Get.find<String>(tag: 'city') ?? '',
+                    child: Text(city,
                         style: TextStyle(
                             fontSize: Dimensions.fontSizeTitle,
                             shadows: const [
@@ -194,10 +198,22 @@ class _CommunityViewState extends State<CommunityView> {
                 const SizedBox(width: Dimensions.paddingSizeDefault),
                 Column(children: [
                   IconButton(
-                      icon: Image.asset(Images.bublePost, height: 60),
+                      icon: Image.asset(Images.bublePost, height: 55),
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(),
                       onPressed: () =>
                           Get.toNamed(RouteHelper.getCreatePostRoute())),
                   const Text('Post',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                  IconButton(
+                      icon: Image.asset(Images.bubleMessage, height: 50),
+                      padding: EdgeInsets.zero,
+                      constraints: BoxConstraints(),
+                      onPressed: () =>
+                          Get.toNamed(RouteHelper.getCommunityChatsRoute())),
+                  const Text('Messages',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold))
                 ]),

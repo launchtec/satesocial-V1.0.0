@@ -9,7 +9,7 @@ class SignUpState extends Equatable {
   final String? height;
   final String? ethnicity;
   final String? sexuality;
-  final String? openToConnectTo;
+  final List<String> openToConnectTo;
   final String? howDidYouKnowAboutUs;
   final bool? confirmRealPerson;
   final EmailStatus emailStatus;
@@ -25,7 +25,7 @@ class SignUpState extends Equatable {
     this.height,
     this.ethnicity,
     this.sexuality,
-    this.openToConnectTo,
+    this.openToConnectTo = const [],
     this.howDidYouKnowAboutUs,
     this.confirmRealPerson,
     this.emailStatus = EmailStatus.unknown,
@@ -42,7 +42,7 @@ class SignUpState extends Equatable {
     String? height,
     String? ethnicity,
     String? sexuality,
-    String? openToConnectTo,
+    List<String>? openToConnectTo,
     String? howDidYouKnowAboutUs,
     bool? confirmRealPerson,
     EmailStatus? emailStatus,

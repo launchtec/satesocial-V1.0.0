@@ -29,7 +29,7 @@ class SignUpParams {
   final int age;
   final String gender;
   final String sexuality;
-  final String openToConnectTo;
+  final List<String> openToConnectTo;
   final bool confirmRealPerson;
   final String? height;
   final String? ethnicity;

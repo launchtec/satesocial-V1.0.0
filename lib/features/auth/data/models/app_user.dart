@@ -7,7 +7,7 @@ class AppUser {
   final int age;
   final String gender;
   final String sexuality;
-  final String openToConnectTo;
+  final List<String> openToConnectTo;
   final bool confirmRealPerson;
   final String? height;
   final String? ethnicity;
@@ -31,19 +31,27 @@ class AppUser {
 
   factory AppUser.fromSnapshot(DocumentSnapshot snapshot) {
     return AppUser(
-        id: snapshot['id'],
-        name: snapshot['name'],
-        email: snapshot['email'],
-        age: snapshot['age'],
-        gender: snapshot['gender'],
-        sexuality: snapshot['sexuality'],
-        openToConnectTo: snapshot['openToConnectTo'],
-        confirmRealPerson: snapshot['confirmRealPerson'],
-        height: snapshot['height'],
-        ethnicity: snapshot['ethnicity'],
-        howDidYouKnowAboutUs: snapshot['howDidYouKnowAboutUs'],
-        avatarUrl: snapshot['avatarUrl'],
-    );
+        id: snapshot.get('id'),
+        name: snapshot.get('name'),
+        email: snapshot.get('email'),
+        age: snapshot.get('age') as int,
+        gender: snapshot.get('gender'),
+        sexuality: snapshot.get('sexuality'),
+        openToConnectTo: (snapshot.get('openToConnectTo') as List<dynamic>).map((item) => item as String).toList(),
+        confirmRealPerson: snapshot.get('confirmRealPerson') as bool,
+        height: snapshot.data().toString().contains('height')
+            ? snapshot.get('height')
+            : '',
+        ethnicity: snapshot.data().toString().contains('ethnicity')
+            ? snapshot.get('ethnicity')
+            : '',
+        howDidYouKnowAboutUs:
+        snapshot.data().toString().contains('howDidYouKnowAboutUs')
+            ? snapshot.get('howDidYouKnowAboutUs')
+            : '',
+        avatarUrl: snapshot.data().toString().contains('avatarUrl')
+            ? snapshot.get('avatarUrl')
+            : '');
   }
 
   Map<String, dynamic> toMap() {

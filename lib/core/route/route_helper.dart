@@ -6,6 +6,7 @@ import 'package:sate_social/features/community/presentation/screens/manage_listi
 import 'package:sate_social/features/community/presentation/screens/map_posts_screen.dart';
 import 'package:sate_social/features/community/presentation/screens/posting_screen.dart';
 import 'package:sate_social/features/dashboard/dashboard_screen.dart';
+import 'package:sate_social/features/messages/presentation/screens/conversations_screen.dart';
 
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 
@@ -19,6 +20,8 @@ class RouteHelper {
   static const String createPost = '/create-post';
   static const String mapPost = '/map-post';
   static const String manageListings = '/manage-listings';
+  static const String communityChats = '/community-chats';
+  static const String connectChats = '/connect-chats';
 
   static String getWelcomeRoute() => welcome;
   static String getSignInRoute() => signIn;
@@ -29,6 +32,8 @@ class RouteHelper {
   static String getCreatePostRoute() => createPost;
   static String getMapPostRoute({required String category}) => '$mapPost?category=$category';
   static String getManageListingsRoute() => manageListings;
+  static String getCommunityChatsRoute() => communityChats;
+  static String getConnectChatsRoute() => connectChats;
 
   static List<GetPage> routes = [
     GetPage(name: welcome, page: () => const WelcomeScreen()),
@@ -40,5 +45,7 @@ class RouteHelper {
     GetPage(name: createPost, page: () => const PostingScreen()),
     GetPage(name: mapPost, page: () => MapPostsScreen(category: Get.parameters['category'] ?? '')),
     GetPage(name: manageListings, page: () => const ManageListingsScreen()),
+    GetPage(name: communityChats, page: () => const ConversationsScreen(isCommunity: true)),
+    GetPage(name: connectChats, page: () => const ConversationsScreen(isCommunity: false)),
   ];
 }
