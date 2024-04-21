@@ -47,7 +47,7 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  var _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   final TextEditingController _inputMessageController = TextEditingController();
   String city = '';
 

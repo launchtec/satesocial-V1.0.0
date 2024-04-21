@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
 import 'package:sate_social/features/messages/domain/use_cases/add_chat_case.dart';
@@ -7,6 +8,7 @@ import 'package:sate_social/features/messages/presentation/blocks/add_chat/add_c
 import 'package:sate_social/features/messages/presentation/blocks/add_chat/add_chat_state.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
@@ -154,6 +156,7 @@ class PostInfoDialog extends StatelessWidget {
                                 onPressed: () async {
                                   await context.read<AddChatCubit>().addChat(post);
                                   Navigator.pop(context);
+                                  Get.toNamed(RouteHelper.getCommunityChatsRoute());
                                 },
                                 style: ButtonStyle(
                                     padding:
