@@ -70,4 +70,21 @@ class AppUser {
       'avatarUrl': avatarUrl,
     };
   }
+
+  static AppUser fromMap(Map<String, dynamic> json) {
+    return AppUser(
+        id: json['id'],
+        name: json['name'],
+        email: json['email'],
+        age: json['age'],
+        gender: json['gender'],
+        sexuality: json['sexuality'],
+        openToConnectTo: (json['openToConnectTo'] as List<dynamic>).map((item) => item as String).toList(),
+        confirmRealPerson: json['confirmRealPerson'],
+        height: json['height'],
+        ethnicity: json['ethnicity'],
+        howDidYouKnowAboutUs: json['howDidYouKnowAboutUs'],
+        avatarUrl: json['avatarUrl']
+    );
+  }
 }

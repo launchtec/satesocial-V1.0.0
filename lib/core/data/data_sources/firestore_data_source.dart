@@ -70,6 +70,7 @@ class FirestoreDataSource {
   Future<void> addChat(Chat chat) {
     return instance.collection('chats').doc(chat.id).set(chat.toMap());
   }
+
   // First owner post responses
   Future<QuerySnapshot> getChats(String userId) {
     return instance.collection('chats').where(Filter.or(
@@ -85,20 +86,20 @@ class FirestoreDataSource {
     )).snapshots();
   }
 
-  void addMessage(String chatId, Message message) {
-    instance
+  Future<void> addMessage(String chatId, Message message) {
+    return instance
         .collection('chats')
         .doc(chatId)
         .collection('messages')
         .add(message.toMap());
   }
 
-  Stream<QuerySnapshot> observeMessages(String chatId) {
+  Stream<QuerySnapshot> getStreamMessages(String chatId) {
     return instance
         .collection('chats')
         .doc(chatId)
         .collection('messages')
-        .orderBy('created', descending: true)
+        .orderBy('created', descending: false)
         .snapshots();
   }
 

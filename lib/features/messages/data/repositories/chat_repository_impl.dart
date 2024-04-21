@@ -1,5 +1,6 @@
 import 'package:sate_social/features/auth/data/models/app_user.dart';
 import 'package:sate_social/features/messages/data/models/chat.dart';
+import 'package:sate_social/features/messages/data/models/message.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
 
 import '../../../../core/data/data_sources/firestore_data_source.dart';
@@ -11,7 +12,12 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<void> addChat({required Chat chat}) async {
-    await firestoreDataSource.addChat(chat);
+    return await firestoreDataSource.addChat(chat);
+  }
+
+  @override
+  Future<void> addMessage({required String chatId, required Message message}) async {
+    return await firestoreDataSource.addMessage(chatId, message);
   }
 
   @override
@@ -47,5 +53,19 @@ class ChatRepositoryImpl implements ChatRepository {
                   postInfo: PostInfo.fromMap(doc.get("postInfo")),
                   connectId: doc.get("connectId"));
             }));
+  }
+
+  @override
+  Stream<Iterable<Message>> getStreamMessages({required String chatId}) {
+    return firestoreDataSource
+        .getStreamMessages(chatId)
+        .map((snapshot) => snapshot.docs.map((doc) {
+      return Message(
+          id: doc.get("id"),
+          text: doc.get("text"),
+          senderId: doc.get("senderId"),
+          created: doc.get("created"),
+      );
+    }));
   }
 }

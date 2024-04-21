@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sate_social/features/messages/data/models/chat.dart';
@@ -24,19 +23,19 @@ class ChatItemWidget extends StatelessWidget {
             child: Container(
                 margin: const EdgeInsets.symmetric(
                     horizontal: Dimensions.paddingSizeSmall,
-                    vertical: Dimensions.paddingSizeMinimal
-                ),
+                    vertical: Dimensions.paddingSizeMinimal),
                 padding: const EdgeInsets.symmetric(
                     vertical: Dimensions.paddingSizeMinimal,
                     horizontal: Dimensions.paddingSizeDefault),
                 decoration: const BoxDecoration(
                   color: ColorConstants.secondColor,
                   shape: BoxShape.rectangle,
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(Dimensions.radiusExtraLarge)),
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(Dimensions.radiusExtraLarge)),
                 ),
-                child: IntrinsicHeight(child: Row(children: [
-                  Column(
+                child: IntrinsicHeight(
+                    child: Row(children: [
+                  Expanded(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Post:',
@@ -50,8 +49,8 @@ class ChatItemWidget extends StatelessWidget {
                                 decorationColor: Colors.white,
                                 color: Colors.white,
                                 fontSize: Dimensions.fontSizeLarge)),
-                        SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                        Text('POSTED - ${chat.postInfo?.created != null ? DateFormat('dd-MM-yyyy').format(DateTime.parse(chat.postInfo!.created)) : ''}',
+                        const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                        Text('POSTED - ${chat.postInfo?.created != null ? DateFormat('MM/dd/yyyy').format(DateTime.parse(chat.postInfo!.created)) : ''}',
                             style: TextStyle(
                                 fontSize: Dimensions.fontSizeOverSmall,
                                 color: Colors.white,
@@ -61,32 +60,41 @@ class ChatItemWidget extends StatelessWidget {
                                 fontSize: Dimensions.fontSizeOverSmall,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold)),
-                      ]),
-                  VerticalDivider(color: Colors.white, thickness: 2),
-                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,children: [
-                    Text(chat.receiver?.name ?? '',
-                        style: TextStyle(
-                            fontSize: Dimensions.fontSizeExtraLarge,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Image.asset(Images.message),
-                      Container(
-                          padding: EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                          decoration: const BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.rectangle,
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(Dimensions.radiusExtraLarge)),
-                          ),
-                          child: Text('View >',
-                          style: TextStyle(
-                              decorationColor: Colors.white,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: Dimensions.fontSizeLarge))),
-                    ])
-                  ]))
+                      ])),
+                  const VerticalDivider(color: Colors.white, thickness: 2),
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                        Text(chat.receiver?.name ?? '',
+                            style: TextStyle(
+                                fontSize: Dimensions.fontSizeExtraLarge,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
+                        const SizedBox(height: Dimensions.paddingSizeMinimal),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(Images.message),
+                              Container(
+                                  padding: const EdgeInsets.all(
+                                      Dimensions.paddingSizeExtraSmall),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                            Dimensions.radiusExtraLarge)),
+                                  ),
+                                  child: Text('View >',
+                                      style: TextStyle(
+                                          decorationColor: Colors.white,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Dimensions.fontSizeLarge))),
+                            ])
+                      ]))
                 ])))));
   }
 }

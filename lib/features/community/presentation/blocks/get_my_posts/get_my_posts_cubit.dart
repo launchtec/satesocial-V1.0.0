@@ -17,13 +17,10 @@ class GetMyPostsCubit extends Cubit<GetMyPostsState> {
         super(const GetMyPostsState());
 
   Future<void> init() async {
-    // Subscribe to listen for changes in the myUser list
     _myPostsSubscription =
         _getMyPostsCase.call(FirebaseAuth.instance.currentUser!.uid).listen(myPostsListen);
   }
 
-  // Every time the myUser list is updated, this function will be called
-  // with the latest data
   void myPostsListen(
       Iterable<PostModel> postModels) async {
     emit(GetMyPostsState(

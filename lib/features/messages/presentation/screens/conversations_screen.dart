@@ -1,7 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
@@ -10,6 +8,7 @@ import 'package:sate_social/features/messages/presentation/blocks/get_chats/get_
 import 'package:sate_social/features/messages/presentation/blocks/get_chats/get_chats_state.dart';
 import 'package:sate_social/features/messages/presentation/widgets/chat_item_widget.dart';
 
+import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
@@ -123,7 +122,7 @@ class _ConversationsViewState extends State<ConversationsView> {
                           itemCount: chats.length,
                           itemBuilder: (context, index) {
                             return ChatItemWidget(
-                                chat: chats[index], onTap: () {});
+                                chat: chats[index], onTap: () => Get.toNamed(RouteHelper.getOpenChatRoute(chats[index])));
                           })
                       : const Center(
                           child: CircularProgressIndicator(

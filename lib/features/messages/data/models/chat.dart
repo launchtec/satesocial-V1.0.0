@@ -33,6 +33,31 @@ class Chat extends Equatable {
     };
   }
 
+  Map<String, dynamic> toMapJson() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'sender': sender?.toMap(),
+      'receiver': receiver?.toMap(),
+      'postInfo': postInfo?.toMap(),
+      'connectId': connectId
+    };
+  }
+
+  static Chat fromMap(Map<String, dynamic> json) {
+    return Chat(
+        id: json['id'],
+        name: json['name'],
+        senderId: json['senderId'],
+        receiverId: json['receiverId'],
+        sender: AppUser.fromMap(json['sender']),
+        receiver: AppUser.fromMap(json['receiver']),
+        postInfo: PostInfo.fromMap(json['postInfo'])
+    );
+  }
+
   @override
   List<Object?> get props => [id, name, senderId, receiverId, postInfo, connectId];
 }

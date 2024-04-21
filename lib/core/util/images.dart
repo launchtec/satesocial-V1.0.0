@@ -1,6 +1,7 @@
 class Images {
   static const String addDoc = 'assets/image/add_doc.png';
   static const String arrow = 'assets/image/arrow.png';
+  static const String avatar = 'assets/image/avatar.png';
   static const String background = 'assets/image/back.png';
   static const String backCommunity = 'assets/image/back_community.png';
   static const String backNotification = 'assets/image/back_notification.png';
@@ -32,6 +33,7 @@ class Images {
   static const String notificationNav = 'assets/image/notification_nav.png';
   static const String purpleBuble = 'assets/image/purple_buble.png';
   static const String settingsNav = 'assets/image/settings_nav.png';
+  static const String sending = 'assets/image/sending.png';
   static const String signInIcon = 'assets/image/sign_in_icon.png';
   static const String signUpIcon = 'assets/image/sign_up_icon.png';
   static const String vectorIcon = 'assets/image/vector.png';
