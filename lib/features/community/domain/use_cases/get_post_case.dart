@@ -2,12 +2,12 @@ import 'package:sate_social/features/community/domain/repositories/post_reposito
 
 import '../../data/models/post_model.dart';
 
-class GetPostsCase {
+class GetPostCase {
   final PostRepository postRepository;
 
-  GetPostsCase({required this.postRepository});
+  GetPostCase({required this.postRepository});
 
-  Future<List<PostModel>> call() {
-    return postRepository.getPosts();
+  Future<PostModel> call(String postId) {
+    return postRepository.getPost(postId);
   }
 }

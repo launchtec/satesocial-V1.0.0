@@ -118,7 +118,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
             rate: state.rate,
             employmentType: state.employmentType,
             urlDoc: urlDoc,
-            isFeatured: false
+            isConfirmed: false
         ),
       );
       emit(state.copyWith(formStatus: FormStatus.submissionSuccess));

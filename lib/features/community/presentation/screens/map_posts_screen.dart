@@ -5,10 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/maps_util.dart';
 import 'package:sate_social/features/community/domain/use_cases/category_posts_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/category_posts/category_posts_cubit.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:sate_social/features/community/presentation/widgets/list_posts_dialog.dart';
 import 'package:sate_social/features/community/presentation/widgets/post_info_dialog.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,7 +21,8 @@ import '../../domain/repositories/post_repository.dart';
 import '../blocks/category_posts/category_posts_state.dart';
 
 class MapPostsScreen extends StatelessWidget {
-  const MapPostsScreen({super.key});
+  final String category;
+  const MapPostsScreen({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +32,14 @@ class MapPostsScreen extends StatelessWidget {
           postRepository: context.read<PostRepository>(),
         ),
       ),
-      child: const MapPostsView(),
+      child: MapPostsView(category: category),
     );
   }
 }
 
 class MapPostsView extends StatefulWidget {
-  const MapPostsView({super.key});
+  final String category;
+  const MapPostsView({super.key, required this.category});
 
   @override
   State<MapPostsView> createState() => _MapPostsViewState();
@@ -47,13 +50,15 @@ class _MapPostsViewState extends State<MapPostsView> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   late CameraPosition _currentPosition;
+  Position? _position;
+  List<PostModel> posts = [];
 
   @override
   void initState() {
     try {
-      Position position = Get.find<Position>(tag: 'coordinates');
+      _position = Get.find<Position>(tag: 'coordinates');
       _currentPosition = CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
+        target: LatLng(_position!.latitude, _position!.longitude),
         zoom: 12,
       );
     } on Exception {
@@ -62,9 +67,12 @@ class _MapPostsViewState extends State<MapPostsView> {
         zoom: 12,
       );
     }
-    context
-        .read<CategoryPostsCubit>()
-        .getCategoryPosts('Professional & Gig Economy');
+    final queryCategory = widget.category == 'romance'
+        ? AppConstants.postCategories[0]
+        : (widget.category == 'social'
+            ? AppConstants.postCategories[1]
+            : AppConstants.postCategories[2]);
+    context.read<CategoryPostsCubit>().getCategoryPosts(queryCategory);
     super.initState();
   }
 
@@ -77,7 +85,8 @@ class _MapPostsViewState extends State<MapPostsView> {
             listener: (context, state) {},
             builder: (context, state) {
               if (markers.isEmpty && state.postModels.isNotEmpty) {
-                addingMarkersInMap(state.postModels);
+                posts = state.postModels;
+                addingMarkersInMap(context);
               }
               return Container(
                   padding: const EdgeInsets.only(
@@ -100,7 +109,8 @@ class _MapPostsViewState extends State<MapPostsView> {
                               Padding(
                                   padding: const EdgeInsets.only(
                                       right: Dimensions.paddingSizeExtraLarge),
-                                  child: Text(Get.find<String>(tag: 'city') ?? '',
+                                  child: Text(
+                                      Get.find<String>(tag: 'city') ?? '',
                                       style: TextStyle(
                                           fontSize: Dimensions.fontSizeTitle,
                                           shadows: const [
@@ -137,24 +147,49 @@ class _MapPostsViewState extends State<MapPostsView> {
                             bottom: 50,
                             left: 20,
                             child: Column(children: [
-                              InkWell(
-                                  child: Image.asset(Images.list, height: 50),
-                                  onTap: () {}),
-                              Text('List View',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      shadows: const [
-                                        Shadow(
-                                          color: Colors
-                                              .black, // Choose the color of the shadow
-                                          blurRadius:
-                                              4.0, // Adjust the blur radius for the shadow effect
-                                          offset: Offset(0,
-                                              4.0), // Set the horizontal and vertical offset for the shadow
-                                        ),
-                                      ],
-                                      fontSize: Dimensions.fontSizeLarge,
-                                      fontWeight: FontWeight.bold)),
+                              state.postModels.isNotEmpty
+                                  ? Column(children: [
+                                      InkWell(
+                                          child: Image.asset(Images.list,
+                                              height: 50),
+                                          onTap: () {
+                                            showDialog(
+                                                barrierDismissible: true,
+                                                context: context,
+                                                builder: (context) {
+                                                  return ListPostsDialog(
+                                                    posts: state.postModels,
+                                                    selectPost: (post) {
+                                                      showDialog(
+                                                          barrierDismissible:
+                                                              true,
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return PostInfoDialog(
+                                                                post: post);
+                                                          });
+                                                    },
+                                                  );
+                                                });
+                                          }),
+                                      Text('List View',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              shadows: const [
+                                                Shadow(
+                                                  color: Colors
+                                                      .black, // Choose the color of the shadow
+                                                  blurRadius:
+                                                      4.0, // Adjust the blur radius for the shadow effect
+                                                  offset: Offset(0,
+                                                      4.0), // Set the horizontal and vertical offset for the shadow
+                                                ),
+                                              ],
+                                              fontSize:
+                                                  Dimensions.fontSizeLarge,
+                                              fontWeight: FontWeight.bold))
+                                    ])
+                                  : Container(),
                               const SizedBox(
                                   height: Dimensions.paddingSizeDefault),
                               InkWell(
@@ -183,30 +218,47 @@ class _MapPostsViewState extends State<MapPostsView> {
             }));
   }
 
-  Future<void> addingMarkersInMap(List<PostModel> postModels) async {
+  Future<void> addingMarkersInMap(BuildContext context) async {
     Set<Marker> tempMarkers = {};
-    for (PostModel post in postModels) {
-      if (post.zipCode.isNotEmpty) {
-        List<Location> locations =
-            await locationFromAddress("USA, ${post.zipCode}");
-        if (locations.isNotEmpty) {
-          tempMarkers.add(Marker(
-            markerId: MarkerId(const Uuid().v4()),
-            position: LatLng(
-              locations.first.latitude,
-              locations.first.longitude,
-            ),
-            icon: await getCustomIcon(),
-            onTap: () {
+    for (PostModel post in posts) {
+      if (post.location != null) {
+        tempMarkers.add(Marker(
+          markerId: MarkerId(const Uuid().v4()),
+          position: LatLng(
+            post.location!.latitude,
+            post.location!.longitude,
+          ),
+          icon: await getCustomIcon(post),
+          onTap: () {
+            final commonPosts =
+                context.read<CategoryPostsCubit>().postsWithSameLocation(post);
+            if (commonPosts.length == 1) {
               showDialog(
                   barrierDismissible: true,
                   context: context,
                   builder: (context) {
                     return PostInfoDialog(post: post);
                   });
-            },
-          ));
-        }
+            } else {
+              showDialog(
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (context) {
+                    return ListPostsDialog(
+                      posts: commonPosts,
+                      selectPost: (post) {
+                        showDialog(
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (context) {
+                              return PostInfoDialog(post: post);
+                            });
+                      },
+                    );
+                  });
+            }
+          },
+        ));
       }
     }
     setState(() {
@@ -214,11 +266,11 @@ class _MapPostsViewState extends State<MapPostsView> {
     });
   }
 
-  Future<BitmapDescriptor> getCustomIcon() async {
+  Future<BitmapDescriptor> getCustomIcon(PostModel postModel) async {
     return SizedBox(
-      height: 150,
-      width: 150,
-      child: Image.asset(Images.marker),
+      height: 125,
+      width: 125,
+      child: Image.asset(postModel.imageCategory(), fit: BoxFit.contain),
     ).toBitmapDescriptor();
   }
 }

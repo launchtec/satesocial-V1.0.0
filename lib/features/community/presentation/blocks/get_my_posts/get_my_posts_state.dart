@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 
-class GetPostsState extends Equatable {
+class GetMyPostsState extends Equatable {
   final bool isLoading;
-  final List<PostModel> postModels;
+  final Iterable<PostModel> postModels;
 
-  const GetPostsState({
+  const GetMyPostsState({
     this.isLoading = true,
     this.postModels = const [],
   });

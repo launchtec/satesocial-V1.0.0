@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_pickers/helpers/show_number_picker.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_selfie_liveness/selfie_liveness.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/dimensions.dart';
+import 'package:sate_social/core/util/styles.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/images.dart';
@@ -60,76 +63,85 @@ class _SignUpViewState extends State<SignUpView> {
       appBar: AppBar(
         title: const Text('Sign Up'),
       ),
-      body: BlocConsumer<SignUpCubit, SignUpState>(
-          listener: (context, state) {
-            if (state.formStatus == FormStatus.invalid) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    content: Text('Invalid form: please fill in all fields'),
-                  ),
-                );
-            }
-            if (state.formStatus == FormStatus.faceNotValid) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    content: Text('Invalid form: go through identity verification'),
-                  ),
-                );
-            }
-            if (state.formStatus == FormStatus.submissionFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'There was an error with the sign in process. Try again.',
-                    ),
-                  ),
-                );
-            }
-            if (state.formStatus == FormStatus.submissionSuccess) {
-              Get.toNamed(
-                  RouteHelper.getDashboardRoute());
-            }
-          },
-          builder: (context, state) {
-            return Container(
-                padding: const EdgeInsets.all(20),
-                child: Stepper(
-                  type: StepperType.horizontal,
-                  currentStep: currentStep,
-                  onStepCancel: () => currentStep == 0
-                      ? null
-                      : setState(() {
-                          currentStep -= 1;
-                        }),
-                  onStepContinue: () {
-                    bool completeStep = context.read<SignUpCubit>().checkStepComplete(currentStep);
-                    if (completeStep) {
-                      bool isLastStep = (currentStep == 2);
-                      if (isLastStep) {
-                        context.read<SignUpCubit>().signUp();
-                      } else {
-                        setState(() {
-                          currentStep += 1;
-                        });
+      body: BlocConsumer<SignUpCubit, SignUpState>(listener: (context, state) {
+        if (state.formStatus == FormStatus.invalid) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Invalid form: please fill in all fields'),
+              ),
+            );
+        }
+        if (state.formStatus == FormStatus.faceNotValid) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Invalid form: go through identity verification'),
+              ),
+            );
+        }
+        if (state.formStatus == FormStatus.submissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'There was an error with the sign in process. Try again.',
+                ),
+              ),
+            );
+        }
+        if (state.formStatus == FormStatus.submissionSuccess) {
+          Get.toNamed(RouteHelper.getDashboardRoute());
+        }
+      }, builder: (blocContext, state) {
+        return SafeArea(
+            child: Container(
+                padding: const EdgeInsets.all(Dimensions.paddingSizeLarge),
+                child: Column(children: [
+                  Expanded(
+                      child: Stepper(
+                    type: StepperType.horizontal,
+                    currentStep: currentStep,
+                    onStepCancel: () => currentStep == 0
+                        ? null
+                        : setState(() {
+                            currentStep -= 1;
+                          }),
+                    onStepContinue: () {
+                      bool completeStep = context
+                          .read<SignUpCubit>()
+                          .checkStepComplete(currentStep);
+                      if (completeStep) {
+                        bool isLastStep = (currentStep == 2);
+                        if (isLastStep) {
+                          context.read<SignUpCubit>().signUp();
+                        } else {
+                          setState(() {
+                            currentStep += 1;
+                          });
+                        }
                       }
-                    }
-                  },
-                  onStepTapped: (step) => setState(() {
-                    currentStep = step;
-                  }),
-                  steps: getSteps(state),
-                ));
-          }),
+                    },
+                    onStepTapped: null,
+                    steps: getSteps(state, blocContext),
+                  )),
+                  InkWell(
+                      child: Text('Sate Social Terms of Use',
+                          style: TextStyle(
+                              fontSize: Dimensions.fontSizeLarge,
+                              color: ColorConstants.primaryColor)),
+                      onTap: () {
+                        launchUrlString(AppConstants.termOfUseLink);
+                      }),
+                ])));
+      }),
     );
   }
 
-  List<Step> getSteps(SignUpState state) {
+  List<Step> getSteps(SignUpState state, BuildContext blocContext) {
     return <Step>[
       Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
@@ -147,7 +159,7 @@ class _SignUpViewState extends State<SignUpView> {
                 ),
               ),
               onChanged: (String value) {
-                context.read<SignUpCubit>().nameChanged(value);
+                blocContext.read<SignUpCubit>().nameChanged(value);
               },
             ),
             const SizedBox(height: Dimensions.paddingSizeDefault),
@@ -167,7 +179,7 @@ class _SignUpViewState extends State<SignUpView> {
               onChanged: (String value) {
                 if (debounce?.isActive ?? false) debounce?.cancel();
                 debounce = Timer(const Duration(milliseconds: 500), () {
-                  context.read<SignUpCubit>().emailChanged(value);
+                  blocContext.read<SignUpCubit>().emailChanged(value);
                 });
               },
             ),
@@ -187,7 +199,7 @@ class _SignUpViewState extends State<SignUpView> {
                     : null,
               ),
               onChanged: (String value) {
-                context.read<SignUpCubit>().passwordChanged(value);
+                blocContext.read<SignUpCubit>().passwordChanged(value);
               },
             ),
             const SizedBox(height: Dimensions.paddingSizeDefault),
@@ -218,7 +230,7 @@ class _SignUpViewState extends State<SignUpView> {
                   title: 'Select Age');
               if (result != null) {
                 _ageController.text = "Age: $result";
-                context.read<SignUpCubit>().ageChanged(result);
+                blocContext.read<SignUpCubit>().ageChanged(result);
               }
             },
           ),
@@ -237,7 +249,7 @@ class _SignUpViewState extends State<SignUpView> {
               style: TextStyle(fontSize: 14),
             ),
             onChanged: (String? value) {
-              context.read<SignUpCubit>().heightChanged(value!);
+              blocContext.read<SignUpCubit>().heightChanged(value!);
             },
             items: AppConstants.heightList
                 .map<DropdownMenuItem<String>>((String value) {
@@ -259,7 +271,7 @@ class _SignUpViewState extends State<SignUpView> {
               style: TextStyle(fontSize: 14),
             ),
             onChanged: (String? value) {
-              context.read<SignUpCubit>().genderChanged(value!);
+              blocContext.read<SignUpCubit>().genderChanged(value!);
             },
             items: AppConstants.genderList
                 .map<DropdownMenuItem<String>>((String value) {
@@ -281,7 +293,7 @@ class _SignUpViewState extends State<SignUpView> {
               style: TextStyle(fontSize: 14),
             ),
             onChanged: (String? value) {
-              context.read<SignUpCubit>().ethnicityChanged(value!);
+              blocContext.read<SignUpCubit>().ethnicityChanged(value!);
             },
             items: AppConstants.ethnicityList
                 .map<DropdownMenuItem<String>>((String value) {
@@ -303,7 +315,7 @@ class _SignUpViewState extends State<SignUpView> {
               style: TextStyle(fontSize: 14),
             ),
             onChanged: (String? value) {
-              context.read<SignUpCubit>().sexualityChanged(value!);
+              blocContext.read<SignUpCubit>().sexualityChanged(value!);
             },
             items: AppConstants.sexualityList
                 .map<DropdownMenuItem<String>>((String value) {
@@ -324,13 +336,71 @@ class _SignUpViewState extends State<SignUpView> {
               'Open To Connect To?\*',
               style: TextStyle(fontSize: 14),
             ),
-            onChanged: (String? value) {
-              context.read<SignUpCubit>().openToConnectToChanged(value!);
+            value: blocContext.read<SignUpCubit>().state.openToConnectTo.isEmpty ? null : blocContext.read<SignUpCubit>().state.openToConnectTo.last,
+            onChanged: (value) {},
+            selectedItemBuilder: (context) {
+              return AppConstants.openToConnectToList.map(
+                    (item) {
+                  return Container(
+                    alignment: AlignmentDirectional.center,
+                    child: Text(
+                      blocContext.read<SignUpCubit>().state.openToConnectTo.join(', '),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      maxLines: 1,
+                    ),
+                  );
+                },
+              ).toList();
             },
-            items: AppConstants.openToConnectToList
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(value: value, child: Text(value));
+            items: AppConstants.openToConnectToList.map((item) {
+              return DropdownMenuItem(
+                value: item,
+                //disable default onTap to avoid closing menu when selecting an item
+                enabled: false,
+                child: StatefulBuilder(
+                  builder: (context, menuSetState) {
+                    final isSelected = blocContext.read<SignUpCubit>().state.openToConnectTo.contains(item);
+                    return InkWell(
+                      onTap: () {
+                        isSelected ? blocContext.read<SignUpCubit>().removeOpenToConnectToChanged(item) : blocContext.read<SignUpCubit>().addOpenToConnectToChanged(item);
+                        //This rebuilds the StatefulWidget to update the button's text
+                        setState(() {});
+                        //This rebuilds the dropdownMenu Widget to update the check mark
+                        menuSetState(() {});
+                      },
+                      child: Container(
+                        height: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: [
+                            if (isSelected)
+                              const Icon(Icons.check_box_outlined)
+                            else
+                              const Icon(Icons.check_box_outline_blank),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                item,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
             }).toList(),
+            // items: AppConstants.openToConnectToList
+            //     .map<DropdownMenuItem<String>>((String value) {
+            //   return DropdownMenuItem<String>(value: value, child: Text(value));
+            // }).toList(),
           ),
           const SizedBox(height: Dimensions.paddingSizeDefault),
           TextFormField(

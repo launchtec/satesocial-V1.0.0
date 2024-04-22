@@ -9,4 +9,5 @@ class ColorConstants {
   static const Color greenAccent = Color(0xFF2DEC34);
   static const Color darkGrey = Color(0xFF8D8D8D);
   static const Color dialogBackground = Color(0xFF292929);
+  static const Color listViewBackground = Color(0xFF010101);
 }

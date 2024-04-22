@@ -5,9 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
 import 'package:sate_social/core/data/data_sources/storage_data_source.dart';
-import 'package:sate_social/core/services/location_service.dart';
 import 'package:sate_social/core/services/push_notification_service.dart';
 import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
+import 'package:sate_social/features/messages/data/repositories/chat_repository_impl.dart';
+import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
 import 'package:sate_social/features/notifications/data/repositories/notification_repository_impl.dart';
 import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
 
@@ -33,7 +34,6 @@ Future<void> bootstrap(AppBuilder builder) async {
 void main() {
   bootstrap(
     () async {
-      final getIt = GetInstance();
       AuthLocalDataSource authLocalDataSource = AuthLocalDataSource();
       AuthRemoteDataSource authRemoteDataSource =
           AuthRemoteDataSourceFirebase();
@@ -54,6 +54,10 @@ void main() {
           storageDataSource: storageDataSource
       );
 
+      ChatRepository chatRepository = ChatRepositoryImpl(
+          firestoreDataSource: firestoreDataSource
+      );
+
       AuthUser user = await authRepository.authUser.first;
 
       if (user.id.isNotEmpty) {
@@ -65,6 +69,7 @@ void main() {
         authRepository: authRepository,
         notificationRepository: notificationRepository,
         postRepository: postRepository,
+        chatRepository: chatRepository,
         authUser: user,
       );
     },
@@ -77,12 +82,14 @@ class App extends StatelessWidget {
     required this.authRepository,
     required this.notificationRepository,
     required this.postRepository,
+    required this.chatRepository,
     this.authUser,
   });
 
   final AuthRepository authRepository;
   final NotificationRepository notificationRepository;
   final PostRepository postRepository;
+  final ChatRepository chatRepository;
   final AuthUser? authUser;
 
   @override
@@ -92,6 +99,7 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: authRepository),
         RepositoryProvider.value(value: notificationRepository),
         RepositoryProvider.value(value: postRepository),
+        RepositoryProvider.value(value: chatRepository)
       ],
       child: GetMaterialApp(
         title: AppConstants.appName,
