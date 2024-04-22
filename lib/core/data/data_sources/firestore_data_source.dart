@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sate_social/features/auth/data/models/user_location.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
@@ -17,6 +20,14 @@ class FirestoreDataSource {
 
   Future<DocumentSnapshot> getUserInfo(String userId) {
     return instance.collection('users').doc(userId).get();
+  }
+
+  Future<QuerySnapshot> getUsers() {
+    return instance.collection('users').get();
+  }
+
+  Future<void> updateUserLocation(String userId, UserLocation userLocation) {
+    return instance.collection('users').doc(userId).update(userLocation.toMap());
   }
 
   Future<void> addOrUpdateNotification(String userId, NotificationModel notification) {
@@ -75,7 +86,7 @@ class FirestoreDataSource {
   Future<QuerySnapshot> getChats(String userId) {
     return instance.collection('chats').where(Filter.or(
         Filter("senderId", isEqualTo: userId),
-        Filter("receiverId", isEqualTo: userId)
+        Filter("receiverId", isEqualTo: userId),
     )).get();
   }
 

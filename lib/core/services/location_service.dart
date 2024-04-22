@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class LocationService {
-  void determinePosition() async {
+  Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -41,6 +41,8 @@ class LocationService {
     if (city != null) {
       Get.put<String>(tag: 'city', city);
     }
+
+    return currentPosition;
   }
 
   Future<String?> cityFromPosition(Position position) async {

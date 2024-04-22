@@ -8,7 +8,7 @@ class GetChatsCase {
 
   Future<List<Chat>> call(String userId) {
     return chatRepository.getChats(
-      userId: userId,
+      userId: userId
     );
   }
 }

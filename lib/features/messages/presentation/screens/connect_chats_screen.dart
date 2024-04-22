@@ -13,31 +13,29 @@ import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
 
-class ConversationsScreen extends StatelessWidget {
-  final bool isCommunity;
-  const ConversationsScreen({super.key, required this.isCommunity});
+class ConnectChatScreen extends StatelessWidget {
+  const ConnectChatScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => GetChatsCubit(
-                getChatsCase: GetChatsCase(
+            getChatsCase: GetChatsCase(
               chatRepository: context.read<ChatRepository>(),
             ))
-              ..init(FirebaseAuth.instance.currentUser!.uid),
-        child: ConversationsView(isCommunity: isCommunity));
+          ..init(FirebaseAuth.instance.currentUser!.uid, false),
+        child: const ConnectChatsView());
   }
 }
 
-class ConversationsView extends StatefulWidget {
-  final bool isCommunity;
-  const ConversationsView({super.key, required this.isCommunity});
+class ConnectChatsView extends StatefulWidget {
+  const ConnectChatsView({super.key});
 
   @override
-  State<ConversationsView> createState() => _ConversationsViewState();
+  State<ConnectChatsView> createState() => _ConnectChatsViewState();
 }
 
-class _ConversationsViewState extends State<ConversationsView> {
+class _ConnectChatsViewState extends State<ConnectChatsView> {
   String city = '';
 
   @override
@@ -63,14 +61,14 @@ class _ConversationsViewState extends State<ConversationsView> {
                   opacity: 0.4),
             ),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Row(children: [
                   IconButton(
                       onPressed: () => Get.back(),
                       icon:
-                          const Icon(Icons.arrow_back_ios, color: Colors.grey)),
+                      const Icon(Icons.arrow_back_ios, color: Colors.grey)),
                   Image.asset(Images.logo, height: 65),
                 ]),
                 Padding(
@@ -84,7 +82,7 @@ class _ConversationsViewState extends State<ConversationsView> {
                                 color: Colors
                                     .black, // Choose the color of the shadow
                                 blurRadius:
-                                    2.0, // Adjust the blur radius for the shadow effect
+                                2.0, // Adjust the blur radius for the shadow effect
                                 offset: Offset(-4.0,
                                     1.0), // Set the horizontal and vertical offset for the shadow
                               ),
@@ -94,7 +92,7 @@ class _ConversationsViewState extends State<ConversationsView> {
               const Divider(color: Colors.grey, thickness: 5),
               const SizedBox(height: Dimensions.paddingSizeLarge),
               Center(
-                  child: Text('Your Community Messages',
+                  child: Text('Your Connect Messages',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -102,20 +100,20 @@ class _ConversationsViewState extends State<ConversationsView> {
               const SizedBox(height: Dimensions.paddingSizeLarge),
               Expanded(child: BlocBuilder<GetChatsCubit, GetChatsState>(
                   builder: (blocContext, state) {
-                final chats = state.chats.toList();
-                return Container(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.paddingSizeDefault),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: Dimensions.paddingSizeExtraSmall),
-                  decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(Dimensions.radiusLarge)),
-                  ),
-                  child: !state.isLoading
-                      ? ListView.builder(
+                    final chats = state.chats.toList();
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.paddingSizeDefault),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: Dimensions.paddingSizeExtraSmall),
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(Dimensions.radiusLarge)),
+                      ),
+                      child: !state.isLoading
+                          ? ListView.builder(
                           padding: const EdgeInsets.symmetric(
                               vertical: Dimensions.paddingSizeSmall,
                               horizontal: Dimensions.paddingSizeExtraSmall),
@@ -124,11 +122,11 @@ class _ConversationsViewState extends State<ConversationsView> {
                             return ChatItemWidget(
                                 chat: chats[index], onTap: () => Get.toNamed(RouteHelper.getOpenChatRoute(chats[index])));
                           })
-                      : const Center(
+                          : const Center(
                           child: CircularProgressIndicator(
                               color: Colors.white, strokeWidth: 2.0)),
-                );
-              })),
+                    );
+                  })),
               const SizedBox(height: Dimensions.paddingSizeOverLarge),
             ])));
   }

@@ -34,7 +34,7 @@ class ChatRepositoryImpl implements ChatRepository {
           sender: AppUser.fromSnapshot(sender),
           receiver: AppUser.fromSnapshot(receiver),
           receiverId: doc.get("receiverId"),
-          postInfo: PostInfo.fromMap(doc.get("postInfo")),
+          postInfo: doc.get("postInfo") != null ? PostInfo.fromMap(doc.get("postInfo")) : null,
           connectId: doc.get("connectId"));
     }).toList());
     return listChats;
@@ -50,7 +50,7 @@ class ChatRepositoryImpl implements ChatRepository {
                   name: doc.get("name"),
                   senderId: doc.get("senderId"),
                   receiverId: doc.get("receiverId"),
-                  postInfo: PostInfo.fromMap(doc.get("postInfo")),
+                  postInfo: doc.data().toString().contains('postInfo') ? PostInfo.fromMap(doc.get("postInfo")) : null,
                   connectId: doc.get("connectId"));
             }));
   }

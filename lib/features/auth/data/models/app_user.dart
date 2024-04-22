@@ -13,6 +13,8 @@ class AppUser {
   final String? ethnicity;
   final String? howDidYouKnowAboutUs;
   final String? avatarUrl;
+  final double? latitude;
+  final double? longitude;
 
   const AppUser({
     required this.id,
@@ -27,6 +29,8 @@ class AppUser {
     this.ethnicity,
     this.howDidYouKnowAboutUs,
     this.avatarUrl,
+    this.latitude,
+    this.longitude
   });
 
   factory AppUser.fromSnapshot(DocumentSnapshot snapshot) {
@@ -51,7 +55,14 @@ class AppUser {
             : '',
         avatarUrl: snapshot.data().toString().contains('avatarUrl')
             ? snapshot.get('avatarUrl')
-            : '');
+            : '',
+        longitude: snapshot.data().toString().contains('longitude')
+        ? snapshot.get('longitude') as double
+        : null,
+        latitude: snapshot.data().toString().contains('latitude')
+            ? snapshot.get('latitude') as double
+            : null
+    );
   }
 
   Map<String, dynamic> toMap() {
