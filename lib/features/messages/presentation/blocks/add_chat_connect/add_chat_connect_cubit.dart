@@ -16,19 +16,22 @@ class AddChatConnectCubit extends Cubit<AddChatConnectState> {
   })  : _addChatCase = addChatCase,
         super(const AddChatConnectState());
 
-  Future<void> addChat(AppUser receiver) async {
+  Future<String> addChat(AppUser receiver) async {
+    String chatId = const Uuid().v4();
     emit(state.copyWith(requestStatus: RequestStatus.submissionInProgress));
     try {
       await _addChatCase(Chat(
-          id: const Uuid().v4(),
+          id: chatId,
           name: receiver.name,
           senderId: FirebaseAuth.instance.currentUser!.uid,
           receiverId: receiver.id,
           connectId: const Uuid().v4()
       ));
       emit(state.copyWith(requestStatus: RequestStatus.submissionSuccess));
+      emit(state.copyWith(requestStatus: RequestStatus.initial));
     } catch (err) {
       emit(state.copyWith(requestStatus: RequestStatus.submissionFailure));
     }
+    return chatId;
   }
 }

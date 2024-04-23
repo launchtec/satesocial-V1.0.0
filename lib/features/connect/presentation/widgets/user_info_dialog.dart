@@ -1,11 +1,10 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/features/auth/data/models/app_user.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
 import 'package:sate_social/features/messages/domain/use_cases/add_chat_case.dart';
-import 'package:sate_social/features/messages/presentation/blocks/add_chat/add_chat_cubit.dart';
-import 'package:sate_social/features/messages/presentation/blocks/add_chat/add_chat_state.dart';
 import 'package:sate_social/features/messages/presentation/blocks/add_chat_connect/add_chat_connect_state.dart';
 
 import '../../../../core/route/route_helper.dart';
@@ -13,7 +12,9 @@ import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../messages/domain/use_cases/add_message_case.dart';
 import '../../../messages/presentation/blocks/add_chat_connect/add_chat_connect_cubit.dart';
+import '../../../messages/presentation/blocks/add_message/add_message_cubit.dart';
 
 class UserInfoDialog extends StatelessWidget {
   final AppUser user;
@@ -22,12 +23,20 @@ class UserInfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => AddChatConnectCubit(
-              addChatCase: AddChatCase(
-                chatRepository: context.read<ChatRepository>(),
-              ),
-            ),
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context) => AddChatConnectCubit(
+                    addChatCase: AddChatCase(
+                      chatRepository: context.read<ChatRepository>(),
+                    ),
+                  )),
+          BlocProvider(
+              create: (context) => AddMessageCubit(
+                  addMessageCase: AddMessageCase(
+                    chatRepository: context.read<ChatRepository>(),
+                  )))
+        ],
         child: AlertDialog(
           contentPadding: EdgeInsets.zero,
           titleTextStyle: TextStyle(
@@ -52,8 +61,8 @@ class UserInfoDialog extends StatelessWidget {
                             colors: user.gender == AppConstants.genderList[0]
                                 ? ColorConstants.malePalette
                                 : user.gender == AppConstants.genderList[1]
-                                ? ColorConstants.femalePalette
-                                : ColorConstants.nonbinaryPalette,
+                                    ? ColorConstants.femalePalette
+                                    : ColorConstants.nonbinaryPalette,
                           ),
                           shape: BoxShape.rectangle,
                           borderRadius: const BorderRadius.only(
@@ -113,15 +122,20 @@ class UserInfoDialog extends StatelessWidget {
                                   fontSize: Dimensions.fontSizeDefault)),
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraSmall),
-                          user.relationship != null ? Column(children: [
-                            Text(user.relationship!,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: Dimensions.fontSizeDefault)),
-                            const SizedBox(
-                                height: Dimensions.paddingSizeExtraSmall),
-                          ]) : Container(),
-                          Text('Interested in: ${user.openToConnectTo.join(', ')}',
+                          user.relationship != null &&
+                                  user.relationship!.isNotEmpty
+                              ? Column(children: [
+                                  Text(user.relationship!,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                              Dimensions.fontSizeDefault)),
+                                  const SizedBox(
+                                      height: Dimensions.paddingSizeExtraSmall),
+                                ])
+                              : const SizedBox(),
+                          Text(
+                              'Interested in: ${user.openToConnectTo.join(', ')}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,
@@ -156,43 +170,100 @@ class UserInfoDialog extends StatelessWidget {
                       left: 0,
                       right: 0,
                       child: Center(
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                await context.read<AddChatConnectCubit>().addChat(user);
-                                Navigator.pop(context);
-                                Get.toNamed(RouteHelper.getConnectChatsRoute());
-                              },
-                              style: ButtonStyle(
-                                  padding:
-                                      MaterialStateProperty.all<EdgeInsets>(
-                                          const EdgeInsets.symmetric(
-                                              horizontal: Dimensions
-                                                  .paddingSizeMiddleSmall)),
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.white)),
-                              child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image.asset(Images.sending,
-                                        height: 24,
-                                        color: ColorConstants.sendPingColor),
-                                    const Text('SEND PING',
-                                        style: TextStyle(
-                                            color: ColorConstants.sendPingColor,
-                                            fontWeight: FontWeight.bold))
-                                  ])))),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2<String>(
+                            isExpanded: true,
+                            hint: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(Images.sending,
+                                      height: 24,
+                                      color: ColorConstants.sendPingColor),
+                                  const SizedBox(
+                                      width: Dimensions.paddingSizeSmall),
+                                  Text('SEND PING',
+                                      style: TextStyle(
+                                          color: ColorConstants.sendPingColor,
+                                          fontSize: Dimensions.fontSizeDefault,
+                                          fontWeight: FontWeight.bold))
+                                ]),
+                            iconStyleData: const IconStyleData(
+                              iconSize: 0,
+                            ),
+                            items: AppConstants.listHello
+                                .map((String item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                                .toList(),
+                            onChanged: (value) async {
+                              String chatId = await context
+                                  .read<AddChatConnectCubit>()
+                                  .addChat(user);
+                              await context
+                                  .read<AddMessageCubit>()
+                                  .addMessage(chatId,
+                                  value!);
+                              Navigator.pop(context);
+                              Get.toNamed(RouteHelper.getConnectChatsRoute());
+                            },
+                            buttonStyleData: ButtonStyleData(
+                              width: context.width / 2,
+                              padding:
+                                  const EdgeInsets.only(left: 14, right: 14),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                  color: Colors.white,
+                                ),
+                                color: Colors.white,
+                              ),
+                              elevation: 2,
+                            ),
+                            dropdownStyleData: DropdownStyleData(
+                              maxHeight: 200,
+                              width: context.width / 2,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                color: Colors.white,
+                              ),
+                              scrollbarTheme: ScrollbarThemeData(
+                                radius: const Radius.circular(40),
+                                thickness: MaterialStateProperty.all(6),
+                                thumbVisibility:
+                                    MaterialStateProperty.all(true),
+                              ),
+                            ),
+                            menuItemStyleData: const MenuItemStyleData(
+                              height: 40,
+                              padding: EdgeInsets.only(left: 14, right: 14),
+                            ),
+                          ),
+                        ),
+                      )),
                   Positioned.fill(
                     child: Align(
                         alignment: Alignment.bottomLeft,
-                        child: ((user.activeInstagram ?? false) && user.userLinkInstagram != null) ? Row(children: [
-                          Image.asset(Images.instagramConnect, height: 48),
-                          Text(user.userLinkInstagram!,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Dimensions.fontSizeDefault)),
-                        ]) : Container()),
+                        child: ((user.activeInstagram ?? false) &&
+                                user.userLinkInstagram != null)
+                            ? Row(children: [
+                                Image.asset(Images.instagramConnect,
+                                    height: 48),
+                                Text(user.userLinkInstagram!,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Dimensions.fontSizeDefault)),
+                              ])
+                            : Container()),
                   ),
                 ]));
           }),
