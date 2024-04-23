@@ -30,6 +30,10 @@ class FirestoreDataSource {
     return instance.collection('users').doc(userId).update(userLocation.toMap());
   }
 
+  Future<void> updateUserInfo(AppUser user) {
+    return instance.collection('users').doc(user.id).update(user.toMap());
+  }
+
   Future<void> addOrUpdateNotification(String userId, NotificationModel notification) {
     return instance
         .collection('users')

@@ -12,10 +12,24 @@ class ColorConstants {
   static const Color darkGrey = Color(0xFF8D8D8D);
   static const Color dialogBackground = Color(0xFF292929);
   static const Color listViewBackground = Color(0xFF010101);
-  static const Color blueBack1 = Color(0xFF0B35A3);
-  static const Color blueBack2 = Color(0xFF003AD0);
-  static const Color blueBack3 = Color(0xFF003AD0);
-  static const Color blueBack4 = Color(0xFF98A9D6);
+  static const List<Color> malePalette = [
+    Color(0xFF0B35A3),
+    Color(0xFF003AD0),
+    Color(0xFF003AD0),
+    Color(0xFF98A9D6)
+  ];
+  static const List<Color> femalePalette = [
+    Color(0xFFFE54D2),
+    Color(0xFFFE54D2),
+    Color(0xFFFA7CD9),
+    Color(0xFFFFDDDD)
+  ];
+  static const List<Color> nonbinaryPalette = [
+    Color(0xFF20A30B),
+    Color(0xFF20A30B),
+    Color(0xFF26A312),
+    Color(0xFF91EC83)
+  ];
   static const Color greyBack = Color(0xFFE7E7E7);
   static const Color sendPingColor = Color(0xFF707172);
 }

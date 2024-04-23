@@ -16,7 +16,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit({
     required SignUpUseCase signUpUseCase,
   })  : _signUpUseCase = signUpUseCase,
-        super(SignUpState());
+        super(const SignUpState());
 
   void nameChanged(String name) {
     emit(

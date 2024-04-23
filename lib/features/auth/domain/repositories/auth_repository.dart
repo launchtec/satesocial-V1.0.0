@@ -13,6 +13,8 @@ abstract class AuthRepository {
 
   Future<void> updateUserLocation({required String userId, required UserLocation userLocation});
 
+  Future<void> updateUserInfo({required AppUser user});
+
   Future<AuthUser> signUp({
     required SignUpParams signUpParams,
   });

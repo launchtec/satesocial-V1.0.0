@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sate_social/core/util/app_constants.dart';
 import 'package:sate_social/core/util/maps_util.dart';
 import 'package:sate_social/features/auth/data/models/app_user.dart';
 import 'package:sate_social/features/auth/domain/repositories/auth_repository.dart';
@@ -44,7 +45,7 @@ class MapConnectView extends StatefulWidget {
 class _MapConnectViewState extends State<MapConnectView> {
   Set<Marker> markers = {};
   final Completer<GoogleMapController> _controller =
-  Completer<GoogleMapController>();
+      Completer<GoogleMapController>();
   late CameraPosition _currentPosition;
   Position? _position;
   List<AppUser> users = [];
@@ -109,7 +110,7 @@ class _MapConnectViewState extends State<MapConnectView> {
                                               color: Colors
                                                   .black, // Choose the color of the shadow
                                               blurRadius:
-                                              2.0, // Adjust the blur radius for the shadow effect
+                                                  2.0, // Adjust the blur radius for the shadow effect
                                               offset: Offset(-4.0,
                                                   1.0), // Set the horizontal and vertical offset for the shadow
                                             ),
@@ -122,17 +123,17 @@ class _MapConnectViewState extends State<MapConnectView> {
                             height: Dimensions.paddingSizeExtraSmall),
                         Expanded(
                             child: GoogleMap(
-                              mapType: MapType.normal,
-                              initialCameraPosition: _currentPosition,
-                              myLocationEnabled: true,
-                              myLocationButtonEnabled: true,
-                              padding: const EdgeInsets.all(
-                                  Dimensions.paddingSizeDefault),
-                              markers: markers,
-                              onMapCreated: (GoogleMapController controller) {
-                                _controller.complete(controller);
-                              },
-                            ))
+                          mapType: MapType.normal,
+                          initialCameraPosition: _currentPosition,
+                          myLocationEnabled: true,
+                          myLocationButtonEnabled: true,
+                          padding: const EdgeInsets.all(
+                              Dimensions.paddingSizeDefault),
+                          markers: markers,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                        ))
                       ]));
             }));
   }
@@ -147,14 +148,14 @@ class _MapConnectViewState extends State<MapConnectView> {
             user.latitude!,
             user.longitude!,
           ),
-          icon: await getCustomIcon(),
+          icon: await getCustomIcon(user.gender),
           onTap: () {
-              showDialog(
-                  barrierDismissible: true,
-                  context: context,
-                  builder: (context) {
-                    return UserInfoDialog(user: user);
-                  });
+            showDialog(
+                barrierDismissible: true,
+                context: context,
+                builder: (context) {
+                  return UserInfoDialog(user: user);
+                });
           },
         ));
       }
@@ -164,11 +165,17 @@ class _MapConnectViewState extends State<MapConnectView> {
     });
   }
 
-  Future<BitmapDescriptor> getCustomIcon() async {
+  Future<BitmapDescriptor> getCustomIcon(String gender) async {
     return SizedBox(
       height: 100,
       width: 100,
-      child: Image.asset(Images.userMarker, fit: BoxFit.contain),
+      child: Image.asset(
+          gender == AppConstants.genderList[0]
+              ? Images.maleMarker
+              : gender == AppConstants.genderList[1]
+                  ? Images.femaleMarker
+                  : Images.nonbinaryMarker,
+          fit: BoxFit.contain),
     ).toBitmapDescriptor();
   }
 }

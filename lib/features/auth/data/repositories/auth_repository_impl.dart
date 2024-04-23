@@ -39,6 +39,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> updateUserInfo({required AppUser user}) {
+    return firestoreDataSource.updateUserInfo(user);
+  }
+
+  @override
   Future<List<AppUser>> getUsers() async {
     final usersSnapshot = await firestoreDataSource.getUsers();
     return usersSnapshot.docs

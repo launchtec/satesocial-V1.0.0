@@ -9,6 +9,7 @@ import 'package:sate_social/features/messages/presentation/blocks/add_chat/add_c
 import 'package:sate_social/features/messages/presentation/blocks/add_chat_connect/add_chat_connect_state.dart';
 
 import '../../../../core/route/route_helper.dart';
+import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
@@ -44,19 +45,18 @@ class UserInfoDialog extends StatelessWidget {
                   Column(mainAxisSize: MainAxisSize.min, children: [
                     Container(
                         width: double.infinity,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            colors: [
-                              ColorConstants.blueBack1,
-                              ColorConstants.blueBack2,
-                              ColorConstants.blueBack3,
-                              ColorConstants.blueBack4,
-                            ],
+                            colors: user.gender == AppConstants.genderList[0]
+                                ? ColorConstants.malePalette
+                                : user.gender == AppConstants.genderList[1]
+                                ? ColorConstants.femalePalette
+                                : ColorConstants.nonbinaryPalette,
                           ),
                           shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                               topRight: Radius.circular(Dimensions.radiusLarge),
                               topLeft: Radius.circular(Dimensions.radiusLarge)),
                         ),
@@ -113,7 +113,16 @@ class UserInfoDialog extends StatelessWidget {
                                   fontSize: Dimensions.fontSizeDefault)),
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraSmall),
-                          Text('Interested in: Friends',
+                          user.relationship != null ? Column(children: [
+                            Text(user.relationship!,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Dimensions.fontSizeDefault)),
+                            const SizedBox(
+                                height: Dimensions.paddingSizeExtraSmall),
+                          ]) : Container(),
+                          Text('Interested in: ${user.openToConnectTo.join(', ')}',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -176,14 +185,14 @@ class UserInfoDialog extends StatelessWidget {
                   Positioned.fill(
                     child: Align(
                         alignment: Alignment.bottomLeft,
-                        child: Row(children: [
+                        child: ((user.activeInstagram ?? false) && user.userLinkInstagram != null) ? Row(children: [
                           Image.asset(Images.instagramConnect, height: 48),
-                          Text('@YourUsername',
+                          Text(user.userLinkInstagram!,
                               style: TextStyle(
-                                  color: ColorConstants.textInstaColor,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: Dimensions.fontSizeDefault)),
-                        ])),
+                        ]) : Container()),
                   ),
                 ]));
           }),
