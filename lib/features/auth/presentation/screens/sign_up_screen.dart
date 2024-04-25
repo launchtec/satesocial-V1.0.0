@@ -361,9 +361,7 @@ class _SignUpViewState extends State<SignUpView> {
                     return InkWell(
                       onTap: () {
                         isSelected ? blocContext.read<SignUpCubit>().removeOpenToConnectToChanged(item) : blocContext.read<SignUpCubit>().addOpenToConnectToChanged(item);
-                        //This rebuilds the StatefulWidget to update the button's text
                         setState(() {});
-                        //This rebuilds the dropdownMenu Widget to update the check mark
                         menuSetState(() {});
                       },
                       child: Container(
@@ -392,10 +390,6 @@ class _SignUpViewState extends State<SignUpView> {
                 ),
               );
             }).toList(),
-            // items: AppConstants.openToConnectToList
-            //     .map<DropdownMenuItem<String>>((String value) {
-            //   return DropdownMenuItem<String>(value: value, child: Text(value));
-            // }).toList(),
           ),
           const SizedBox(height: Dimensions.paddingSizeDefault),
           TextFormField(

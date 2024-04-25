@@ -6,20 +6,23 @@ import 'package:sate_social/features/auth/data/models/app_user.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
 import 'package:sate_social/features/messages/domain/use_cases/add_chat_case.dart';
 import 'package:sate_social/features/messages/presentation/blocks/add_chat_connect/add_chat_connect_state.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../messages/data/models/chat.dart';
 import '../../../messages/domain/use_cases/add_message_case.dart';
 import '../../../messages/presentation/blocks/add_chat_connect/add_chat_connect_cubit.dart';
 import '../../../messages/presentation/blocks/add_message/add_message_cubit.dart';
 
 class UserInfoDialog extends StatelessWidget {
   final AppUser user;
+  final Chat? chat;
 
-  const UserInfoDialog({super.key, required this.user});
+  const UserInfoDialog({super.key, required this.user, this.chat});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class UserInfoDialog extends StatelessWidget {
                   )),
           BlocProvider(
               create: (context) => AddMessageCubit(
-                  addMessageCase: AddMessageCase(
+                      addMessageCase: AddMessageCase(
                     chatRepository: context.read<ChatRepository>(),
                   )))
         ],
@@ -170,7 +173,7 @@ class UserInfoDialog extends StatelessWidget {
                       left: 0,
                       right: 0,
                       child: Center(
-                        child: DropdownButtonHideUnderline(
+                        child: chat == null ? DropdownButtonHideUnderline(
                           child: DropdownButton2<String>(
                             isExpanded: true,
                             hint: Row(
@@ -210,8 +213,7 @@ class UserInfoDialog extends StatelessWidget {
                                   .addChat(user);
                               await context
                                   .read<AddMessageCubit>()
-                                  .addMessage(chatId,
-                                  value!);
+                                  .addMessage(chatId, value!);
                               Navigator.pop(context);
                               Get.toNamed(RouteHelper.getConnectChatsRoute());
                             },
@@ -247,22 +249,50 @@ class UserInfoDialog extends StatelessWidget {
                               padding: EdgeInsets.only(left: 14, right: 14),
                             ),
                           ),
-                        ),
+                        ) : ElevatedButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              Get.toNamed(RouteHelper.getOpenChatRoute(chat!));
+                            },
+                            style: ButtonStyle(
+                                padding:
+                                MaterialStateProperty.all<EdgeInsets>(
+                                    const EdgeInsets.symmetric(
+                                        horizontal: Dimensions
+                                            .paddingSizeMiddleSmall)),
+                                backgroundColor:
+                                MaterialStateProperty.all<Color>(
+                                    Colors.white)),
+                            child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.asset(Images.sending,
+                                      height: 24,
+                                      color: ColorConstants.sendPingColor),
+                                  const Text('OPEN CHAT',
+                                      style: TextStyle(
+                                          color: ColorConstants.sendPingColor,
+                                          fontWeight: FontWeight.bold))
+                                ])),
                       )),
                   Positioned.fill(
                     child: Align(
                         alignment: Alignment.bottomLeft,
                         child: ((user.activeInstagram ?? false) &&
                                 user.userLinkInstagram != null)
-                            ? Row(children: [
-                                Image.asset(Images.instagramConnect,
-                                    height: 48),
-                                Text(user.userLinkInstagram!,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Dimensions.fontSizeDefault)),
-                              ])
+                            ? InkWell(
+                                child: Row(children: [
+                                  Image.asset(Images.instagramConnect,
+                                      height: 48),
+                                  Text(user.userLinkInstagram!,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              Dimensions.fontSizeDefault)),
+                                ]),
+                                onTap: () => launchUrlString(
+                                    'https://www.instagram.com/${user.userLinkInstagram!.replaceFirst('@', '')}'))
                             : Container()),
                   ),
                 ]));

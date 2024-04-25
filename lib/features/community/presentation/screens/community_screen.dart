@@ -170,7 +170,7 @@ class _CommunityViewState extends State<CommunityView> {
                         borderRadius: BorderRadius.all(
                             Radius.circular(Dimensions.radiusLarge)),
                       ),
-                      child: featurePosts.isNotEmpty
+                      child: !state.isLoading
                           ? ListView.builder(
                               padding: const EdgeInsets.symmetric(
                                   vertical: Dimensions.paddingSizeSmall,

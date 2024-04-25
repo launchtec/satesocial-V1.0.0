@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -13,6 +14,11 @@ import 'package:sate_social/features/auth/domain/use_cases/get_users_case.dart';
 import 'package:sate_social/features/auth/presentation/blocks/get_users/get_users_cubit.dart';
 import 'package:sate_social/features/auth/presentation/blocks/get_users/get_users_state.dart';
 import 'package:sate_social/features/connect/presentation/widgets/user_info_dialog.dart';
+import 'package:sate_social/features/messages/data/models/chat.dart';
+import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
+import 'package:sate_social/features/messages/domain/use_cases/get_chats_case.dart';
+import 'package:sate_social/features/messages/presentation/blocks/get_chats/get_chats_cubit.dart';
+import 'package:sate_social/features/messages/presentation/blocks/get_chats/get_chats_state.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../core/util/dimensions.dart';
@@ -24,12 +30,21 @@ class MapConnectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetUsersCubit(
-        getUsersCase: GetUsersCase(
-          authRepository: context.read<AuthRepository>(),
-        ),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) => GetUsersCubit(
+                  getUsersCase: GetUsersCase(
+                    authRepository: context.read<AuthRepository>(),
+                  ),
+                )),
+        BlocProvider(
+            create: (context) => GetChatsCubit(
+                  getChatsCase: GetChatsCase(
+                    chatRepository: context.read<ChatRepository>(),
+                  ),
+                ))
+      ],
       child: const MapConnectView(),
     );
   }
@@ -49,6 +64,7 @@ class _MapConnectViewState extends State<MapConnectView> {
   late CameraPosition _currentPosition;
   Position? _position;
   List<AppUser> users = [];
+  List<Chat> chats = [];
 
   @override
   void initState() {
@@ -65,6 +81,7 @@ class _MapConnectViewState extends State<MapConnectView> {
       );
     }
     context.read<GetUsersCubit>().getUsers();
+    context.read<GetChatsCubit>().getChats(FirebaseAuth.instance.currentUser!.uid, false);
     super.initState();
   }
 
@@ -73,69 +90,85 @@ class _MapConnectViewState extends State<MapConnectView> {
     return Scaffold(
         appBar: null,
         backgroundColor: Colors.black,
-        body: BlocConsumer<GetUsersCubit, GetUsersState>(
-            listener: (context, state) {},
-            builder: (context, state) {
-              if (markers.isEmpty && state.users.isNotEmpty) {
-                users = state.users;
-                addingMarkersInMap(context);
-              }
-              return Container(
-                  padding: const EdgeInsets.only(
-                      top: Dimensions.paddingSizeOverLarge),
-                  width: double.infinity,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: Dimensions.paddingSizeSmall),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(children: [
-                                IconButton(
-                                    onPressed: () => Get.back(),
-                                    icon: const Icon(Icons.arrow_back_ios,
-                                        color: Colors.grey)),
-                                Image.asset(Images.logo, height: 65),
-                              ]),
-                              Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: Dimensions.paddingSizeExtraLarge),
-                                  child: Text(
-                                      Get.find<String>(tag: 'city') ?? '',
-                                      style: TextStyle(
-                                          fontSize: Dimensions.fontSizeTitle,
-                                          shadows: const [
-                                            Shadow(
-                                              color: Colors
-                                                  .black, // Choose the color of the shadow
-                                              blurRadius:
-                                                  2.0, // Adjust the blur radius for the shadow effect
-                                              offset: Offset(-4.0,
-                                                  1.0), // Set the horizontal and vertical offset for the shadow
-                                            ),
-                                          ],
-                                          color: ColorConstants.secondColor)))
+        body: MultiBlocListener(
+            listeners: [
+              BlocListener<GetUsersCubit, GetUsersState>(listener: (context, state){
+                if (markers.isEmpty && state.users.isNotEmpty) {
+                  users = state.users;
+                  addingMarkersInMap(context);
+                }
+              }),
+              BlocListener<GetChatsCubit, GetChatsState>(listener: (context, state){
+                if (chats.isEmpty && state.chats.isNotEmpty) {
+                  chats = state.chats.toList();
+                }
+              })
+            ],
+            child: Container(
+                padding:
+                    const EdgeInsets.only(top: Dimensions.paddingSizeOverLarge),
+                width: double.infinity,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: Dimensions.paddingSizeSmall),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(children: [
+                              IconButton(
+                                  onPressed: () => Get.back(),
+                                  icon: const Icon(Icons.arrow_back_ios,
+                                      color: Colors.grey)),
+                              Image.asset(Images.logo, height: 65),
                             ]),
-                        const Divider(
-                            color: Colors.grey,
-                            thickness: 5,
-                            height: Dimensions.paddingSizeExtraSmall),
-                        Expanded(
-                            child: GoogleMap(
-                          mapType: MapType.normal,
-                          initialCameraPosition: _currentPosition,
-                          myLocationEnabled: true,
-                          myLocationButtonEnabled: true,
-                          padding: const EdgeInsets.all(
-                              Dimensions.paddingSizeDefault),
-                          markers: markers,
-                          onMapCreated: (GoogleMapController controller) {
-                            _controller.complete(controller);
-                          },
-                        ))
-                      ]));
-            }));
+                            Padding(
+                                padding: const EdgeInsets.only(
+                                    right: Dimensions.paddingSizeExtraLarge),
+                                child: Text(Get.find<String>(tag: 'city') ?? '',
+                                    style: TextStyle(
+                                        fontSize: Dimensions.fontSizeTitle,
+                                        shadows: const [
+                                          Shadow(
+                                            color: Colors
+                                                .black, // Choose the color of the shadow
+                                            blurRadius:
+                                                2.0, // Adjust the blur radius for the shadow effect
+                                            offset: Offset(-4.0,
+                                                1.0), // Set the horizontal and vertical offset for the shadow
+                                          ),
+                                        ],
+                                        color: ColorConstants.secondColor)))
+                          ]),
+                      const Divider(
+                          color: Colors.grey,
+                          thickness: 5,
+                          height: Dimensions.paddingSizeExtraSmall),
+                      Expanded(
+                          child: GoogleMap(
+                        mapType: MapType.normal,
+                        initialCameraPosition: _currentPosition,
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true,
+                        padding:
+                            const EdgeInsets.all(Dimensions.paddingSizeDefault),
+                        markers: markers,
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                        },
+                      ))
+                    ]))));
+  }
+
+  Chat? getChatForUser(String userId) {
+    Chat? userChat;
+    for (Chat chat in chats) {
+      if (chat.receiverId == userId) {
+        userChat = chat;
+        break;
+      }
+    }
+    return userChat;
   }
 
   Future<void> addingMarkersInMap(BuildContext context) async {
@@ -154,7 +187,7 @@ class _MapConnectViewState extends State<MapConnectView> {
                 barrierDismissible: true,
                 context: context,
                 builder: (context) {
-                  return UserInfoDialog(user: user);
+                  return UserInfoDialog(user: user, chat: getChatForUser(user.id));
                 });
           },
         ));
