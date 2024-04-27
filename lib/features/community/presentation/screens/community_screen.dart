@@ -206,7 +206,7 @@ class _CommunityViewState extends State<CommunityView> {
                   const Text('Post',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold)),
-                  SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                  const SizedBox(height: Dimensions.paddingSizeExtraSmall),
                   IconButton(
                       icon: Image.asset(Images.bubleMessage, height: 50),
                       padding: EdgeInsets.zero,

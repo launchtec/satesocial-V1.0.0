@@ -1,5 +1,5 @@
 import 'package:sate_social/features/auth/data/models/app_user.dart';
-import 'package:sate_social/features/auth/data/models/user_location.dart';
+import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 
 import '../entities/auth_user.dart';
 import '../use_cases/sign_up_use_case.dart';
@@ -11,7 +11,7 @@ abstract class AuthRepository {
 
   Future<List<AppUser>> getUsers();
 
-  Future<void> updateUserLocation({required String userId, required UserLocation userLocation});
+  Future<void> updateUserLocation({required String userId, required UserLocationFcm userLocation});
 
   Future<void> updateUserInfo({required AppUser user});
 

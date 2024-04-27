@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sate_social/core/services/location_service.dart';
+import 'package:sate_social/core/services/push_notification_service.dart';
 import 'package:sate_social/core/util/dimensions.dart';
 import 'package:sate_social/core/util/images.dart';
 import 'package:sate_social/core/util/styles.dart';
-import 'package:sate_social/features/auth/data/models/user_location.dart';
+import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 import 'package:sate_social/features/auth/domain/repositories/auth_repository.dart';
 import 'package:sate_social/features/auth/domain/use_cases/update_location_case.dart';
 import 'package:sate_social/features/auth/presentation/blocks/update_location/update_location_cubit.dart';
@@ -56,8 +57,9 @@ class _DashboardViewState extends State<DashboardView> {
 
   void getAndSaveLocation() async {
     final position = await LocationService().determinePosition();
-    context.read<UpdateLocationCubit>().updateLocation(UserLocation(
-        latitude: position.latitude, longitude: position.longitude));
+    final fcmToken = (await context.read<PushNotificationService>().getToken()) ?? '';
+    context.read<UpdateLocationCubit>().updateLocation(UserLocationFcm(
+        latitude: position.latitude, longitude: position.longitude, fcmToken: fcmToken));
   }
 
   List<Widget> widgetOptions(PageController navController) {

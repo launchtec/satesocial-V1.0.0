@@ -30,6 +30,10 @@ class ColorConstants {
     Color(0xFF26A312),
     Color(0xFF91EC83)
   ];
+  static const List<Color> matchPalette = [
+    Color(0xFFA645C9),
+    Color(0xFFE400BB),
+  ];
   static const Color greyBack = Color(0xFFE7E7E7);
   static const Color sendPingColor = Color(0xFF707172);
 }

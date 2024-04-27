@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sate_social/features/home/presentation/widgets/match_form_dialog.dart';
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
@@ -72,7 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.bold))
                   ])
                 ]),
-                onPressed: () => widget.navController.jumpToPage(4),
+                onPressed: () => showDialog(
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (context) {
+                      return const MatchFormDialog();
+                    }),
               )
             ])));
   }

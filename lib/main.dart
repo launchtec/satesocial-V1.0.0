@@ -70,6 +70,7 @@ void main() {
         notificationRepository: notificationRepository,
         postRepository: postRepository,
         chatRepository: chatRepository,
+        notificationService: pushNotificationService,
         authUser: user,
       );
     },
@@ -83,6 +84,7 @@ class App extends StatelessWidget {
     required this.notificationRepository,
     required this.postRepository,
     required this.chatRepository,
+    required this.notificationService,
     this.authUser,
   });
 
@@ -90,6 +92,7 @@ class App extends StatelessWidget {
   final NotificationRepository notificationRepository;
   final PostRepository postRepository;
   final ChatRepository chatRepository;
+  final PushNotificationService notificationService;
   final AuthUser? authUser;
 
   @override
@@ -99,7 +102,8 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: authRepository),
         RepositoryProvider.value(value: notificationRepository),
         RepositoryProvider.value(value: postRepository),
-        RepositoryProvider.value(value: chatRepository)
+        RepositoryProvider.value(value: chatRepository),
+        RepositoryProvider.value(value: notificationService)
       ],
       child: GetMaterialApp(
         title: AppConstants.appName,
