@@ -89,39 +89,38 @@ class AppConstants {
 
   // Match form - User Input for Self
   static const List<String> zodiacs = ['Aquarius', 'Aries', 'Cancer', 'Capricorn', 'Gemini', 'Leo', 'Libra', 'Pisces',
-    'Sagittarius', 'Scorpio', 'Taurus', 'Virgo'];
+    'Sagittarius', 'Scorpio', 'Taurus', 'Virgo', 'Prefer not to say'];
   static const List<String> religions = ['Christian', 'Muslim', 'Hindi', 'Spiritual', 'Agnostic', 'Atheist', 'Jewish', 'Buddhist',
     'Other'];
   static const List<String> educations = ['High School', 'BS/BA', 'MBA/JD', 'Ph.D./MD'];
-  static const List<String> bodyTypes = ['Athletic', 'Average', 'Curvy', 'A few extra pounds', 'Slim', 'Overweight'];
-  static const List<String> children = ['I do not have children', 'I have children'];
+  static const List<String> children = ['I do not have children', 'I have children', 'Prefer not to say'];
   static const List<String> familyPlanning = ['I want children of my own', 'I am open to dating those with children',
-    'I would be interesting in co- parenting', 'I do not want children'];
-  static const List<String> marijuana = ['I smoke daily', 'Social smoker', 'Smoke free life'];
-  static const List<String> cigarette = ['I smoke', 'Social smoker', 'Smoke free life'];
-  static const List<String> alcohol = ['Heavy drinker', 'Moderate drinker', 'Social drinker', 'Alcohol free life'];
+    'I would be interesting in co- parenting', 'I do not want children', 'Prefer not to say'];
+  static const List<String> marijuana = ['I smoke daily', 'Social smoker', 'Smoke free life', 'Prefer not to say'];
+  static const List<String> cigarette = ['I smoke', 'Social smoker', 'Smoke free life', 'Prefer not to say'];
+  static const List<String> alcohol = ['Heavy drinker', 'Moderate drinker', 'Social drinker', 'Alcohol free life', 'Prefer not to say'];
   static const List<String> diet = ['No preference/All foods', 'Pescatarian', 'Vegetarian', 'Vegan', 'Gluten free',
     'Dairy free'];
   static const List<String> politics = ['Liberal', 'Moderate', 'Conservative', 'Not political'];
   static const List<String> satisfactions = ['I am very happy and content with myself: always looking to flourish',
     'I am happy and content with myself, but have some self insecurities', 'I am happy and on the path to personal growth',
-    'I am not satisfied with myself but making changes', 'I am not too satisfied with myself'];
+    'I am not satisfied with myself but making changes', 'I am not too satisfied with myself', 'Prefer not to say'];
   static const List<String> featuresBody = ['Back', 'Belly', 'Butt', 'Chest', 'Complexion', 'Eyes', 'Feet', 'Hair',
-    'Hands', 'Height', 'Hips', 'Jawline', 'Legs', 'Lips', 'Muscles', 'Neck line', 'Shoulders', 'Smile', 'Teeth', 'Voice'
-  ];
+    'Hands', 'Height', 'Hips', 'Jawline', 'Legs', 'Lips', 'Muscles', 'Neck line', 'Shoulders', 'Smile', 'Teeth', 'Voice',
+    'Prefer not to say'];
   static const List<String> thoughtsCheating = ['ENM', 'Cheating is never ok', 'I have cheated in my past relationships',
     'It\'s important to try to be faithful and communicate, but hookups happen',
-    'Being true to your heart is more important than physical fidelity'];
+    'Being true to your heart is more important than physical fidelity', 'Prefer not to say'];
   static const List<String> happiest = ['With Family and Friends', 'With my pet(s)', 'City lights energy', 'Near or on water',
     'Partaking in social events; bars, clubbing and meet ups', 'Watching and playing sports', 'Home body',
     'Healthy mix of homebody and social seeker'];
-  static const List<String> workout = ['Daily', 'A few times a week', 'Several times a month', 'Not very often'];
+  static const List<String> workout = ['Daily', 'A few times a week', 'Several times a month', 'Not very often', 'Prefer not to say'];
   static const List<String> bodyType = ['Athletic', 'Average', 'Curvy', 'A few extra pounds', 'Slim', 'Overweight'];
   static const List<String> preferDress = ['Casually', 'Sporty', 'Practically', 'Elegantly', 'Fashionably', 'Appropriate to the occasion',
     'Uniquely and unconventionally'];
-  static const List<String> importantSex = ['Very important', 'Important', 'Not particularly important', 'Not important'];
+  static const List<String> importantSex = ['Very important', 'Important', 'Not particularly important', 'Not important', 'Prefer not to say'];
   static const List<String> marriage = ['I believe in marriage with the right partner', 'I do not believe in the institution of marriage',
-    'Indifferent'];
+    'Indifferent', 'Prefer not to say'];
   static const List<String> freeTime = ['Reading/ Mind enhancement activities', 'Watching movies and shows', 'Relaxation', 'Playing sports',
     'Working out', 'Going out to bars and restaurants', 'Pursuing my hobbies', 'Playing board games', 'Surfing the internet', 'Volunteering',
     'Hanging out with friends', 'Spending time with my family', 'Going to the theater/ arts/ museum', 'Listening to music', 'Mountains and nature',

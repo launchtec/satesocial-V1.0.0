@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:sate_social/core/data/blocks/form_status.dart';
+import 'package:sate_social/core/data/blocks/request_status.dart';
 
 class CreatePostState extends Equatable {
   final String? title;
@@ -12,7 +12,7 @@ class CreatePostState extends Equatable {
   final String? rate;
   final String? employmentType;
   final File? uploadDoc;
-  final FormStatus formStatus;
+  final RequestStatus requestStatus;
 
   const CreatePostState({
     this.title,
@@ -23,26 +23,41 @@ class CreatePostState extends Equatable {
     this.rate,
     this.employmentType,
     this.uploadDoc,
-    this.formStatus = FormStatus.initial,
+    this.requestStatus = RequestStatus.initial,
   });
 
-  CreatePostState copyWith({String? title, String? content, String? category, String? group, String? zipCode, String? rate, String? employmentType, File? uploadDoc, FormStatus? formStatus}) {
+  CreatePostState copyWith(
+      {String? title,
+      String? content,
+      String? category,
+      String? group,
+      String? zipCode,
+      String? rate,
+      String? employmentType,
+      File? uploadDoc,
+      RequestStatus? requestStatus}) {
     return CreatePostState(
-      title: title ?? this.title,
-      content: content ?? this.content,
-      category: category ?? this.category,
-      group: group ?? this.group,
-      zipCode: zipCode ?? this.zipCode,
-      rate: rate ?? this.rate,
-      employmentType: employmentType ?? this.employmentType,
-      uploadDoc: uploadDoc ?? this.uploadDoc,
-      formStatus: formStatus ?? this.formStatus
-    );
+        title: title ?? this.title,
+        content: content ?? this.content,
+        category: category ?? this.category,
+        group: group ?? this.group,
+        zipCode: zipCode ?? this.zipCode,
+        rate: rate ?? this.rate,
+        employmentType: employmentType ?? this.employmentType,
+        uploadDoc: uploadDoc ?? this.uploadDoc,
+        requestStatus: requestStatus ?? this.requestStatus);
   }
-
 
   @override
   List<Object?> get props => [
-    title, content, category, group, zipCode, rate, employmentType, uploadDoc, formStatus
-  ];
+        title,
+        content,
+        category,
+        group,
+        zipCode,
+        rate,
+        employmentType,
+        uploadDoc,
+        requestStatus
+      ];
 }

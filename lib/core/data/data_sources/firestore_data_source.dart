@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
+import 'package:sate_social/features/home/data/models/partner_match_model.dart';
+import 'package:sate_social/features/home/data/models/self_match_model.dart';
 import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
 import '../../../features/auth/data/models/app_user.dart';
@@ -80,6 +82,24 @@ class FirestoreDataSource {
 
   Future<void> deletePost(String postId) {
     return instance.collection('posts').doc(postId).delete();
+  }
+
+  Future<void> addSelfMatchForm(String userId, SelfMatchModel selfMatchModel) {
+    return instance
+        .collection('users')
+        .doc(userId)
+        .collection('self_match_form')
+        .doc(selfMatchModel.id)
+        .set(selfMatchModel.toMap());
+  }
+
+  Future<void> addPartnerMatchForm(String userId, PartnerMatchModel partnerMatchModel) {
+    return instance
+        .collection('users')
+        .doc(userId)
+        .collection('partner_match_form')
+        .doc(partnerMatchModel.id)
+        .set(partnerMatchModel.toMap());
   }
 
   Future<void> addChat(Chat chat) {

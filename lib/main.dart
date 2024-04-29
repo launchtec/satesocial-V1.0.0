@@ -7,6 +7,8 @@ import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
 import 'package:sate_social/core/data/data_sources/storage_data_source.dart';
 import 'package:sate_social/core/services/push_notification_service.dart';
 import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
+import 'package:sate_social/features/home/data/repositories/match_repository_impl.dart';
+import 'package:sate_social/features/home/domain/repositories/match_repository.dart';
 import 'package:sate_social/features/messages/data/repositories/chat_repository_impl.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
 import 'package:sate_social/features/notifications/data/repositories/notification_repository_impl.dart';
@@ -58,6 +60,10 @@ void main() {
           firestoreDataSource: firestoreDataSource
       );
 
+      MatchRepository matchRepository = MatchRepositoryImpl(
+          firestoreDataSource: firestoreDataSource
+      );
+
       AuthUser user = await authRepository.authUser.first;
 
       if (user.id.isNotEmpty) {
@@ -70,6 +76,7 @@ void main() {
         notificationRepository: notificationRepository,
         postRepository: postRepository,
         chatRepository: chatRepository,
+        matchRepository: matchRepository,
         notificationService: pushNotificationService,
         authUser: user,
       );
@@ -84,6 +91,7 @@ class App extends StatelessWidget {
     required this.notificationRepository,
     required this.postRepository,
     required this.chatRepository,
+    required this.matchRepository,
     required this.notificationService,
     this.authUser,
   });
@@ -92,6 +100,7 @@ class App extends StatelessWidget {
   final NotificationRepository notificationRepository;
   final PostRepository postRepository;
   final ChatRepository chatRepository;
+  final MatchRepository matchRepository;
   final PushNotificationService notificationService;
   final AuthUser? authUser;
 
@@ -103,6 +112,7 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: notificationRepository),
         RepositoryProvider.value(value: postRepository),
         RepositoryProvider.value(value: chatRepository),
+        RepositoryProvider.value(value: matchRepository),
         RepositoryProvider.value(value: notificationService)
       ],
       child: GetMaterialApp(

@@ -49,8 +49,7 @@ class MatchFormDialog extends StatelessWidget {
                 const SizedBox(height: Dimensions.paddingSizeDefault),
                 ElevatedButton(
                     onPressed: () async {
-                      // Navigator.pop(context);
-                      // Get.toNamed(RouteHelper.getOpenChatRoute(chat!));
+                      Navigator.pop(context, true);
                     },
                     style: ButtonStyle(
                         padding:
@@ -72,8 +71,7 @@ class MatchFormDialog extends StatelessWidget {
                 const SizedBox(height: Dimensions.paddingSizeDefault),
                 ElevatedButton(
                     onPressed: () async {
-                      // Navigator.pop(context);
-                      // Get.toNamed(RouteHelper.getOpenChatRoute(chat!));
+                      Navigator.pop(context, false);
                     },
                     style: ButtonStyle(
                         padding:
