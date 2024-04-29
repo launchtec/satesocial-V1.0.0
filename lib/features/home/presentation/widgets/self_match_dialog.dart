@@ -110,7 +110,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.zodiacs,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .zodiacChanged(value), null),
+                                              .zodiacChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -120,7 +121,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           religions,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .religionChanged(value), null),
+                                              .religionChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -130,7 +132,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           ethnicities,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .ethnicityChanged(value), null),
+                                              .ethnicityChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -140,7 +143,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           educations,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .educationChanged(value), null),
+                                              .educationChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -150,7 +154,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.heightList,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .heightChanged(value), null),
+                                              .heightChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -160,7 +165,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           bodyTypes,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .bodyTypeChanged(value), null),
+                                              .bodyTypeChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -170,7 +176,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.children,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .childrenChanged(value), null),
+                                              .childrenChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -180,7 +187,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.familyPlanning,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .familyPlanChanged(value), 50),
+                                              .familyPlanChanged(value),
+                                          50),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -190,7 +198,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.marijuana,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .marijuanaChanged(value), null),
+                                              .marijuanaChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -200,7 +209,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.cigarette,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .smokerCigaretteChanged(value), null),
+                                              .smokerCigaretteChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -210,7 +220,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.alcohol,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .alcoholChanged(value), null),
+                                              .alcoholChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -220,7 +231,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           diets,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .dietChanged(value), null),
+                                              .dietChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -230,7 +242,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           politics,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .politicsChanged(value), null),
+                                              .politicsChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -240,7 +253,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.satisfactions,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .satisfactionChanged(value), 50),
+                                              .satisfactionChanged(value),
+                                          50),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       Text(
@@ -518,7 +532,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.thoughtsCheating,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .cheatingChanged(value), 50),
+                                              .cheatingChanged(value),
+                                          50),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       Text('Where are you happiest?',
@@ -661,7 +676,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.workout,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .howOftenWorkoutChanged(value), null),
+                                              .howOftenWorkoutChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       Text(
@@ -1073,7 +1089,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.importantSex,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .importantIsSexChanged(value), null),
+                                              .importantIsSexChanged(value),
+                                          null),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       oneChoiceDropButton(
@@ -1083,7 +1100,8 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                                           AppConstants.marriage,
                                           (value) => blocContext
                                               .read<SelfMatchCubit>()
-                                              .marriageChanged(value), 50),
+                                              .marriageChanged(value),
+                                          50),
                                       const SizedBox(
                                           height: Dimensions.paddingSizeSmall),
                                       Text(

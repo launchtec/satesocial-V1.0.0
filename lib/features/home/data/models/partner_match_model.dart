@@ -1,22 +1,18 @@
 class PartnerMatchModel {
   final String id;
-  final String userId;
-  final String userName;
-  final String religion;
-  final String ethnicity;
-  final String education;
-  final String age;
+  final List<String> religions;
+  final List<String> ethnicities;
+  final List<String> educations;
+  final String? age;
   final List<String> bodyTypes;
-  final String diet;
-  final String politics;
+  final String? diet;
+  final String? politics;
 
   const PartnerMatchModel({
       required this.id,
-      required this.userId,
-      required this.userName,
-      required this.religion,
-      required this.ethnicity,
-      required this.education,
+      required this.religions,
+      required this.ethnicities,
+      required this.educations,
       required this.age,
       required this.bodyTypes,
       required this.diet,
@@ -26,11 +22,9 @@ class PartnerMatchModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'userId': userId,
-      'userName': userName,
-      'religion': religion,
-      'ethnicity': ethnicity,
-      'education': education,
+      'religion': religions,
+      'ethnicity': ethnicities,
+      'education': educations,
       'age': age,
       'bodyTypes': bodyTypes,
       'diet': diet,
