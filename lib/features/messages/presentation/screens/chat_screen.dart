@@ -10,6 +10,9 @@ import 'package:sate_social/features/messages/presentation/blocks/add_message/ad
 import 'package:sate_social/features/messages/presentation/blocks/get_messages/get_messages_cubit.dart';
 import 'package:sate_social/features/messages/presentation/blocks/get_messages/get_messages_state.dart';
 import 'package:sate_social/features/messages/presentation/widgets/message_item_widget.dart';
+import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:sate_social/features/notifications/domain/use_cases/add_notification_case.dart';
+import 'package:sate_social/features/notifications/presentation/blocks/add_notification/add_notification_cubit.dart';
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
@@ -32,6 +35,11 @@ class ChatScreen extends StatelessWidget {
           create: (context) => AddMessageCubit(
                   addMessageCase: AddMessageCase(
                 chatRepository: context.read<ChatRepository>(),
+              ))),
+      BlocProvider(
+          create: (context) => AddNotificationCubit(
+                  addNotificationCase: AddNotificationCase(
+                notificationRepository: context.read<NotificationRepository>(),
               )))
     ], child: ChatView(chat: chat));
   }
@@ -237,6 +245,25 @@ class _ChatViewState extends State<ChatView> {
                                               .read<AddMessageCubit>()
                                               .addMessage(widget.chat.id,
                                                   _inputMessageController.text);
+                                          await context
+                                              .read<AddNotificationCubit>()
+                                              .addNotification(
+                                                  FirebaseAuth
+                                                              .instance
+                                                              .currentUser!
+                                                              .uid ==
+                                                          widget.chat.senderId
+                                                      ? widget.chat.sender!.name
+                                                      : widget
+                                                          .chat.receiver!.name,
+                                                  _inputMessageController.text,
+                                                  FirebaseAuth
+                                                              .instance
+                                                              .currentUser!
+                                                              .uid !=
+                                                          widget.chat.senderId
+                                                      ? widget.chat.senderId
+                                                      : widget.chat.receiverId);
                                           FocusManager.instance.primaryFocus
                                               ?.unfocus();
                                           setState(() {

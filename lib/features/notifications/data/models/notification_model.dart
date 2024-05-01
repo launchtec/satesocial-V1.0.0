@@ -3,17 +3,19 @@ import 'package:equatable/equatable.dart';
 class NotificationModel extends Equatable {
   final String id;
   final String title;
-  final String content;
+  final String message;
+  final String senderId;
+  final String recipientUserId;
   final String created;
-  final String location;
   bool isOpen;
 
   NotificationModel({
     required this.id,
     required this.title,
-    required this.content,
+    required this.message,
+    required this.senderId,
+    required this.recipientUserId,
     required this.created,
-    required this.location,
     this.isOpen = false
   });
 
@@ -21,13 +23,14 @@ class NotificationModel extends Equatable {
     return <String, dynamic>{
       'id': id,
       'title': title,
-      'content': content,
+      'message': message,
+      'senderId': senderId,
+      'recipientUserId': recipientUserId,
       'created': created,
-      'location': location,
       'isOpen': isOpen
     };
   }
 
   @override
-  List<Object?> get props => [id, title, content, created, location];
+  List<Object?> get props => [id, title, message, senderId, recipientUserId, created, isOpen];
 }

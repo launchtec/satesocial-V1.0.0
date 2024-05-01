@@ -67,7 +67,7 @@ void main() {
       AuthUser user = await authRepository.authUser.first;
 
       if (user.id.isNotEmpty) {
-        pushNotificationService.initialize(notificationRepository);
+        pushNotificationService.initialize();
         FirebaseMessaging.onBackgroundMessage(backgroundHandler);
       }
 

@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:sate_social/features/notifications/data/models/notification_model.dart';
-import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
 
 import '../route/route_helper.dart';
 import 'local_notification_service.dart';
@@ -16,7 +13,7 @@ class PushNotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
 
-  Future initialize(NotificationRepository notificationRepository) async {
+  Future initialize() async {
     if (Platform.isIOS) {
       await _fcm.requestPermission(
         alert: true,
@@ -47,20 +44,8 @@ class PushNotificationService {
     FirebaseMessaging.onMessageOpenedApp.listen(onAppOpen);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      saveNotificationFirestore(message, notificationRepository);
       handleRemoteMessage(message);
     });
-  }
-  
-  void saveNotificationFirestore(RemoteMessage message, NotificationRepository notificationRepository) {
-    final notificationModel = NotificationModel(
-        id: message.messageId!,
-        title: message.notification?.title ?? "",
-        content: message.notification?.body ?? "",
-        created: message.sentTime?.toIso8601String() ?? "",
-        location: message.data["location"]
-    );
-    notificationRepository.addOrUpdateNotification(userId: FirebaseAuth.instance.currentUser!.uid, notification: notificationModel);
   }
 
   void handleRemoteMessage(RemoteMessage message) {

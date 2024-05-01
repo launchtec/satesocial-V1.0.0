@@ -6,6 +6,9 @@ import 'package:sate_social/features/auth/data/models/app_user.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
 import 'package:sate_social/features/messages/domain/use_cases/add_chat_case.dart';
 import 'package:sate_social/features/messages/presentation/blocks/add_chat_connect/add_chat_connect_state.dart';
+import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:sate_social/features/notifications/domain/use_cases/add_notification_case.dart';
+import 'package:sate_social/features/notifications/presentation/blocks/add_notification/add_notification_cubit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../core/route/route_helper.dart';
@@ -38,6 +41,11 @@ class UserInfoDialog extends StatelessWidget {
               create: (context) => AddMessageCubit(
                       addMessageCase: AddMessageCase(
                     chatRepository: context.read<ChatRepository>(),
+                  ))),
+          BlocProvider(
+              create: (context) => AddNotificationCubit(
+                  addNotificationCase: AddNotificationCase(
+                    notificationRepository: context.read<NotificationRepository>(),
                   )))
         ],
         child: AlertDialog(
@@ -214,6 +222,9 @@ class UserInfoDialog extends StatelessWidget {
                               await context
                                   .read<AddMessageCubit>()
                                   .addMessage(chatId, value!);
+                              await context
+                                  .read<AddNotificationCubit>()
+                                  .addNotification('You have a new connect', value, user.id);
                               Navigator.pop(context);
                               Get.toNamed(RouteHelper.getConnectChatsRoute());
                             },

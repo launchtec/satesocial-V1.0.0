@@ -36,21 +36,19 @@ class FirestoreDataSource {
     return instance.collection('users').doc(user.id).update(user.toMap());
   }
 
-  Future<void> addOrUpdateNotification(String userId, NotificationModel notification) {
+  Future<void> addOrUpdateNotification(NotificationModel notification) {
     return instance
-        .collection('users')
-        .doc(userId)
         .collection('notifications')
         .doc(notification.id)
         .set(notification.toMap());
   }
 
   Future<QuerySnapshot> getNotifications(String userId) {
-    return instance.collection('users').doc(userId).collection('notifications').get();
+    return instance.collection('notifications').where(Filter("recipientUserId", isEqualTo: userId)).get();
   }
 
   Stream<QuerySnapshot> getStreamNotifications(String userId) {
-    return instance.collection('users').doc(userId).collection('notifications').snapshots();
+    return instance.collection('notifications').where(Filter("recipientUserId", isEqualTo: userId)).snapshots();
   }
 
   Future<void> addOrUpdatePost(PostModel postModel) {

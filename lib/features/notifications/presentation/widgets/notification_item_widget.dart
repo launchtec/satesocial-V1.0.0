@@ -36,7 +36,7 @@ class NotificationItemWidget extends StatelessWidget {
                     Column(children: [
                       SizedBox(
                           width: context.width / 2,
-                          child: Text(notificationModel.content,
+                          child: Text(notificationModel.message,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.black,
@@ -46,11 +46,7 @@ class NotificationItemWidget extends StatelessWidget {
                             Text(notificationModel.title,
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: Dimensions.fontSizeSmall)),
-                            Text(' - ${notificationModel.location}',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: Dimensions.fontSizeSmall)),
+                                    fontSize: Dimensions.fontSizeSmall))
                           ]),
                         ]),
                     Container(

@@ -63,6 +63,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final authModel = await remoteDataSource.signUpWithEmailAndPassword(
       email: signUpParams.email.value,
       password: signUpParams.password.value,
+      name: signUpParams.name
     );
     firestoreDataSource.addUser(AppUser(
       id: authModel.id,

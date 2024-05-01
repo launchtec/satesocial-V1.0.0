@@ -75,7 +75,7 @@ class _ConnectViewState extends State<ConnectView> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Image.asset(Images.logo, height: 60),
+                Image.asset(Images.logo, height: 50),
                 Padding(
                     padding: const EdgeInsets.only(
                         right: Dimensions.paddingSizeExtraLarge),
@@ -132,7 +132,7 @@ class _ConnectViewState extends State<ConnectView> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical:
                                           Dimensions.paddingSizeExtraSmall),
-                                  width: context.width / 2,
+                                  width: context.width / 1.8,
                                   child: ElevatedButton(
                                       onPressed: () async {
                                         // Get.toNamed(RouteHelper.getCommunityChatsRoute());
@@ -165,7 +165,7 @@ class _ConnectViewState extends State<ConnectView> {
                                                 height: 18)
                                           ]))),
                               Container(
-                                  width: context.width / 2,
+                                  width: context.width / 1.8,
                                   padding: const EdgeInsets.symmetric(
                                       vertical:
                                           Dimensions.paddingSizeExtraSmall),
@@ -202,7 +202,7 @@ class _ConnectViewState extends State<ConnectView> {
                                                 height: 18)
                                           ]))),
                               Container(
-                                  width: context.width / 2,
+                                  width: context.width / 1.8,
                                   padding: const EdgeInsets.symmetric(
                                       vertical:
                                           Dimensions.paddingSizeExtraSmall),
@@ -651,7 +651,7 @@ class _ConnectViewState extends State<ConnectView> {
                                         ])
                                       ])),
                               const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
+                                  height: Dimensions.paddingSizeMinimal),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal:
@@ -691,7 +691,7 @@ class _ConnectViewState extends State<ConnectView> {
                                                 Dimensions.fontSizeOverSmall)),
                                   ])),
                               const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
+                                  height: Dimensions.paddingSizeMinimal),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal:
@@ -733,7 +733,7 @@ class _ConnectViewState extends State<ConnectView> {
                                     )),
                                   ])),
                               const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
+                                  height: Dimensions.paddingSizeMinimal),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal:
@@ -817,7 +817,7 @@ class _ConnectViewState extends State<ConnectView> {
                                         ])
                                   ])),
                               const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
+                                  height: Dimensions.paddingSizeMinimal),
                               BlocConsumer<UserUpdateCubit,
                                       UserUpdateState>(
                                   listener: (context, state) {
@@ -849,7 +849,7 @@ class _ConnectViewState extends State<ConnectView> {
                                 return Container(
                                     padding: const EdgeInsets.symmetric(
                                         vertical:
-                                            Dimensions.paddingSizeExtraSmall),
+                                            Dimensions.paddingSizeMinimal),
                                     width: context.width / 3,
                                     child: ElevatedButton(
                                         onPressed: () async {
