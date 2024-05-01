@@ -6,6 +6,9 @@ import 'package:sate_social/features/messages/domain/repositories/chat_repositor
 import 'package:sate_social/features/messages/domain/use_cases/add_chat_case.dart';
 import 'package:sate_social/features/messages/presentation/blocks/add_chat/add_chat_cubit.dart';
 import 'package:sate_social/features/messages/presentation/blocks/add_chat/add_chat_state.dart';
+import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:sate_social/features/notifications/domain/use_cases/add_notification_case.dart';
+import 'package:sate_social/features/notifications/presentation/blocks/add_notification/add_notification_cubit.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/route/route_helper.dart';
@@ -22,12 +25,19 @@ class PostInfoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => AddChatCubit(
-              addChatCase: AddChatCase(
-                chatRepository: context.read<ChatRepository>(),
-              ),
-            ),
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context) => AddChatCubit(
+                      addChatCase: AddChatCase(
+                    chatRepository: context.read<ChatRepository>(),
+                  ))),
+          BlocProvider(
+              create: (context) => AddNotificationCubit(
+                  addNotificationCase: AddNotificationCase(
+                    notificationRepository: context.read<NotificationRepository>(),
+                  ))),
+        ],
         child: AlertDialog(
           contentPadding: EdgeInsets.zero,
           titleTextStyle: TextStyle(
@@ -157,8 +167,12 @@ class PostInfoDialog extends StatelessWidget {
                             child: ElevatedButton(
                                 onPressed: () async {
                                   if (chat == null) {
-                                    await context.read<AddChatCubit>().addChat(
-                                        post);
+                                    await context
+                                        .read<AddChatCubit>()
+                                        .addChat(post);
+                                    await context
+                                        .read<AddNotificationCubit>()
+                                        .addNotification(post.title, 'You have a new response', post.userId);
                                     Navigator.pop(context);
                                     Get.toNamed(
                                         RouteHelper.getCommunityChatsRoute());
@@ -180,7 +194,10 @@ class PostInfoDialog extends StatelessWidget {
                                 child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(chat == null ? 'Send Response' : 'Open Response',
+                                      Text(
+                                          chat == null
+                                              ? 'Send Response'
+                                              : 'Open Response',
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold)),
