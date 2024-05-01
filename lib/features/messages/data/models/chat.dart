@@ -54,7 +54,7 @@ class Chat extends Equatable {
         receiverId: json['receiverId'],
         sender: AppUser.fromMap(json['sender']),
         receiver: AppUser.fromMap(json['receiver']),
-        postInfo: PostInfo.fromMap(json['postInfo'])
+        postInfo: json['postInfo'] != null ? PostInfo.fromMap(json['postInfo']) : null
     );
   }
 

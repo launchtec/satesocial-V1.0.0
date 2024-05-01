@@ -35,7 +35,7 @@ class ChatItemWidget extends StatelessWidget {
                 ),
                 child: IntrinsicHeight(
                     child: Row(children: [
-                  Expanded(child: Column(
+                  chat.connectId == null ? Expanded(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Post:',
@@ -60,7 +60,11 @@ class ChatItemWidget extends StatelessWidget {
                                 fontSize: Dimensions.fontSizeOverSmall,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold)),
-                      ])),
+                      ])) : Center(child: Text('Connect',
+                      style: TextStyle(
+                          fontSize: Dimensions.fontSizeExtraLarge,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold))),
                   const VerticalDivider(color: Colors.white, thickness: 2),
                   Expanded(
                       child: Column(

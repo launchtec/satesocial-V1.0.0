@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart';
+import 'package:sate_social/core/data/blocks/request_status.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:sate_social/features/community/domain/use_cases/add_post_use_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/create_post/create_post_state.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../../core/data/blocks/form_status.dart';
 import '../../../../../core/util/app_constants.dart';
 import '../../../domain/use_cases/upload_doc_case.dart';
 
@@ -99,7 +99,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   }
 
   Future<void> submitPost() async {
-    emit(state.copyWith(formStatus: FormStatus.submissionInProgress));
+    emit(state.copyWith(requestStatus: RequestStatus.submissionInProgress));
     String? urlDoc;
     if (isGigCategory() && state.uploadDoc != null) {
       urlDoc = await _uploadDocCase.call(state.uploadDoc!.path, basename(state.uploadDoc!.path), FirebaseAuth.instance.currentUser!.uid);
@@ -121,9 +121,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
             isConfirmed: false
         ),
       );
-      emit(state.copyWith(formStatus: FormStatus.submissionSuccess));
+      emit(state.copyWith(requestStatus: RequestStatus.submissionSuccess));
     } catch (err) {
-      emit(state.copyWith(formStatus: FormStatus.submissionFailure));
+      emit(state.copyWith(requestStatus: RequestStatus.submissionFailure));
     }
   }
 }

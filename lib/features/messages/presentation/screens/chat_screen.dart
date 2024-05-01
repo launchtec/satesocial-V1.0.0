@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -181,8 +180,9 @@ class _ChatViewState extends State<ChatView> {
                               ])),
                           const SizedBox(height: Dimensions.paddingSizeSmall),
                           const Divider(thickness: 4, color: Colors.white),
-                          Expanded(child: BlocBuilder<GetMessagesCubit, GetMessagesState>(
-                              builder: (blocContext, state) {
+                          Expanded(child:
+                              BlocBuilder<GetMessagesCubit, GetMessagesState>(
+                                  builder: (blocContext, state) {
                             final messages = state.messages.toList();
                             if (_scrollController.hasClients) {
                               _scrollDown();
@@ -196,13 +196,17 @@ class _ChatViewState extends State<ChatView> {
                                             Dimensions.paddingSizeExtraSmall),
                                     itemCount: messages.length,
                                     itemBuilder: (context, index) {
-                                      return MessageItemWidget(message: messages[index], ownerId: FirebaseAuth.instance.currentUser!.uid);
+                                      return MessageItemWidget(
+                                          message: messages[index],
+                                          ownerId: FirebaseAuth
+                                              .instance.currentUser!.uid);
                                     })
                                 : const Center(
                                     child: CircularProgressIndicator(
                                         color: Colors.white, strokeWidth: 2.0));
                           })),
-                          const SizedBox(height: Dimensions.paddingSizeOverLarge),
+                          const SizedBox(
+                              height: Dimensions.paddingSizeOverLarge),
                         ]),
                         Align(
                             alignment: Alignment.bottomCenter,
@@ -231,8 +235,10 @@ class _ChatViewState extends State<ChatView> {
                                         onPressed: () async {
                                           await context
                                               .read<AddMessageCubit>()
-                                              .addMessage(widget.chat.id, _inputMessageController.text);
-                                          FocusManager.instance.primaryFocus?.unfocus();
+                                              .addMessage(widget.chat.id,
+                                                  _inputMessageController.text);
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
                                           setState(() {
                                             _inputMessageController.text = '';
                                           });

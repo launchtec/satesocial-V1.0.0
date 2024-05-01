@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:sate_social/core/data/blocks/request_status.dart';
 import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
 import 'package:sate_social/features/community/domain/use_cases/upload_doc_case.dart';
 import 'package:sate_social/features/community/presentation/blocks/create_post/create_post_cubit.dart';
@@ -13,7 +14,6 @@ import 'package:sate_social/features/community/presentation/blocks/create_post/c
 import 'package:sate_social/features/community/presentation/widgets/groups_view_dialog.dart';
 
 import '../../../../core/common_widgets/alert_dialogs.dart';
-import '../../../../core/data/blocks/form_status.dart';
 import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
@@ -58,7 +58,7 @@ class _PostingViewState extends State<PostingView> {
             backgroundColor: ColorConstants.backColor,
             body: BlocConsumer<CreatePostCubit, CreatePostState>(
                 listener: (context, state) {
-              if (state.formStatus == FormStatus.submissionSuccess) {
+              if (state.requestStatus == RequestStatus.submissionSuccess) {
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()

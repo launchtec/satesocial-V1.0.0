@@ -1,5 +1,10 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
+import 'package:sate_social/features/home/data/models/partner_match_model.dart';
+import 'package:sate_social/features/home/data/models/self_match_model.dart';
 import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
 import '../../../features/auth/data/models/app_user.dart';
@@ -17,6 +22,18 @@ class FirestoreDataSource {
 
   Future<DocumentSnapshot> getUserInfo(String userId) {
     return instance.collection('users').doc(userId).get();
+  }
+
+  Future<QuerySnapshot> getUsers() {
+    return instance.collection('users').get();
+  }
+
+  Future<void> updateUserLocation(String userId, UserLocationFcm userLocation) {
+    return instance.collection('users').doc(userId).update(userLocation.toMap());
+  }
+
+  Future<void> updateUserInfo(AppUser user) {
+    return instance.collection('users').doc(user.id).update(user.toMap());
   }
 
   Future<void> addOrUpdateNotification(String userId, NotificationModel notification) {
@@ -67,6 +84,24 @@ class FirestoreDataSource {
     return instance.collection('posts').doc(postId).delete();
   }
 
+  Future<void> addSelfMatchForm(String userId, SelfMatchModel selfMatchModel) {
+    return instance
+        .collection('users')
+        .doc(userId)
+        .collection('self_match_form')
+        .doc(selfMatchModel.id)
+        .set(selfMatchModel.toMap());
+  }
+
+  Future<void> addPartnerMatchForm(String userId, PartnerMatchModel partnerMatchModel) {
+    return instance
+        .collection('users')
+        .doc(userId)
+        .collection('partner_match_form')
+        .doc(partnerMatchModel.id)
+        .set(partnerMatchModel.toMap());
+  }
+
   Future<void> addChat(Chat chat) {
     return instance.collection('chats').doc(chat.id).set(chat.toMap());
   }
@@ -75,7 +110,7 @@ class FirestoreDataSource {
   Future<QuerySnapshot> getChats(String userId) {
     return instance.collection('chats').where(Filter.or(
         Filter("senderId", isEqualTo: userId),
-        Filter("receiverId", isEqualTo: userId)
+        Filter("receiverId", isEqualTo: userId),
     )).get();
   }
 

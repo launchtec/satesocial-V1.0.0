@@ -1,5 +1,6 @@
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
 import 'package:sate_social/features/auth/data/models/app_user.dart';
+import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 
 import '../../domain/entities/auth_user.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -35,6 +36,24 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<AppUser> getUserInfo({required String userId}) async {
     final userDocument = await firestoreDataSource.getUserInfo(userId);
     return AppUser.fromSnapshot(userDocument);
+  }
+
+  @override
+  Future<void> updateUserInfo({required AppUser user}) {
+    return firestoreDataSource.updateUserInfo(user);
+  }
+
+  @override
+  Future<List<AppUser>> getUsers() async {
+    final usersSnapshot = await firestoreDataSource.getUsers();
+    return usersSnapshot.docs
+        .map((doc) => AppUser.fromSnapshot(doc))
+        .toList();
+  }
+
+  @override
+  Future<void> updateUserLocation({required String userId, required UserLocationFcm userLocation}) async {
+    return firestoreDataSource.updateUserLocation(userId, userLocation);
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_material_pickers/helpers/show_number_picker.dart';
@@ -209,30 +208,26 @@ class _SignUpViewState extends State<SignUpView> {
         isActive: currentStep >= 1,
         title: const Text("Profile"),
         content: Column(children: [
-          TextFormField(
-            key: const Key('signUp_ageInput_textField'),
-            controller: _ageController,
-            showCursor: true,
-            readOnly: true,
+          DropdownButtonFormField2<String>(
+            isExpanded: true,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(16),
-              hintText: 'Age\*',
-              hintStyle: const TextStyle(fontSize: 14),
+              contentPadding: const EdgeInsets.symmetric(vertical: 16),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
+              // Add more decoration..
             ),
-            onTap: () async {
-              final result = await showMaterialNumberPicker(
-                  context: context,
-                  minNumber: 18,
-                  maxNumber: 120,
-                  title: 'Select Age');
-              if (result != null) {
-                _ageController.text = "Age: $result";
-                blocContext.read<SignUpCubit>().ageChanged(result);
-              }
+            hint: const Text(
+              'Age',
+              style: TextStyle(fontSize: 14),
+            ),
+            onChanged: (String? value) {
+              blocContext.read<SignUpCubit>().ageChanged(int.parse(value!));
             },
+            items: AppConstants.ageList
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(value: value, child: Text(value));
+            }).toList(),
           ),
           const SizedBox(height: Dimensions.paddingSizeDefault),
           DropdownButtonFormField2<String>(
@@ -366,9 +361,7 @@ class _SignUpViewState extends State<SignUpView> {
                     return InkWell(
                       onTap: () {
                         isSelected ? blocContext.read<SignUpCubit>().removeOpenToConnectToChanged(item) : blocContext.read<SignUpCubit>().addOpenToConnectToChanged(item);
-                        //This rebuilds the StatefulWidget to update the button's text
                         setState(() {});
-                        //This rebuilds the dropdownMenu Widget to update the check mark
                         menuSetState(() {});
                       },
                       child: Container(
@@ -397,10 +390,6 @@ class _SignUpViewState extends State<SignUpView> {
                 ),
               );
             }).toList(),
-            // items: AppConstants.openToConnectToList
-            //     .map<DropdownMenuItem<String>>((String value) {
-            //   return DropdownMenuItem<String>(value: value, child: Text(value));
-            // }).toList(),
           ),
           const SizedBox(height: Dimensions.paddingSizeDefault),
           TextFormField(

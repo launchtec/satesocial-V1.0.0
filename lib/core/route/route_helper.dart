@@ -7,9 +7,11 @@ import 'package:sate_social/features/auth/presentation/screens/welcome_screen.da
 import 'package:sate_social/features/community/presentation/screens/manage_listings_screen.dart';
 import 'package:sate_social/features/community/presentation/screens/map_posts_screen.dart';
 import 'package:sate_social/features/community/presentation/screens/posting_screen.dart';
+import 'package:sate_social/features/connect/presentation/screens/map_connect_screen.dart';
 import 'package:sate_social/features/dashboard/dashboard_screen.dart';
 import 'package:sate_social/features/messages/presentation/screens/chat_screen.dart';
-import 'package:sate_social/features/messages/presentation/screens/conversations_screen.dart';
+import 'package:sate_social/features/messages/presentation/screens/connect_chats_screen.dart';
+import 'package:sate_social/features/messages/presentation/screens/post_chats_screen.dart';
 
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 import '../../features/messages/data/models/chat.dart';
@@ -27,6 +29,7 @@ class RouteHelper {
   static const String communityChats = '/community-chats';
   static const String connectChats = '/connect-chats';
   static const String openChat = '/open-chat';
+  static const String mapConnect = '/map-connect';
 
   static String getWelcomeRoute() => welcome;
   static String getSignInRoute() => signIn;
@@ -43,22 +46,24 @@ class RouteHelper {
     String chatJson = jsonEncode(chat.toMapJson());
     return '$openChat?chat=$chatJson';
   }
+  static String getMapConnectRoute() => mapConnect;
 
   static List<GetPage> routes = [
     GetPage(name: welcome, page: () => const WelcomeScreen()),
     GetPage(name: signIn, page: () => const SignInScreen()),
     GetPage(name: signUp, page: () => const SignUpScreen()),
     GetPage(name: recoveryPass, page: () => const RecoveryPassScreen()),
-    GetPage(name: dashboard, page: () => const DashboardScreen()),
+    GetPage(name: dashboard, page: () => const DashboardScreen(openNotification: false)),
     GetPage(name: dashboardToNotification, page: () => const DashboardScreen(openNotification: true)),
     GetPage(name: createPost, page: () => const PostingScreen()),
     GetPage(name: mapPost, page: () => MapPostsScreen(category: Get.parameters['category'] ?? '')),
     GetPage(name: manageListings, page: () => const ManageListingsScreen()),
-    GetPage(name: communityChats, page: () => const ConversationsScreen(isCommunity: true)),
-    GetPage(name: connectChats, page: () => const ConversationsScreen(isCommunity: false)),
+    GetPage(name: communityChats, page: () => const PostChatScreen()),
+    GetPage(name: connectChats, page: () => const ConnectChatScreen()),
     GetPage(name: openChat, page: () {
       Chat chat = Chat.fromMap(jsonDecode(Get.parameters['chat']!));
       return ChatScreen(chat: chat);
     }),
+    GetPage(name: mapConnect, page: () => const MapConnectScreen()),
   ];
 }

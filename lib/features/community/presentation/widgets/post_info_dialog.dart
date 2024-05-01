@@ -12,11 +12,13 @@ import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../messages/data/models/chat.dart';
 
 class PostInfoDialog extends StatelessWidget {
   final PostModel post;
+  final Chat? chat;
 
-  const PostInfoDialog({super.key, required this.post});
+  const PostInfoDialog({super.key, required this.post, this.chat});
 
   @override
   Widget build(BuildContext context) {
@@ -154,9 +156,17 @@ class PostInfoDialog extends StatelessWidget {
                         Center(
                             child: ElevatedButton(
                                 onPressed: () async {
-                                  await context.read<AddChatCubit>().addChat(post);
-                                  Navigator.pop(context);
-                                  Get.toNamed(RouteHelper.getCommunityChatsRoute());
+                                  if (chat == null) {
+                                    await context.read<AddChatCubit>().addChat(
+                                        post);
+                                    Navigator.pop(context);
+                                    Get.toNamed(
+                                        RouteHelper.getCommunityChatsRoute());
+                                  } else {
+                                    Navigator.pop(context);
+                                    Get.toNamed(
+                                        RouteHelper.getOpenChatRoute(chat!));
+                                  }
                                 },
                                 style: ButtonStyle(
                                     padding:
@@ -170,8 +180,8 @@ class PostInfoDialog extends StatelessWidget {
                                 child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Text('Send Response',
-                                          style: TextStyle(
+                                      Text(chat == null ? 'Send Response' : 'Open Response',
+                                          style: const TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold)),
                                       Image.asset(Images.message, height: 24)

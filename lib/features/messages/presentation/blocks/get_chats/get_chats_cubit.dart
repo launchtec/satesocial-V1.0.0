@@ -13,12 +13,18 @@ class GetChatsCubit extends Cubit<GetChatsState> {
   })  : _getChatsCase = getChatsCase,
         super(const GetChatsState());
 
-  Future<void> init(String userId) async {
-    getChats(userId);
+  Future<void> init(String userId, bool needPost) async {
+    getChats(userId, needPost);
   }
 
-  Future<void> getChats(String userId) async {
-    List<Chat> chats = await _getChatsCase.call(userId);
+  Future<void> getChats(String userId, bool needPost) async {
+    List<Chat> chats = needPost
+        ? (await _getChatsCase.call(userId))
+            .where((chat) => chat.postInfo != null)
+            .toList()
+        : (await _getChatsCase.call(userId))
+            .where((chat) => chat.connectId != null)
+            .toList();
     emit(GetChatsState(isLoading: false, chats: chats));
   }
 }

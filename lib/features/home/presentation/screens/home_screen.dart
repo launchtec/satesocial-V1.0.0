@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sate_social/features/home/presentation/widgets/match_form_dialog.dart';
+import 'package:sate_social/features/home/presentation/widgets/partner_match_dialog.dart';
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
+import '../widgets/self_match_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   final PageController navController;
@@ -60,20 +63,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () => widget.navController.jumpToPage(3),
               ),
               IconButton(
-                icon: Stack(alignment: Alignment.center, children: [
-                  Image.asset(Images.buble, height: context.height / 5),
-                  Column(children: [
-                    Image.asset(Images.match, height: 50),
-                    const SizedBox(height: Dimensions.paddingSizeSmall),
-                    Text('MATCH',
-                        style: TextStyle(
-                            fontSize: Dimensions.fontSizeLarge,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold))
-                  ])
-                ]),
-                onPressed: () => widget.navController.jumpToPage(4),
-              )
+                  icon: Stack(alignment: Alignment.center, children: [
+                    Image.asset(Images.buble, height: context.height / 5),
+                    Column(children: [
+                      Image.asset(Images.match, height: 50),
+                      const SizedBox(height: Dimensions.paddingSizeSmall),
+                      Text('MATCH',
+                          style: TextStyle(
+                              fontSize: Dimensions.fontSizeLarge,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold))
+                    ])
+                  ]),
+                  onPressed: () async {
+                    bool? isSelfForm = await showDialog(
+                        barrierDismissible: true,
+                        context: context,
+                        builder: (context) {
+                          return const MatchFormDialog();
+                        });
+                    if (isSelfForm != null) {
+                      showDialog(
+                          barrierDismissible: true,
+                          context: context,
+                          builder: (context) {
+                            return isSelfForm ? const SelfMatchDialog() : const PartnerMatchDialog();
+                          });
+                    }
+                  })
             ])));
   }
 }
