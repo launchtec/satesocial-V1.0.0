@@ -19,11 +19,12 @@ class AddNotificationCubit extends Cubit<ReadNotificationState> {
     try {
       await _addNotificationCase(NotificationModel(
           id: const Uuid().v4(),
-          title: title,
+          title: "Sate Social: $title",
           message: message,
           senderId: FirebaseAuth.instance.currentUser!.uid,
           recipientUserId: recipientUserId,
-          created: DateTime.now().toIso8601String()));
+          created: DateTime.now().toUtc().toIso8601String(),
+      ));
       emit(state.copyWith(requestStatus: RequestStatus.submissionSuccess));
     } catch (err) {
       emit(state.copyWith(requestStatus: RequestStatus.submissionFailure));

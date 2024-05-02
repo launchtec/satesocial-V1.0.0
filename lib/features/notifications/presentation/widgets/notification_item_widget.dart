@@ -28,7 +28,7 @@ class NotificationItemWidget extends StatelessWidget {
                     Column(children: [
                       Image.asset(Images.bell, height: 28),
                       const SizedBox(height: Dimensions.paddingSizeSmall),
-                      Text(timeago.format(DateTime.parse(notificationModel.created)),
+                      Text(timeago.format(DateTime.parse(notificationModel.created).toLocal()),
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: Dimensions.fontSizeSmall)),

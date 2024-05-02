@@ -27,7 +27,7 @@ class AppConstants {
   static const List<String> sexualityList = ['Straight', 'Gay', 'Lesbian', 'Bisexual',
     'Allosexual', 'Androsexual', 'Asexual', 'Autosexual', 'Bicurious', 'Demisexual',
     'Fluid', 'Graysexual', 'Gynesexual', 'Monosexual', 'Omnisexual', 'Pansexual',
-    'Polysexual', 'Queer', 'Questioning', 'Skoliosexual', 'Spectrasexual', 'Other type out'];
+    'Polysexual', 'Queer', 'Questioning', 'Skoliosexual', 'Spectrasexual'];
   static const List<String> openToConnectToList = ['Romantically', 'Friends/ Activity Partners',
     'Professionally'];
 
