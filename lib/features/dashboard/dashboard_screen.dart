@@ -66,7 +66,7 @@ class _DashboardViewState extends State<DashboardView> {
     return <Widget>[
       HomeScreen(navController: _pageController),
       const NotificationScreen(),
-      const ConnectScreen(),
+      ConnectScreen(),
       const CommunityScreen(),
       Container(),
       const SettingsScreen(),

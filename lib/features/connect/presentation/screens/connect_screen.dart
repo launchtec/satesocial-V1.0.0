@@ -10,6 +10,7 @@ import 'package:sate_social/features/auth/presentation/blocks/user_info/user_inf
 import 'package:sate_social/features/auth/presentation/blocks/user_info/user_info_state.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_update/user_update_cubit.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_update/user_update_state.dart';
+import 'package:sate_social/features/connect/presentation/widgets/sexuality_drop.dart';
 
 import '../../../../core/data/blocks/request_status.dart';
 import '../../../../core/route/route_helper.dart';
@@ -477,40 +478,11 @@ class _ConnectViewState extends State<ConnectView> {
                                     const SizedBox(
                                         width:
                                             Dimensions.paddingSizeExtraSmall),
-                                    Expanded(
-                                        child: DropdownButtonFormField2<String>(
-                                      isExpanded: true,
-                                      value: appUser?.sexuality,
-                                      style: TextStyle(
-                                          fontSize: Dimensions.fontSizeDefault,
-                                          color: Colors.black),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.zero,
-                                          border: InputBorder.none),
-                                      buttonStyleData: const ButtonStyleData(
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                      Dimensions.radiusSmall))),
-                                          padding: EdgeInsets.zero),
-                                      hint: const Text(
-                                        'Sexuality',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      onChanged: (String? value) {
-                                        context
-                                            .read<UserUpdateCubit>()
-                                            .sexualityChanged(value!);
-                                      },
-                                      items: AppConstants.sexualityList
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                            value: value, child: Text(value));
-                                      }).toList(),
-                                    )),
+                                    Expanded(child: SexualityDrop(initialValue: appUser?.sexuality, onChanged: (value) {
+                                      context
+                                          .read<UserUpdateCubit>()
+                                          .sexualityChanged(value);
+                                    })),
                                   ])),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
