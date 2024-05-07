@@ -27,6 +27,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
             senderId: doc.get("senderId"),
             recipientUserId: doc.get("recipientUserId"),
             created: doc.get("created"),
+            chatId: doc.get("chatId"),
             isOpen: doc.get("isOpen")))
         .toList();
   }
@@ -42,6 +43,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
             senderId: doc.get("senderId"),
             recipientUserId: doc.get("recipientUserId"),
             created: doc.get("created"),
+            chatId: doc.get("chatId"),
             isOpen: doc.get("isOpen"))));
   }
 }

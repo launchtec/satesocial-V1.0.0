@@ -42,7 +42,7 @@ class SexualityDrop extends StatelessWidget {
           return AppConstants.sexualityList;
         }
         return AppConstants.sexualityList.where((String option) {
-          return option.contains(textEditingValue.text.toLowerCase());
+          return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
         });
       },
       onSelected: onChanged,
