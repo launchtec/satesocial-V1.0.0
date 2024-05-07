@@ -7,6 +7,7 @@ class NotificationModel extends Equatable {
   final String senderId;
   final String recipientUserId;
   final String created;
+  final String? chatId;
   bool isOpen;
 
   NotificationModel({
@@ -16,6 +17,7 @@ class NotificationModel extends Equatable {
     required this.senderId,
     required this.recipientUserId,
     required this.created,
+    this.chatId,
     this.isOpen = false
   });
 
@@ -27,10 +29,11 @@ class NotificationModel extends Equatable {
       'senderId': senderId,
       'recipientUserId': recipientUserId,
       'created': created,
+      'chatId': chatId,
       'isOpen': isOpen
     };
   }
 
   @override
-  List<Object?> get props => [id, title, message, senderId, recipientUserId, created, isOpen];
+  List<Object?> get props => [id, title, message, senderId, recipientUserId, created, chatId, isOpen];
 }

@@ -104,6 +104,10 @@ class FirestoreDataSource {
     return instance.collection('chats').doc(chat.id).set(chat.toMap());
   }
 
+  Future<DocumentSnapshot> getChat(String chatId) {
+    return instance.collection('chats').doc(chatId).get();
+  }
+
   // First owner post responses
   Future<QuerySnapshot> getChats(String userId) {
     return instance.collection('chats').where(Filter.or(

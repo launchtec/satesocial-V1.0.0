@@ -61,11 +61,13 @@ class _ConnectViewState extends State<ConnectView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: null,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Container(
             padding:
                 const EdgeInsets.only(top: Dimensions.paddingSizeExtremeLarge),
             width: double.infinity,
+            height: double.infinity,
             decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(Images.backCommunity),
@@ -73,7 +75,7 @@ class _ConnectViewState extends State<ConnectView> {
                   opacity: 0.4),
             ),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                ListView(padding: EdgeInsets.zero, shrinkWrap: true, children: [
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Image.asset(Images.logo, height: 50),
@@ -97,7 +99,7 @@ class _ConnectViewState extends State<ConnectView> {
               ]),
               const Divider(color: Colors.grey, thickness: 4),
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-              Expanded(child: BlocBuilder<UserInfoCubit, UserInfoState>(
+              BlocBuilder<UserInfoCubit, UserInfoState>(
                   builder: (blocContext, state) {
                 if (appUser == null && state.user != null) {
                   appUser = state.user!;
@@ -478,11 +480,14 @@ class _ConnectViewState extends State<ConnectView> {
                                     const SizedBox(
                                         width:
                                             Dimensions.paddingSizeExtraSmall),
-                                    Expanded(child: SexualityDrop(initialValue: appUser?.sexuality, onChanged: (value) {
-                                      context
-                                          .read<UserUpdateCubit>()
-                                          .sexualityChanged(value);
-                                    })),
+                                    Expanded(
+                                        child: SexualityDrop(
+                                            initialValue: appUser?.sexuality,
+                                            onChanged: (value) {
+                                              context
+                                                  .read<UserUpdateCubit>()
+                                                  .sexualityChanged(value);
+                                            })),
                                   ])),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -790,8 +795,7 @@ class _ConnectViewState extends State<ConnectView> {
                                   ])),
                               const SizedBox(
                                   height: Dimensions.paddingSizeMinimal),
-                              BlocConsumer<UserUpdateCubit,
-                                      UserUpdateState>(
+                              BlocConsumer<UserUpdateCubit, UserUpdateState>(
                                   listener: (context, state) {
                                 if (state.requestStatus ==
                                     RequestStatus.submissionFailure) {
@@ -853,12 +857,13 @@ class _ConnectViewState extends State<ConnectView> {
                                                           FontWeight.bold)),
                                             ])));
                               }),
+                            const SizedBox(height: Dimensions.paddingSizeDefault)
                             ])
                       : const Center(
                           child: CircularProgressIndicator(
                               color: Colors.white, strokeWidth: 2.0)),
                 );
-              })),
+              }),
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
             ])));
   }

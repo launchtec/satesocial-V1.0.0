@@ -42,9 +42,8 @@ class RouteHelper {
   static String getManageListingsRoute() => manageListings;
   static String getCommunityChatsRoute() => communityChats;
   static String getConnectChatsRoute() => connectChats;
-  static String getOpenChatRoute(Chat chat) {
-    String chatJson = jsonEncode(chat.toMapJson());
-    return '$openChat?chat=$chatJson';
+  static String getOpenChatRoute(String chatId) {
+    return '$openChat?chatId=$chatId';
   }
   static String getMapConnectRoute() => mapConnect;
 
@@ -61,8 +60,8 @@ class RouteHelper {
     GetPage(name: communityChats, page: () => const PostChatScreen()),
     GetPage(name: connectChats, page: () => const ConnectChatScreen()),
     GetPage(name: openChat, page: () {
-      Chat chat = Chat.fromMap(jsonDecode(Get.parameters['chat']!));
-      return ChatScreen(chat: chat);
+      String chatId = Get.parameters['chatId']!;
+      return ChatScreen(chatId: chatId);
     }),
     GetPage(name: mapConnect, page: () => const MapConnectScreen()),
   ];

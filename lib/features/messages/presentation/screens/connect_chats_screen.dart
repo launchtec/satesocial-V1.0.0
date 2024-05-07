@@ -120,7 +120,7 @@ class _ConnectChatsViewState extends State<ConnectChatsView> {
                           itemCount: chats.length,
                           itemBuilder: (context, index) {
                             return ChatItemWidget(
-                                chat: chats[index], onTap: () => Get.toNamed(RouteHelper.getOpenChatRoute(chats[index])));
+                                chat: chats[index], onTap: () => Get.toNamed(RouteHelper.getOpenChatRoute(chats[index].id)));
                           })
                           : const Center(
                           child: CircularProgressIndicator(

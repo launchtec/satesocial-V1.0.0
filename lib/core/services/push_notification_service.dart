@@ -50,23 +50,22 @@ class PushNotificationService {
 
   void handleRemoteMessage(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
+    String chatId = message.data['chatId'];
     if (notification != null) {
       final notifyModel = LocalNotificationModel(
           id: message.messageId.hashCode,
           body: notification.body,
           title: notification.title ?? "");
       LocalNotificationService.showNotification(
-        notifyModel,
-        onClick: (dynamic payload) {
-          onAppOpen(message);
-        },
+        notifyModel, chatId
       );
     }
   }
 
   void onAppOpen(RemoteMessage message) {
+    String chatId = message.data['chatId'];
     Get.toNamed(RouteHelper
-        .getDashboardToNotificationRoute());
+        .getOpenChatRoute(chatId));
   }
 
   Future<String?> getToken() async {
@@ -77,6 +76,7 @@ class PushNotificationService {
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
+  String chatId = message.data['chatId'];
   if (notification != null) {
     final notifyModel = LocalNotificationModel(
         id: message.messageId.hashCode,
@@ -84,10 +84,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
         title: notification.title ?? "");
     LocalNotificationService.showNotification(
       notifyModel,
-      onClick: (dynamic payload) {
-        Get.toNamed(RouteHelper
-            .getDashboardToNotificationRoute());
-      },
+      chatId
     );
   }
 }

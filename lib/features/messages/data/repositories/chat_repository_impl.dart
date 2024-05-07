@@ -16,6 +16,22 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
+  Future<Chat> getChat({required String chatId}) async {
+    final chatDocument = await firestoreDataSource.getChat(chatId);
+    final sender = await firestoreDataSource.getUserInfo(chatDocument.get("senderId"));
+    final receiver = await firestoreDataSource.getUserInfo(chatDocument.get("receiverId"));
+    return Chat(
+        id: chatDocument.get("id"),
+        name: chatDocument.get("name"),
+        senderId: chatDocument.get("senderId"),
+        sender: AppUser.fromSnapshot(sender),
+        receiver: AppUser.fromSnapshot(receiver),
+        receiverId: chatDocument.get("receiverId"),
+        postInfo: chatDocument.get("postInfo") != null ? PostInfo.fromMap(chatDocument.get("postInfo")) : null,
+        connectId: chatDocument.get("connectId"));
+  }
+
+  @override
   Future<void> addMessage({required String chatId, required Message message}) async {
     return await firestoreDataSource.addMessage(chatId, message);
   }

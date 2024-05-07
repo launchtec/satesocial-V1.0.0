@@ -172,14 +172,14 @@ class PostInfoDialog extends StatelessWidget {
                                         .addChat(post);
                                     await context
                                         .read<AddNotificationCubit>()
-                                        .addNotification(post.title, 'You have a new response', post.userId);
+                                        .addNotification(post.title, 'You have a new response', post.userId, chat!.id);
                                     Navigator.pop(context);
                                     Get.toNamed(
                                         RouteHelper.getCommunityChatsRoute());
                                   } else {
                                     Navigator.pop(context);
                                     Get.toNamed(
-                                        RouteHelper.getOpenChatRoute(chat!));
+                                        RouteHelper.getOpenChatRoute(chat!.id));
                                   }
                                 },
                                 style: ButtonStyle(

@@ -23,4 +23,8 @@ abstract class ChatRepository {
   Future<List<Chat>> getChats({
     required String userId
   });
+
+  Future<Chat> getChat({
+    required String chatId
+  });
 }

@@ -14,7 +14,7 @@ class AddNotificationCubit extends Cubit<ReadNotificationState> {
   })  : _addNotificationCase = addNotificationCase,
         super(const ReadNotificationState());
 
-  Future<void> addNotification(String title, String message, String recipientUserId) async {
+  Future<void> addNotification(String title, String message, String recipientUserId, String chatId) async {
     emit(state.copyWith(requestStatus: RequestStatus.submissionInProgress));
     try {
       await _addNotificationCase(NotificationModel(
@@ -23,6 +23,7 @@ class AddNotificationCubit extends Cubit<ReadNotificationState> {
           message: message,
           senderId: FirebaseAuth.instance.currentUser!.uid,
           recipientUserId: recipientUserId,
+          chatId: chatId,
           created: DateTime.now().toUtc().toIso8601String(),
       ));
       emit(state.copyWith(requestStatus: RequestStatus.submissionSuccess));

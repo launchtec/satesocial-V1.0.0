@@ -224,7 +224,7 @@ class UserInfoDialog extends StatelessWidget {
                                   .addMessage(chatId, value!);
                               await context
                                   .read<AddNotificationCubit>()
-                                  .addNotification('You have a new connect', value, user.id);
+                                  .addNotification('You have a new connect', value, user.id, chatId);
                               Navigator.pop(context);
                               Get.toNamed(RouteHelper.getConnectChatsRoute());
                             },
@@ -263,7 +263,7 @@ class UserInfoDialog extends StatelessWidget {
                         ) : ElevatedButton(
                             onPressed: () async {
                               Navigator.pop(context);
-                              Get.toNamed(RouteHelper.getOpenChatRoute(chat!));
+                              Get.toNamed(RouteHelper.getOpenChatRoute(chat!.id));
                             },
                             style: ButtonStyle(
                                 padding:
