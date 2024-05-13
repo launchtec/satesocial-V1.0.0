@@ -94,7 +94,12 @@ class _MapConnectViewState extends State<MapConnectView> {
             listeners: [
               BlocListener<GetUsersCubit, GetUsersState>(listener: (context, state){
                 if (markers.isEmpty && state.users.isNotEmpty) {
-                  users = state.users;
+                  users.clear();
+                  for (AppUser appUser in state.users) {
+                    if (appUser.id != FirebaseAuth.instance.currentUser!.uid) {
+                      users.add(appUser);
+                    }
+                  }
                   addingMarkersInMap(context);
                 }
               }),

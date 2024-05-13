@@ -39,12 +39,13 @@ class DashboardView extends StatefulWidget {
   State<DashboardView> createState() => _DashboardViewState();
 }
 
-class _DashboardViewState extends State<DashboardView> {
+class _DashboardViewState extends State<DashboardView> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   late PageController _pageController;
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     getAndSaveLocation();
     if (widget.openNotification) {
       _selectedIndex = 1;
@@ -55,22 +56,35 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      getAndSaveLocation();
+    }
+  }
+
   void getAndSaveLocation() async {
     final position = await LocationService().determinePosition();
     final fcmToken = (await context.read<PushNotificationService>().getToken()) ?? '';
     context.read<UpdateLocationCubit>().updateLocation(UserLocationFcm(
-        latitude: position.latitude, longitude: position.longitude, fcmToken: fcmToken));
+        latitude: position.latitude, longitude: position.longitude, fcmToken: fcmToken, lastActivity: DateTime.now().toIso8601String()));
   }
 
   List<Widget> widgetOptions(PageController navController) {
     return <Widget>[
-      HomeScreen(navController: _pageController),
+      HomeScreen(navController: _pageController, isShowMatch: false),
       const NotificationScreen(),
-      ConnectScreen(),
+      const ConnectScreen(),
       const CommunityScreen(),
-      Container(),
+      HomeScreen(navController: _pageController, isShowMatch: true),
       const SettingsScreen(),
     ];
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

@@ -19,26 +19,29 @@ class AppUser {
   final bool? activeInstagram;
   final double? latitude;
   final double? longitude;
+  final String? lastActivity;
 
-  const AppUser(
-      {required this.id,
-      required this.name,
-      required this.email,
-      required this.age,
-      required this.gender,
-      required this.sexuality,
-      required this.openToConnectTo,
-      required this.confirmRealPerson,
-      this.height,
-      this.ethnicity,
-      this.howDidYouKnowAboutUs,
-      this.avatarUrl,
-      this.relationship,
-      this.activeRelationship,
-      this.userLinkInstagram,
-      this.activeInstagram,
-      this.latitude,
-      this.longitude});
+  const AppUser({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.age,
+    required this.gender,
+    required this.sexuality,
+    required this.openToConnectTo,
+    required this.confirmRealPerson,
+    this.height,
+    this.ethnicity,
+    this.howDidYouKnowAboutUs,
+    this.avatarUrl,
+    this.relationship,
+    this.activeRelationship,
+    this.userLinkInstagram,
+    this.activeInstagram,
+    this.latitude,
+    this.longitude,
+    this.lastActivity
+  });
 
   factory AppUser.fromSnapshot(DocumentSnapshot snapshot) {
     return AppUser(
@@ -85,6 +88,9 @@ class AppUser {
       activeInstagram: snapshot.data().toString().contains('activeInstagram')
           ? snapshot.get('activeInstagram')
           : false,
+      lastActivity: snapshot.data().toString().contains('lastActivity')
+          ? snapshot.get('lastActivity')
+          : '',
     );
   }
 
@@ -106,6 +112,7 @@ class AppUser {
       'activeRelationship': activeRelationship,
       'userLinkInstagram': userLinkInstagram,
       'activeInstagram': activeInstagram,
+      'lastActivity': lastActivity
     };
   }
 

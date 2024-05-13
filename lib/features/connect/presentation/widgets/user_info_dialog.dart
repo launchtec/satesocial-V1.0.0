@@ -10,6 +10,7 @@ import 'package:sate_social/features/notifications/domain/repositories/notificat
 import 'package:sate_social/features/notifications/domain/use_cases/add_notification_case.dart';
 import 'package:sate_social/features/notifications/presentation/blocks/add_notification/add_notification_cubit.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/app_constants.dart';
@@ -83,12 +84,14 @@ class UserInfoDialog extends StatelessWidget {
                         child: Column(children: [
                           const SizedBox(height: Dimensions.paddingSizeSmall),
                           Image.asset(Images.avatar, height: 64),
-                          const SizedBox(
-                              height: Dimensions.paddingSizeExtraSmall),
-                          Text('Active 5 minutes ago',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: Dimensions.fontSizeDefault)),
+                          user.lastActivity != null ? Column(children: [
+                            const SizedBox(
+                                height: Dimensions.paddingSizeExtraSmall),
+                            Text('Active ${timeago.format(DateTime.parse(user.lastActivity!).toLocal())}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Dimensions.fontSizeDefault)),
+                          ]) : const SizedBox(),
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraSmall),
                           Text(user.name,

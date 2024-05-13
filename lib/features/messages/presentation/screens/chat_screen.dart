@@ -14,6 +14,7 @@ import 'package:sate_social/features/messages/presentation/widgets/message_item_
 import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
 import 'package:sate_social/features/notifications/domain/use_cases/add_notification_case.dart';
 import 'package:sate_social/features/notifications/presentation/blocks/add_notification/add_notification_cubit.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
@@ -143,7 +144,6 @@ class _ChatViewState extends State<ChatView> {
                               fontSize: Dimensions.fontSizeLarge)),
                     ])),
                     const SizedBox(height: Dimensions.paddingSizeSmall),
-
                     Expanded(
                         child: Container(
                             width: double.infinity,
@@ -169,7 +169,9 @@ class _ChatViewState extends State<ChatView> {
                                 const SizedBox(
                                     height: Dimensions.paddingSizeSmall),
                                 Text(
-                                    '${state.chat!.receiver?.name ?? ''}\'s Response',
+                                    currentUserIsSender(state.chat!.senderId)
+                                        ? '${state.chat!.receiver?.name ?? ''}\'s Response'
+                                        : '${state.chat!.sender?.name ?? ''}\'s Response',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -180,7 +182,10 @@ class _ChatViewState extends State<ChatView> {
                                 Image.asset(Images.avatar, height: 64),
                                 const SizedBox(
                                     height: Dimensions.paddingSizeExtraSmall),
-                                Text('Active 5 minutes ago',
+                                Text(
+                                    'Active ${currentUserIsSender(state.chat!.senderId) ?
+                                    (state.chat!.receiver?.lastActivity != null ? timeago.format(DateTime.parse(state.chat!.receiver!.lastActivity!).toLocal()) : 'indefinitely') :
+                                    (state.chat!.sender?.lastActivity != null ? timeago.format(DateTime.parse(state.chat!.sender!.lastActivity!).toLocal()) : 'indefinitely')}',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: Dimensions.fontSizeDefault)),
@@ -191,21 +196,27 @@ class _ChatViewState extends State<ChatView> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                      Text('${state.chat!.receiver?.age ?? ''}',
+                                      Text(currentUserIsSender(state.chat!.senderId)
+                                          ? '${state.chat!.receiver?.age ?? ''}'
+                                          : '${state.chat!.sender?.age ?? ''}',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize:
                                                   Dimensions.fontSizeDefault)),
                                       const VerticalDivider(
                                           thickness: 2, color: Colors.white),
-                                      Text(state.chat!.receiver?.gender ?? '',
+                                      Text(currentUserIsSender(state.chat!.senderId)
+                                          ? (state.chat!.receiver?.gender ?? '')
+                                          : (state.chat!.sender?.gender ?? ''),
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize:
                                                   Dimensions.fontSizeDefault)),
                                       const VerticalDivider(
                                           thickness: 2, color: Colors.white),
-                                      Text(state.chat!.receiver?.height ?? '',
+                                      Text(currentUserIsSender(state.chat!.senderId)
+                                          ? (state.chat!.receiver?.height ?? '')
+                                          : (state.chat!.sender?.height ?? ''),
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize:
@@ -218,7 +229,8 @@ class _ChatViewState extends State<ChatView> {
                                 Expanded(child: BlocBuilder<GetMessagesCubit,
                                         GetMessagesState>(
                                     builder: (blocContext, state) {
-                                  final messages = state.messages.toList().reversed.toList();
+                                  final messages =
+                                      state.messages.toList().reversed.toList();
                                   return !state.isLoading
                                       ? ListView.builder(
                                           reverse: true,
@@ -280,28 +292,22 @@ class _ChatViewState extends State<ChatView> {
                                                     .read<
                                                         AddNotificationCubit>()
                                                     .addNotification(
-                                                        FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser!
-                                                                    .uid ==
-                                                                state.chat!
-                                                                    .senderId
+                                                        currentUserIsSender(state
+                                                                .chat!.senderId)
                                                             ? state.chat!
                                                                 .sender!.name
                                                             : state.chat!
                                                                 .receiver!.name,
                                                         _inputMessageController
                                                             .text,
-                                                        FirebaseAuth
-                                                                    .instance
-                                                                    .currentUser!
-                                                                    .uid !=
+                                                        currentUserIsSender(
                                                                 state.chat!
-                                                                    .senderId
+                                                                    .senderId)
                                                             ? state
                                                                 .chat!.senderId
                                                             : state.chat!
-                                                                .receiverId, widget.chatId);
+                                                                .receiverId,
+                                                        widget.chatId);
                                                 FocusManager
                                                     .instance.primaryFocus
                                                     ?.unfocus();
@@ -316,5 +322,9 @@ class _ChatViewState extends State<ChatView> {
                     const SizedBox(height: Dimensions.paddingSizeOverLarge),
                   ]);
             })));
+  }
+
+  bool currentUserIsSender(String senderId) {
+    return senderId == FirebaseAuth.instance.currentUser!.uid;
   }
 }
