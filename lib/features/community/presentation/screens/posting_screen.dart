@@ -46,8 +46,19 @@ class PostingView extends StatefulWidget {
 }
 
 class _PostingViewState extends State<PostingView> {
+  late String city;
   final focusNode = FocusNode();
   List<String> postGroups = AppConstants.romanceGroups;
+
+  @override
+  void initState() {
+    try {
+      city = Get.find<String>(tag: 'city');
+    } catch (exception) {
+      city = '';
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +100,7 @@ class _PostingViewState extends State<PostingView> {
                           Padding(
                               padding: const EdgeInsets.only(
                                   right: Dimensions.paddingSizeExtraLarge),
-                              child: Text('DENVER',
+                              child: Text(city,
                                   style: TextStyle(
                                       fontSize: Dimensions.fontSizeTitle,
                                       shadows: const [
@@ -554,7 +565,7 @@ class _PostingViewState extends State<PostingView> {
                                   },
                                   style: ButtonStyle(
                                       backgroundColor:
-                                          MaterialStateProperty.all<Color>(
+                                          WidgetStateProperty.all<Color>(
                                               ColorConstants.primaryColor)),
                                   child: const Text('Submit',
                                       style: TextStyle(color: Colors.white)))

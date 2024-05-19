@@ -39,8 +39,11 @@ class Images {
   static const String vectorIcon = 'assets/image/vector.png';
   static const String welcomeBack = 'assets/image/welcome_back.png';
   static const String maleMarker = 'assets/image/male_marker.png';
+  static const String emptyMaleMarker = 'assets/image/empty_male_marker.png';
   static const String femaleMarker = 'assets/image/female_marker.png';
+  static const String emptyFemaleMarker = 'assets/image/empty_female_marker.png';
   static const String nonbinaryMarker = 'assets/image/nonbinary_marker.png';
+  static const String emptyNonbinaryMarker = 'assets/image/empty_nonbinary_marker.png';
 
   // Post group images
   static const String agendaIcon = 'assets/image_groups/agenda.png';

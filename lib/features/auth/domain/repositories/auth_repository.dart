@@ -1,4 +1,5 @@
 import 'package:sate_social/features/auth/data/models/app_user.dart';
+import 'package:sate_social/features/auth/data/models/avatar_user.dart';
 import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 
 import '../entities/auth_user.dart';
@@ -12,6 +13,8 @@ abstract class AuthRepository {
   Future<List<AppUser>> getUsers();
 
   Future<void> updateUserLocation({required String userId, required UserLocationFcm userLocation});
+
+  Future<void> updateUserAvatar({required String userId, required AvatarUser avatarUser});
 
   Future<void> updateUserInfo({required AppUser user});
 

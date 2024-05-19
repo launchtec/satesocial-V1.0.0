@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,6 +21,7 @@ import 'package:sate_social/features/messages/domain/use_cases/get_chats_case.da
 import 'package:sate_social/features/messages/presentation/blocks/get_chats/get_chats_cubit.dart';
 import 'package:sate_social/features/messages/presentation/blocks/get_chats/get_chats_state.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
@@ -81,7 +83,9 @@ class _MapConnectViewState extends State<MapConnectView> {
       );
     }
     context.read<GetUsersCubit>().getUsers();
-    context.read<GetChatsCubit>().getChats(FirebaseAuth.instance.currentUser!.uid, false);
+    context
+        .read<GetChatsCubit>()
+        .getChats(FirebaseAuth.instance.currentUser!.uid, false);
     super.initState();
   }
 
@@ -92,7 +96,8 @@ class _MapConnectViewState extends State<MapConnectView> {
         backgroundColor: Colors.black,
         body: MultiBlocListener(
             listeners: [
-              BlocListener<GetUsersCubit, GetUsersState>(listener: (context, state){
+              BlocListener<GetUsersCubit, GetUsersState>(
+                  listener: (context, state) {
                 if (markers.isEmpty && state.users.isNotEmpty) {
                   users.clear();
                   for (AppUser appUser in state.users) {
@@ -103,7 +108,8 @@ class _MapConnectViewState extends State<MapConnectView> {
                   addingMarkersInMap(context);
                 }
               }),
-              BlocListener<GetChatsCubit, GetChatsState>(listener: (context, state){
+              BlocListener<GetChatsCubit, GetChatsState>(
+                  listener: (context, state) {
                 if (chats.isEmpty && state.chats.isNotEmpty) {
                   chats = state.chats.toList();
                 }
@@ -186,13 +192,14 @@ class _MapConnectViewState extends State<MapConnectView> {
             user.latitude!,
             user.longitude!,
           ),
-          icon: await getCustomIcon(user.gender),
+          icon: await getCustomIcon(user),
           onTap: () {
             showDialog(
                 barrierDismissible: true,
                 context: context,
                 builder: (context) {
-                  return UserInfoDialog(user: user, chat: getChatForUser(user.id));
+                  return UserInfoDialog(
+                      user: user, chat: getChatForUser(user.id));
                 });
           },
         ));
@@ -203,17 +210,44 @@ class _MapConnectViewState extends State<MapConnectView> {
     });
   }
 
-  Future<BitmapDescriptor> getCustomIcon(String gender) async {
+  Future<BitmapDescriptor> getCustomIcon(AppUser user) async {
     return SizedBox(
       height: 100,
       width: 100,
-      child: Image.asset(
-          gender == AppConstants.genderList[0]
-              ? Images.maleMarker
-              : gender == AppConstants.genderList[1]
-                  ? Images.femaleMarker
-                  : Images.nonbinaryMarker,
-          fit: BoxFit.contain),
+      child: user.gender == AppConstants.genderList[0]
+          ? (user.avatar!.isEmpty
+              ? Image.asset(Images.maleMarker, fit: BoxFit.contain)
+              : Stack(alignment: Alignment.topCenter, children: [
+                  Image.asset(Images.emptyMaleMarker, height: 100, fit: BoxFit.contain),
+                  SvgPicture.string(
+                    user.avatar!,
+                    width: 65,
+                    height: 65,
+                  )
+                ]))
+          : user.gender == AppConstants.genderList[1]
+              ? (user.avatar!.isEmpty
+                  ? Image.asset(Images.femaleMarker, height: 100, fit: BoxFit.contain)
+                  : Stack(children: [
+                      Image.asset(Images.emptyFemaleMarker,
+                          fit: BoxFit.contain),
+                      SvgPicture.string(
+                        user.avatar!,
+                        width: 65,
+                        height: 65,
+                      )
+                    ]))
+              : (user.avatar!.isEmpty
+                  ? Image.asset(Images.nonbinaryMarker, height: 100, fit: BoxFit.contain)
+                  : Stack(children: [
+                      Image.asset(Images.emptyNonbinaryMarker,
+                          fit: BoxFit.contain),
+                      SvgPicture.string(
+                        user.avatar!,
+                        width: 65,
+                        height: 65,
+                      )
+                    ])),
     ).toBitmapDescriptor();
   }
 }

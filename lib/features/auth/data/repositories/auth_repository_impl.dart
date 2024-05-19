@@ -1,5 +1,6 @@
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
 import 'package:sate_social/features/auth/data/models/app_user.dart';
+import 'package:sate_social/features/auth/data/models/avatar_user.dart';
 import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 
 import '../../domain/entities/auth_user.dart';
@@ -57,6 +58,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> updateUserAvatar({required String userId, required AvatarUser avatarUser}) async {
+    return firestoreDataSource.updateUserAvatar(userId, avatarUser);
+  }
+
+  @override
   Future<AuthUser> signUp({
     required SignUpParams signUpParams,
   }) async {
@@ -77,7 +83,7 @@ class AuthRepositoryImpl implements AuthRepository {
       ethnicity: signUpParams.ethnicity,
       howDidYouKnowAboutUs: signUpParams.howDidYouKnowAboutUs,
       confirmRealPerson: signUpParams.confirmRealPerson,
-      avatarUrl: null,
+      avatar: null,
     ));
 
     localDataSource.write(key: 'user', value: authModel);

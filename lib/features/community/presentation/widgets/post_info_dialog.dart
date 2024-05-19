@@ -170,9 +170,6 @@ class PostInfoDialog extends StatelessWidget {
                                     await context
                                         .read<AddChatCubit>()
                                         .addChat(post);
-                                    await context
-                                        .read<AddNotificationCubit>()
-                                        .addNotification(post.title, 'You have a new response', post.userId, chat!.id);
                                     Navigator.pop(context);
                                     Get.toNamed(
                                         RouteHelper.getCommunityChatsRoute());

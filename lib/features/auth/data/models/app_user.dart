@@ -12,7 +12,7 @@ class AppUser {
   final String? height;
   final String? ethnicity;
   final String? howDidYouKnowAboutUs;
-  final String? avatarUrl;
+  final String? avatar;
   final String? relationship;
   final bool? activeRelationship;
   final String? userLinkInstagram;
@@ -33,7 +33,7 @@ class AppUser {
     this.height,
     this.ethnicity,
     this.howDidYouKnowAboutUs,
-    this.avatarUrl,
+    this.avatar,
     this.relationship,
     this.activeRelationship,
     this.userLinkInstagram,
@@ -65,8 +65,8 @@ class AppUser {
           snapshot.data().toString().contains('howDidYouKnowAboutUs')
               ? snapshot.get('howDidYouKnowAboutUs')
               : '',
-      avatarUrl: snapshot.data().toString().contains('avatarUrl')
-          ? snapshot.get('avatarUrl')
+      avatar: snapshot.data().toString().contains('avatarMap')
+          ? snapshot.get('avatarMap')
           : '',
       longitude: snapshot.data().toString().contains('longitude')
           ? snapshot.get('longitude') as double
@@ -90,7 +90,7 @@ class AppUser {
           : false,
       lastActivity: snapshot.data().toString().contains('lastActivity')
           ? snapshot.get('lastActivity')
-          : '',
+          : null,
     );
   }
 
@@ -107,7 +107,7 @@ class AppUser {
       'height': height,
       'ethnicity': ethnicity,
       'howDidYouKnowAboutUs': howDidYouKnowAboutUs,
-      'avatarUrl': avatarUrl,
+      'avatarMap': avatar,
       'relationship': relationship,
       'activeRelationship': activeRelationship,
       'userLinkInstagram': userLinkInstagram,
@@ -131,6 +131,6 @@ class AppUser {
         height: json['height'],
         ethnicity: json['ethnicity'],
         howDidYouKnowAboutUs: json['howDidYouKnowAboutUs'],
-        avatarUrl: json['avatarUrl']);
+        avatar: json['avatarMap']);
   }
 }

@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sate_social/features/auth/data/models/avatar_user.dart';
 import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:sate_social/features/home/data/models/partner_match_model.dart';
@@ -30,6 +29,10 @@ class FirestoreDataSource {
 
   Future<void> updateUserLocation(String userId, UserLocationFcm userLocation) {
     return instance.collection('users').doc(userId).update(userLocation.toMap());
+  }
+
+  Future<void> updateUserAvatar(String userId, AvatarUser avatarUser) {
+    return instance.collection('users').doc(userId).update(avatarUser.toMap());
   }
 
   Future<void> updateUserInfo(AppUser user) {

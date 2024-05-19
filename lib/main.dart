@@ -70,7 +70,6 @@ void main() {
 
       if (user.id.isNotEmpty) {
         pushNotificationService.initialize();
-        // FirebaseMessaging.onBackgroundMessage(backgroundHandler);
       }
 
       return App(

@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/features/auth/data/models/app_user.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
@@ -9,8 +10,8 @@ import 'package:sate_social/features/messages/presentation/blocks/add_chat_conne
 import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
 import 'package:sate_social/features/notifications/domain/use_cases/add_notification_case.dart';
 import 'package:sate_social/features/notifications/presentation/blocks/add_notification/add_notification_cubit.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/app_constants.dart';
@@ -83,7 +84,11 @@ class UserInfoDialog extends StatelessWidget {
                         ),
                         child: Column(children: [
                           const SizedBox(height: Dimensions.paddingSizeSmall),
-                          Image.asset(Images.avatar, height: 64),
+                          user.avatar!.isEmpty ? Image.asset(Images.avatar, height: 64) : SvgPicture.string(
+                            user.avatar!,
+                            width: 64,
+                            height: 64,
+                          ),
                           user.lastActivity != null ? Column(children: [
                             const SizedBox(
                                 height: Dimensions.paddingSizeExtraSmall),

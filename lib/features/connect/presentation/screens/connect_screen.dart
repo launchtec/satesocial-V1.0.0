@@ -1,11 +1,15 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/features/auth/data/models/app_user.dart';
+import 'package:sate_social/features/auth/data/models/avatar_user.dart';
 import 'package:sate_social/features/auth/domain/repositories/auth_repository.dart';
+import 'package:sate_social/features/auth/domain/use_cases/update_avatar_case.dart';
 import 'package:sate_social/features/auth/domain/use_cases/user_info_case.dart';
 import 'package:sate_social/features/auth/domain/use_cases/user_update_case.dart';
+import 'package:sate_social/features/auth/presentation/blocks/update_avatar/update_avatar_cubit.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_info/user_info_cubit.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_info/user_info_state.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_update/user_update_cubit.dart';
@@ -34,6 +38,12 @@ class ConnectScreen extends StatelessWidget {
       BlocProvider(
           create: (context) => UserUpdateCubit(
                 userUpdateCase: UserUpdateCase(
+                  authRepository: context.read<AuthRepository>(),
+                ),
+              )),
+      BlocProvider(
+          create: (context) => UpdateAvatarCubit(
+                updateAvatarCase: UpdateAvatarCase(
                   authRepository: context.read<AuthRepository>(),
                 ),
               ))
@@ -88,11 +98,11 @@ class _ConnectViewState extends State<ConnectView> {
                             shadows: const [
                               Shadow(
                                 color: ColorConstants
-                                    .primaryColor, // Choose the color of the shadow
+                                    .primaryColor,
                                 blurRadius:
-                                    2.0, // Adjust the blur radius for the shadow effect
+                                    2.0,
                                 offset: Offset(-4.0,
-                                    1.0), // Set the horizontal and vertical offset for the shadow
+                                    1.0),
                               ),
                             ],
                             color: Colors.orange)))
@@ -101,7 +111,7 @@ class _ConnectViewState extends State<ConnectView> {
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
               BlocBuilder<UserInfoCubit, UserInfoState>(
                   builder: (blocContext, state) {
-                if (appUser == null && state.user != null) {
+                if (state.user != null) {
                   appUser = state.user!;
                   context
                       .read<UserUpdateCubit>()
@@ -129,8 +139,12 @@ class _ConnectViewState extends State<ConnectView> {
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                              Image.asset(Images.avatar,
-                                  height: 48, fit: BoxFit.contain),
+                              appUser!.avatar!.isEmpty
+                                  ? Image.asset(Images.avatar,
+                                      height: 48, fit: BoxFit.contain)
+                                  : SizedBox(
+                                      height: 48,
+                                      child: FluttermojiCircleAvatar()),
                               Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical:
@@ -138,7 +152,15 @@ class _ConnectViewState extends State<ConnectView> {
                                   width: context.width / 1.8,
                                   child: ElevatedButton(
                                       onPressed: () async {
-                                        // Get.toNamed(RouteHelper.getCommunityChatsRoute());
+                                        String result = await Get.toNamed(
+                                            RouteHelper.getAvatarRoute());
+                                        context
+                                            .read<UpdateAvatarCubit>()
+                                            .updateAvatar(AvatarUser(
+                                                avatar: result,
+                                                lastActivity: DateTime.now()
+                                                    .toIso8601String()));
+                                        context.read<UserInfoCubit>().getUserInfo();
                                       },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:
@@ -857,7 +879,8 @@ class _ConnectViewState extends State<ConnectView> {
                                                           FontWeight.bold)),
                                             ])));
                               }),
-                            const SizedBox(height: Dimensions.paddingSizeDefault)
+                              const SizedBox(
+                                  height: Dimensions.paddingSizeDefault)
                             ])
                       : const Center(
                           child: CircularProgressIndicator(
