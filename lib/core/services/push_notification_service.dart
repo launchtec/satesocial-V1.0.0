@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:sate_social/features/notifications/data/models/notification_model.dart';
-import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
 
 import '../route/route_helper.dart';
 import 'local_notification_service.dart';
@@ -16,7 +13,7 @@ class PushNotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
 
-  Future initialize(NotificationRepository notificationRepository) async {
+  Future initialize() async {
     if (Platform.isIOS) {
       await _fcm.requestPermission(
         alert: true,
@@ -47,41 +44,28 @@ class PushNotificationService {
     FirebaseMessaging.onMessageOpenedApp.listen(onAppOpen);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      saveNotificationFirestore(message, notificationRepository);
       handleRemoteMessage(message);
     });
-  }
-  
-  void saveNotificationFirestore(RemoteMessage message, NotificationRepository notificationRepository) {
-    final notificationModel = NotificationModel(
-        id: message.messageId!,
-        title: message.notification?.title ?? "",
-        content: message.notification?.body ?? "",
-        created: message.sentTime?.toIso8601String() ?? "",
-        location: message.data["location"]
-    );
-    notificationRepository.addOrUpdateNotification(userId: FirebaseAuth.instance.currentUser!.uid, notification: notificationModel);
   }
 
   void handleRemoteMessage(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
+    String chatId = message.data['chatId'];
     if (notification != null) {
       final notifyModel = LocalNotificationModel(
           id: message.messageId.hashCode,
           body: notification.body,
           title: notification.title ?? "");
       LocalNotificationService.showNotification(
-        notifyModel,
-        onClick: (dynamic payload) {
-          onAppOpen(message);
-        },
+        notifyModel, chatId
       );
     }
   }
 
   void onAppOpen(RemoteMessage message) {
+    String chatId = message.data['chatId'];
     Get.toNamed(RouteHelper
-        .getDashboardToNotificationRoute());
+        .getOpenChatRoute(chatId));
   }
 
   Future<String?> getToken() async {
@@ -92,6 +76,7 @@ class PushNotificationService {
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   RemoteNotification? notification = message.notification;
+  String chatId = message.data['chatId'];
   if (notification != null) {
     final notifyModel = LocalNotificationModel(
         id: message.messageId.hashCode,
@@ -99,10 +84,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
         title: notification.title ?? "");
     LocalNotificationService.showNotification(
       notifyModel,
-      onClick: (dynamic payload) {
-        Get.toNamed(RouteHelper
-            .getDashboardToNotificationRoute());
-      },
+      chatId
     );
   }
 }

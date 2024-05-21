@@ -27,7 +27,7 @@ class AppConstants {
   static const List<String> sexualityList = ['Straight', 'Gay', 'Lesbian', 'Bisexual',
     'Allosexual', 'Androsexual', 'Asexual', 'Autosexual', 'Bicurious', 'Demisexual',
     'Fluid', 'Graysexual', 'Gynesexual', 'Monosexual', 'Omnisexual', 'Pansexual',
-    'Polysexual', 'Queer', 'Questioning', 'Skoliosexual', 'Spectrasexual', 'Other type out'];
+    'Polysexual', 'Queer', 'Questioning', 'Skoliosexual', 'Spectrasexual'];
   static const List<String> openToConnectToList = ['Romantically', 'Friends/ Activity Partners',
     'Professionally'];
 
@@ -69,23 +69,6 @@ class AppConstants {
     'Health Science & Medical Technology', 'Healthcare', 'Industrial Electronics', 'Insurance', 'IT', 'Manufacturing',
     'Transportation', 'Other type'];
   static const List<String> employmentTypes = ["Full time", "Part time", "Contract", "Temporary", "Freelancer"];
-
-  static List<NotificationModel> notificationModals = [
-    NotificationModel(
-        id: '1',
-        title: 'Based on gig filters',
-        content: 'New request to connect to your card',
-        created: '5 mins ago',
-        location: '5 miles away'
-    ),
-    NotificationModel(
-        id: '2',
-        title: 'Based on love filters',
-        content: 'New request to connect to your card',
-        created: '15 mins ago',
-        location: '2 miles away'
-    )
-  ];
 
   // Match form - User Input for Self
   static const List<String> zodiacs = ['Aquarius', 'Aries', 'Cancer', 'Capricorn', 'Gemini', 'Leo', 'Libra', 'Pisces',

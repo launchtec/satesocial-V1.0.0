@@ -2,7 +2,6 @@ import '../../data/models/notification_model.dart';
 
 abstract class NotificationRepository {
   Future<void> addOrUpdateNotification({
-    required String userId,
     required NotificationModel notification
   });
 

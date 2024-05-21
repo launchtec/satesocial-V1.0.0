@@ -24,6 +24,7 @@ import 'features/auth/domain/entities/auth_user.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/community/data/repositories/post_repository_impl.dart';
 import 'firebase_options.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 typedef AppBuilder = Future<Widget> Function();
 
@@ -34,6 +35,7 @@ Future<void> bootstrap(AppBuilder builder) async {
 }
 
 void main() {
+  tz.initializeTimeZones();
   bootstrap(
     () async {
       AuthLocalDataSource authLocalDataSource = AuthLocalDataSource();
@@ -67,8 +69,7 @@ void main() {
       AuthUser user = await authRepository.authUser.first;
 
       if (user.id.isNotEmpty) {
-        pushNotificationService.initialize(notificationRepository);
-        FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+        pushNotificationService.initialize();
       }
 
       return App(

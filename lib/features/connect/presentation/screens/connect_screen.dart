@@ -1,15 +1,20 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/features/auth/data/models/app_user.dart';
+import 'package:sate_social/features/auth/data/models/avatar_user.dart';
 import 'package:sate_social/features/auth/domain/repositories/auth_repository.dart';
+import 'package:sate_social/features/auth/domain/use_cases/update_avatar_case.dart';
 import 'package:sate_social/features/auth/domain/use_cases/user_info_case.dart';
 import 'package:sate_social/features/auth/domain/use_cases/user_update_case.dart';
+import 'package:sate_social/features/auth/presentation/blocks/update_avatar/update_avatar_cubit.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_info/user_info_cubit.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_info/user_info_state.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_update/user_update_cubit.dart';
 import 'package:sate_social/features/auth/presentation/blocks/user_update/user_update_state.dart';
+import 'package:sate_social/features/connect/presentation/widgets/sexuality_drop.dart';
 
 import '../../../../core/data/blocks/request_status.dart';
 import '../../../../core/route/route_helper.dart';
@@ -33,6 +38,12 @@ class ConnectScreen extends StatelessWidget {
       BlocProvider(
           create: (context) => UserUpdateCubit(
                 userUpdateCase: UserUpdateCase(
+                  authRepository: context.read<AuthRepository>(),
+                ),
+              )),
+      BlocProvider(
+          create: (context) => UpdateAvatarCubit(
+                updateAvatarCase: UpdateAvatarCase(
                   authRepository: context.read<AuthRepository>(),
                 ),
               ))
@@ -60,11 +71,13 @@ class _ConnectViewState extends State<ConnectView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: null,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Container(
             padding:
                 const EdgeInsets.only(top: Dimensions.paddingSizeExtremeLarge),
             width: double.infinity,
+            height: double.infinity,
             decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(Images.backCommunity),
@@ -72,10 +85,10 @@ class _ConnectViewState extends State<ConnectView> {
                   opacity: 0.4),
             ),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                ListView(padding: EdgeInsets.zero, shrinkWrap: true, children: [
               const SizedBox(height: Dimensions.paddingSizeSmall),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Image.asset(Images.logo, height: 60),
+                Image.asset(Images.logo, height: 50),
                 Padding(
                     padding: const EdgeInsets.only(
                         right: Dimensions.paddingSizeExtraLarge),
@@ -85,20 +98,20 @@ class _ConnectViewState extends State<ConnectView> {
                             shadows: const [
                               Shadow(
                                 color: ColorConstants
-                                    .primaryColor, // Choose the color of the shadow
+                                    .primaryColor,
                                 blurRadius:
-                                    2.0, // Adjust the blur radius for the shadow effect
+                                    2.0,
                                 offset: Offset(-4.0,
-                                    1.0), // Set the horizontal and vertical offset for the shadow
+                                    1.0),
                               ),
                             ],
                             color: Colors.orange)))
               ]),
               const Divider(color: Colors.grey, thickness: 4),
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-              Expanded(child: BlocBuilder<UserInfoCubit, UserInfoState>(
+              BlocBuilder<UserInfoCubit, UserInfoState>(
                   builder: (blocContext, state) {
-                if (appUser == null && state.user != null) {
+                if (state.user != null) {
                   appUser = state.user!;
                   context
                       .read<UserUpdateCubit>()
@@ -126,16 +139,28 @@ class _ConnectViewState extends State<ConnectView> {
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                              Image.asset(Images.avatar,
-                                  height: 48, fit: BoxFit.contain),
+                              appUser!.avatar!.isEmpty
+                                  ? Image.asset(Images.avatar,
+                                      height: 48, fit: BoxFit.contain)
+                                  : SizedBox(
+                                      height: 48,
+                                      child: FluttermojiCircleAvatar()),
                               Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical:
                                           Dimensions.paddingSizeExtraSmall),
-                                  width: context.width / 2,
+                                  width: context.width / 1.8,
                                   child: ElevatedButton(
                                       onPressed: () async {
-                                        // Get.toNamed(RouteHelper.getCommunityChatsRoute());
+                                        String result = await Get.toNamed(
+                                            RouteHelper.getAvatarRoute());
+                                        context
+                                            .read<UpdateAvatarCubit>()
+                                            .updateAvatar(AvatarUser(
+                                                avatar: result,
+                                                lastActivity: DateTime.now()
+                                                    .toIso8601String()));
+                                        context.read<UserInfoCubit>().getUserInfo();
                                       },
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:
@@ -165,7 +190,7 @@ class _ConnectViewState extends State<ConnectView> {
                                                 height: 18)
                                           ]))),
                               Container(
-                                  width: context.width / 2,
+                                  width: context.width / 1.8,
                                   padding: const EdgeInsets.symmetric(
                                       vertical:
                                           Dimensions.paddingSizeExtraSmall),
@@ -202,7 +227,7 @@ class _ConnectViewState extends State<ConnectView> {
                                                 height: 18)
                                           ]))),
                               Container(
-                                  width: context.width / 2,
+                                  width: context.width / 1.8,
                                   padding: const EdgeInsets.symmetric(
                                       vertical:
                                           Dimensions.paddingSizeExtraSmall),
@@ -478,39 +503,13 @@ class _ConnectViewState extends State<ConnectView> {
                                         width:
                                             Dimensions.paddingSizeExtraSmall),
                                     Expanded(
-                                        child: DropdownButtonFormField2<String>(
-                                      isExpanded: true,
-                                      value: appUser?.sexuality,
-                                      style: TextStyle(
-                                          fontSize: Dimensions.fontSizeDefault,
-                                          color: Colors.black),
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.zero,
-                                          border: InputBorder.none),
-                                      buttonStyleData: const ButtonStyleData(
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(
-                                                      Dimensions.radiusSmall))),
-                                          padding: EdgeInsets.zero),
-                                      hint: const Text(
-                                        'Sexuality',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      onChanged: (String? value) {
-                                        context
-                                            .read<UserUpdateCubit>()
-                                            .sexualityChanged(value!);
-                                      },
-                                      items: AppConstants.sexualityList
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                            value: value, child: Text(value));
-                                      }).toList(),
-                                    )),
+                                        child: SexualityDrop(
+                                            initialValue: appUser?.sexuality,
+                                            onChanged: (value) {
+                                              context
+                                                  .read<UserUpdateCubit>()
+                                                  .sexualityChanged(value);
+                                            })),
                                   ])),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -651,7 +650,7 @@ class _ConnectViewState extends State<ConnectView> {
                                         ])
                                       ])),
                               const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
+                                  height: Dimensions.paddingSizeMinimal),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal:
@@ -691,7 +690,7 @@ class _ConnectViewState extends State<ConnectView> {
                                                 Dimensions.fontSizeOverSmall)),
                                   ])),
                               const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
+                                  height: Dimensions.paddingSizeMinimal),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal:
@@ -733,7 +732,7 @@ class _ConnectViewState extends State<ConnectView> {
                                     )),
                                   ])),
                               const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
+                                  height: Dimensions.paddingSizeMinimal),
                               Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal:
@@ -817,9 +816,8 @@ class _ConnectViewState extends State<ConnectView> {
                                         ])
                                   ])),
                               const SizedBox(
-                                  height: Dimensions.paddingSizeExtraSmall),
-                              BlocConsumer<UserUpdateCubit,
-                                      UserUpdateState>(
+                                  height: Dimensions.paddingSizeMinimal),
+                              BlocConsumer<UserUpdateCubit, UserUpdateState>(
                                   listener: (context, state) {
                                 if (state.requestStatus ==
                                     RequestStatus.submissionFailure) {
@@ -849,7 +847,7 @@ class _ConnectViewState extends State<ConnectView> {
                                 return Container(
                                     padding: const EdgeInsets.symmetric(
                                         vertical:
-                                            Dimensions.paddingSizeExtraSmall),
+                                            Dimensions.paddingSizeMinimal),
                                     width: context.width / 3,
                                     child: ElevatedButton(
                                         onPressed: () async {
@@ -881,12 +879,14 @@ class _ConnectViewState extends State<ConnectView> {
                                                           FontWeight.bold)),
                                             ])));
                               }),
+                              const SizedBox(
+                                  height: Dimensions.paddingSizeDefault)
                             ])
                       : const Center(
                           child: CircularProgressIndicator(
                               color: Colors.white, strokeWidth: 2.0)),
                 );
-              })),
+              }),
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
             ])));
   }

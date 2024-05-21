@@ -1,11 +1,16 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/features/auth/data/models/app_user.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
 import 'package:sate_social/features/messages/domain/use_cases/add_chat_case.dart';
 import 'package:sate_social/features/messages/presentation/blocks/add_chat_connect/add_chat_connect_state.dart';
+import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:sate_social/features/notifications/domain/use_cases/add_notification_case.dart';
+import 'package:sate_social/features/notifications/presentation/blocks/add_notification/add_notification_cubit.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../core/route/route_helper.dart';
@@ -38,6 +43,11 @@ class UserInfoDialog extends StatelessWidget {
               create: (context) => AddMessageCubit(
                       addMessageCase: AddMessageCase(
                     chatRepository: context.read<ChatRepository>(),
+                  ))),
+          BlocProvider(
+              create: (context) => AddNotificationCubit(
+                  addNotificationCase: AddNotificationCase(
+                    notificationRepository: context.read<NotificationRepository>(),
                   )))
         ],
         child: AlertDialog(
@@ -74,13 +84,19 @@ class UserInfoDialog extends StatelessWidget {
                         ),
                         child: Column(children: [
                           const SizedBox(height: Dimensions.paddingSizeSmall),
-                          Image.asset(Images.avatar, height: 64),
-                          const SizedBox(
-                              height: Dimensions.paddingSizeExtraSmall),
-                          Text('Active 5 minutes ago',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: Dimensions.fontSizeDefault)),
+                          user.avatar!.isEmpty ? Image.asset(Images.avatar, height: 64) : SvgPicture.string(
+                            user.avatar!,
+                            width: 64,
+                            height: 64,
+                          ),
+                          user.lastActivity != null ? Column(children: [
+                            const SizedBox(
+                                height: Dimensions.paddingSizeExtraSmall),
+                            Text('Active ${timeago.format(DateTime.parse(user.lastActivity!).toLocal())}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Dimensions.fontSizeDefault)),
+                          ]) : const SizedBox(),
                           const SizedBox(
                               height: Dimensions.paddingSizeExtraSmall),
                           Text(user.name,
@@ -214,6 +230,9 @@ class UserInfoDialog extends StatelessWidget {
                               await context
                                   .read<AddMessageCubit>()
                                   .addMessage(chatId, value!);
+                              await context
+                                  .read<AddNotificationCubit>()
+                                  .addNotification('You have a new connect', value, user.id, chatId);
                               Navigator.pop(context);
                               Get.toNamed(RouteHelper.getConnectChatsRoute());
                             },
@@ -252,7 +271,7 @@ class UserInfoDialog extends StatelessWidget {
                         ) : ElevatedButton(
                             onPressed: () async {
                               Navigator.pop(context);
-                              Get.toNamed(RouteHelper.getOpenChatRoute(chat!));
+                              Get.toNamed(RouteHelper.getOpenChatRoute(chat!.id));
                             },
                             style: ButtonStyle(
                                 padding:

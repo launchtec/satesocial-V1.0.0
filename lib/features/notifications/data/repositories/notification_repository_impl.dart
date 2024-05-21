@@ -10,8 +10,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
 
   @override
   Future<void> addOrUpdateNotification(
-      {required String userId, required NotificationModel notification}) async {
-    await firestoreDataSource.addOrUpdateNotification(userId, notification);
+      {required NotificationModel notification}) async {
+    await firestoreDataSource.addOrUpdateNotification(notification);
   }
 
   @override
@@ -23,24 +23,27 @@ class NotificationRepositoryImpl implements NotificationRepository {
         .map((doc) => NotificationModel(
             id: doc.get("id"),
             title: doc.get("title"),
-            content: doc.get("content"),
+            message: doc.get("message"),
+            senderId: doc.get("senderId"),
+            recipientUserId: doc.get("recipientUserId"),
             created: doc.get("created"),
-            location: doc.get("location"),
-            isOpen: doc.get("isOpen")
-        ))
+            chatId: doc.get("chatId"),
+            isOpen: doc.get("isOpen")))
         .toList();
   }
 
   @override
-  Stream<Iterable<NotificationModel>> getStreamNotifications({required String userId}) {
+  Stream<Iterable<NotificationModel>> getStreamNotifications(
+      {required String userId}) {
     return firestoreDataSource.getStreamNotifications(userId).map((snapshot) =>
         snapshot.docs.map((doc) => NotificationModel(
             id: doc.get("id"),
             title: doc.get("title"),
-            content: doc.get("content"),
+            message: doc.get("message"),
+            senderId: doc.get("senderId"),
+            recipientUserId: doc.get("recipientUserId"),
             created: doc.get("created"),
-            location: doc.get("location"),
-            isOpen: doc.get("isOpen") as bool
-        )));
+            chatId: doc.get("chatId"),
+            isOpen: doc.get("isOpen"))));
   }
 }

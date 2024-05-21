@@ -12,33 +12,36 @@ class AppUser {
   final String? height;
   final String? ethnicity;
   final String? howDidYouKnowAboutUs;
-  final String? avatarUrl;
+  final String? avatar;
   final String? relationship;
   final bool? activeRelationship;
   final String? userLinkInstagram;
   final bool? activeInstagram;
   final double? latitude;
   final double? longitude;
+  final String? lastActivity;
 
-  const AppUser(
-      {required this.id,
-      required this.name,
-      required this.email,
-      required this.age,
-      required this.gender,
-      required this.sexuality,
-      required this.openToConnectTo,
-      required this.confirmRealPerson,
-      this.height,
-      this.ethnicity,
-      this.howDidYouKnowAboutUs,
-      this.avatarUrl,
-      this.relationship,
-      this.activeRelationship,
-      this.userLinkInstagram,
-      this.activeInstagram,
-      this.latitude,
-      this.longitude});
+  const AppUser({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.age,
+    required this.gender,
+    required this.sexuality,
+    required this.openToConnectTo,
+    required this.confirmRealPerson,
+    this.height,
+    this.ethnicity,
+    this.howDidYouKnowAboutUs,
+    this.avatar,
+    this.relationship,
+    this.activeRelationship,
+    this.userLinkInstagram,
+    this.activeInstagram,
+    this.latitude,
+    this.longitude,
+    this.lastActivity
+  });
 
   factory AppUser.fromSnapshot(DocumentSnapshot snapshot) {
     return AppUser(
@@ -62,8 +65,8 @@ class AppUser {
           snapshot.data().toString().contains('howDidYouKnowAboutUs')
               ? snapshot.get('howDidYouKnowAboutUs')
               : '',
-      avatarUrl: snapshot.data().toString().contains('avatarUrl')
-          ? snapshot.get('avatarUrl')
+      avatar: snapshot.data().toString().contains('avatarMap')
+          ? snapshot.get('avatarMap')
           : '',
       longitude: snapshot.data().toString().contains('longitude')
           ? snapshot.get('longitude') as double
@@ -85,6 +88,9 @@ class AppUser {
       activeInstagram: snapshot.data().toString().contains('activeInstagram')
           ? snapshot.get('activeInstagram')
           : false,
+      lastActivity: snapshot.data().toString().contains('lastActivity')
+          ? snapshot.get('lastActivity')
+          : null,
     );
   }
 
@@ -101,11 +107,12 @@ class AppUser {
       'height': height,
       'ethnicity': ethnicity,
       'howDidYouKnowAboutUs': howDidYouKnowAboutUs,
-      'avatarUrl': avatarUrl,
+      'avatarMap': avatar,
       'relationship': relationship,
       'activeRelationship': activeRelationship,
       'userLinkInstagram': userLinkInstagram,
       'activeInstagram': activeInstagram,
+      'lastActivity': lastActivity
     };
   }
 
@@ -124,6 +131,6 @@ class AppUser {
         height: json['height'],
         ethnicity: json['ethnicity'],
         howDidYouKnowAboutUs: json['howDidYouKnowAboutUs'],
-        avatarUrl: json['avatarUrl']);
+        avatar: json['avatarMap']);
   }
 }

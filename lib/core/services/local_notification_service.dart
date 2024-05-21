@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+
+import '../route/route_helper.dart';
 
 class LocalNotificationService {
   static AndroidNotificationChannel get channel => const AndroidNotificationChannel(
@@ -36,7 +39,7 @@ class LocalNotificationService {
       );
 
   static void showNotification(LocalNotificationModel notification,
-      {void Function(dynamic)? onClick}) async {
+      String chatId) async {
     var initializationSettingsAndroid = const AndroidInitializationSettings("@mipmap/ic_launcher");
 
     var initializationSettingsIOS = const DarwinInitializationSettings();
@@ -49,7 +52,8 @@ class LocalNotificationService {
     FlutterLocalNotificationsPlugin().initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (response) {
-
+        Get.toNamed(RouteHelper
+            .getOpenChatRoute(chatId));
       },
       onDidReceiveBackgroundNotificationResponse: null
     );

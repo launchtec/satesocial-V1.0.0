@@ -24,6 +24,7 @@ class AuthRemoteDataSourceFirebase implements AuthRemoteDataSource {
   Future<AuthUserModel> signUpWithEmailAndPassword({
     required String email,
     required String password,
+    required String name,
   }) async {
     try {
       firebase_auth.UserCredential credential =
@@ -31,6 +32,7 @@ class AuthRemoteDataSourceFirebase implements AuthRemoteDataSource {
         email: email,
         password: password,
       );
+      credential.user?.updateDisplayName(name);
 
       if (credential.user == null) {
         throw Exception('Sign up failed: The user is null after sign up.');

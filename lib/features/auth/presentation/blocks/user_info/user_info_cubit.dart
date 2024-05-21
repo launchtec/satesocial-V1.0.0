@@ -13,6 +13,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         super(const UserInfoState());
 
   Future<void> getUserInfo() async {
+    emit(const UserInfoState(isLoading: true));
     AppUser appUser = await _userInfoCase.call(FirebaseAuth.instance.currentUser!.uid);
     emit(UserInfoState(isLoading: false, user: appUser));
   }

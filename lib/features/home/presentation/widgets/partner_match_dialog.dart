@@ -659,7 +659,6 @@ class _PartnerMatchDialogState extends State<PartnerMatchDialog> {
                                 listener: (context, state) {
                                   if (state.requestStatus ==
                                       RequestStatus.submissionSuccess) {
-                                    Navigator.of(context).pop();
                                     ScaffoldMessenger.of(context)
                                       ..hideCurrentSnackBar()
                                       ..showSnackBar(

@@ -9,13 +9,24 @@ import '../widgets/self_match_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   final PageController navController;
-  const HomeScreen({super.key, required this.navController});
+  final bool isShowMatch;
+  const HomeScreen({super.key, required this.navController, required this.isShowMatch});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isShowMatch) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => showMatchDialog(context));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,22 +86,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold))
                     ])
                   ]),
-                  onPressed: () async {
-                    bool? isSelfForm = await showDialog(
-                        barrierDismissible: true,
-                        context: context,
-                        builder: (context) {
-                          return const MatchFormDialog();
-                        });
-                    if (isSelfForm != null) {
-                      showDialog(
-                          barrierDismissible: true,
-                          context: context,
-                          builder: (context) {
-                            return isSelfForm ? const SelfMatchDialog() : const PartnerMatchDialog();
-                          });
-                    }
-                  })
+                  onPressed: () => showMatchDialog(context))
             ])));
+  }
+
+  void showMatchDialog(BuildContext context) async {
+    bool? isSelfForm = await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return const MatchFormDialog();
+        });
+    if (isSelfForm != null) {
+      showDialog(
+          barrierDismissible: true,
+          context: context,
+          builder: (context) {
+            return isSelfForm ? const SelfMatchDialog() : const PartnerMatchDialog();
+          });
+    }
   }
 }

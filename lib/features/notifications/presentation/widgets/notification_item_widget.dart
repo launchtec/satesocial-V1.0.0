@@ -28,7 +28,7 @@ class NotificationItemWidget extends StatelessWidget {
                     Column(children: [
                       Image.asset(Images.bell, height: 28),
                       const SizedBox(height: Dimensions.paddingSizeSmall),
-                      Text(timeago.format(DateTime.parse(notificationModel.created)),
+                      Text(timeago.format(DateTime.parse(notificationModel.created).toLocal()),
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: Dimensions.fontSizeSmall)),
@@ -36,7 +36,7 @@ class NotificationItemWidget extends StatelessWidget {
                     Column(children: [
                       SizedBox(
                           width: context.width / 2,
-                          child: Text(notificationModel.content,
+                          child: Text(notificationModel.message,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.black,
@@ -46,11 +46,7 @@ class NotificationItemWidget extends StatelessWidget {
                             Text(notificationModel.title,
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: Dimensions.fontSizeSmall)),
-                            Text(' - ${notificationModel.location}',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: Dimensions.fontSizeSmall)),
+                                    fontSize: Dimensions.fontSizeSmall))
                           ]),
                         ]),
                     Container(

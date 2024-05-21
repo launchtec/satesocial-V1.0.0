@@ -1,8 +1,4 @@
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:sate_social/features/messages/data/models/message.dart';
 
@@ -51,7 +47,7 @@ class MessageItemWidget extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: Dimensions.paddingSizeDefault),
-                    child: Text('Sent ${DateFormat('hh:mm a').format(DateTime.parse(message.created))}',
+                    child: Text('${DateFormat('d MMM hh:mm a').format(DateTime.parse(message.created))}',
                         style: const TextStyle(color: Colors.white)))
               ])
             ]));

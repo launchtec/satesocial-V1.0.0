@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:sate_social/core/data/blocks/request_status.dart';
 import 'package:sate_social/features/notifications/domain/repositories/notification_repository.dart';
 import 'package:sate_social/features/notifications/domain/use_cases/get_notifications_case.dart';
@@ -9,6 +10,7 @@ import 'package:sate_social/features/notifications/presentation/blocks/read_noti
 import 'package:sate_social/features/notifications/presentation/blocks/read_notification/read_notification_state.dart';
 import 'package:sate_social/features/notifications/presentation/widgets/notification_item_widget.dart';
 
+import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../data/models/notification_model.dart';
@@ -128,6 +130,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                 .readNotification(
                                                 notifications[index]);
                                           }
+                                          Get.toNamed(RouteHelper
+                                              .getOpenChatRoute(notifications[index].chatId!));
                                         });
                                   });
                                 },

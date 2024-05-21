@@ -2313,7 +2313,6 @@ class _SelfMatchDialogState extends State<SelfMatchDialog> {
                             listener: (context, state) {
                           if (state.requestStatus ==
                               RequestStatus.submissionSuccess) {
-                            Navigator.of(context).pop();
                             ScaffoldMessenger.of(context)
                               ..hideCurrentSnackBar()
                               ..showSnackBar(

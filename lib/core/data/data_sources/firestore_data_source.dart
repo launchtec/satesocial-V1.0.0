@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sate_social/features/auth/data/models/avatar_user.dart';
 import 'package:sate_social/features/auth/data/models/user_location_fcm.dart';
 import 'package:sate_social/features/community/data/models/post_model.dart';
 import 'package:sate_social/features/home/data/models/partner_match_model.dart';
@@ -32,25 +31,27 @@ class FirestoreDataSource {
     return instance.collection('users').doc(userId).update(userLocation.toMap());
   }
 
+  Future<void> updateUserAvatar(String userId, AvatarUser avatarUser) {
+    return instance.collection('users').doc(userId).update(avatarUser.toMap());
+  }
+
   Future<void> updateUserInfo(AppUser user) {
     return instance.collection('users').doc(user.id).update(user.toMap());
   }
 
-  Future<void> addOrUpdateNotification(String userId, NotificationModel notification) {
+  Future<void> addOrUpdateNotification(NotificationModel notification) {
     return instance
-        .collection('users')
-        .doc(userId)
         .collection('notifications')
         .doc(notification.id)
         .set(notification.toMap());
   }
 
   Future<QuerySnapshot> getNotifications(String userId) {
-    return instance.collection('users').doc(userId).collection('notifications').get();
+    return instance.collection('notifications').where(Filter("recipientUserId", isEqualTo: userId)).get();
   }
 
   Stream<QuerySnapshot> getStreamNotifications(String userId) {
-    return instance.collection('users').doc(userId).collection('notifications').snapshots();
+    return instance.collection('notifications').where(Filter("recipientUserId", isEqualTo: userId)).snapshots();
   }
 
   Future<void> addOrUpdatePost(PostModel postModel) {
@@ -104,6 +105,10 @@ class FirestoreDataSource {
 
   Future<void> addChat(Chat chat) {
     return instance.collection('chats').doc(chat.id).set(chat.toMap());
+  }
+
+  Future<DocumentSnapshot> getChat(String chatId) {
+    return instance.collection('chats').doc(chatId).get();
   }
 
   // First owner post responses
