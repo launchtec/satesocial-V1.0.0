@@ -18,6 +18,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import '../../../messages/domain/repositories/chat_repository.dart';
 import '../../../messages/domain/use_cases/get_chats_case.dart';
 import '../../../messages/presentation/blocks/get_chats/get_chats_cubit.dart';
@@ -88,6 +89,7 @@ class _MapPostsViewState extends State<MapPostsView> {
         : (widget.category == 'social'
             ? AppConstants.postCategories[1]
             : AppConstants.postCategories[2]);
+    context.read<UpdateActivityCubit>().updateActivity();
     context.read<CategoryPostsCubit>().getCategoryPosts(queryCategory);
     context
         .read<GetChatsCubit>()

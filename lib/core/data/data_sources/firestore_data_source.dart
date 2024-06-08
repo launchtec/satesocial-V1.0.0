@@ -31,6 +31,10 @@ class FirestoreDataSource {
     return instance.collection('users').doc(userId).update(userLocation.toMap());
   }
 
+  Future<void> updateUserActivity(String userId, String lastActivity) {
+    return instance.collection('users').doc(userId).update({"lastActivity" : lastActivity});
+  }
+
   Future<void> updateUserAvatar(String userId, AvatarUser avatarUser) {
     return instance.collection('users').doc(userId).update(avatarUser.toMap());
   }

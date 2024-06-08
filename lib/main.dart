@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:sate_social/core/data/data_sources/firestore_data_source.dart';
 import 'package:sate_social/core/data/data_sources/storage_data_source.dart';
 import 'package:sate_social/core/services/push_notification_service.dart';
+import 'package:sate_social/features/auth/domain/use_cases/update_activity_case.dart';
+import 'package:sate_social/features/auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import 'package:sate_social/features/community/domain/repositories/post_repository.dart';
 import 'package:sate_social/features/home/data/repositories/match_repository_impl.dart';
 import 'package:sate_social/features/home/domain/repositories/match_repository.dart';
@@ -43,28 +45,26 @@ void main() {
           AuthRemoteDataSourceFirebase();
       FirestoreDataSource firestoreDataSource = FirestoreDataSource();
       StorageDataSource storageDataSource = StorageDataSource();
-      PushNotificationService pushNotificationService = PushNotificationService();
+      PushNotificationService pushNotificationService =
+          PushNotificationService();
 
       AuthRepository authRepository = AuthRepositoryImpl(
           localDataSource: authLocalDataSource,
           remoteDataSource: authRemoteDataSource,
           firestoreDataSource: firestoreDataSource);
 
-      NotificationRepository notificationRepository = NotificationRepositoryImpl(
-          firestoreDataSource: firestoreDataSource);
+      NotificationRepository notificationRepository =
+          NotificationRepositoryImpl(firestoreDataSource: firestoreDataSource);
 
       PostRepository postRepository = PostRepositoryImpl(
           firestoreDataSource: firestoreDataSource,
-          storageDataSource: storageDataSource
-      );
+          storageDataSource: storageDataSource);
 
-      ChatRepository chatRepository = ChatRepositoryImpl(
-          firestoreDataSource: firestoreDataSource
-      );
+      ChatRepository chatRepository =
+          ChatRepositoryImpl(firestoreDataSource: firestoreDataSource);
 
-      MatchRepository matchRepository = MatchRepositoryImpl(
-          firestoreDataSource: firestoreDataSource
-      );
+      MatchRepository matchRepository =
+          MatchRepositoryImpl(firestoreDataSource: firestoreDataSource);
 
       AuthUser user = await authRepository.authUser.first;
 
@@ -114,7 +114,12 @@ class App extends StatelessWidget {
         RepositoryProvider.value(value: postRepository),
         RepositoryProvider.value(value: chatRepository),
         RepositoryProvider.value(value: matchRepository),
-        RepositoryProvider.value(value: notificationService)
+        RepositoryProvider.value(value: notificationService),
+        BlocProvider(
+            create: (context) => UpdateActivityCubit(
+                    updateActivityCase: UpdateActivityCase(
+                  authRepository: authRepository,
+                )))
       ],
       child: GetMaterialApp(
         title: AppConstants.appName,
@@ -122,7 +127,8 @@ class App extends StatelessWidget {
         navigatorKey: Get.key,
         theme: ThemeData.light(useMaterial3: true),
         getPages: RouteHelper.routes,
-        initialRoute: authUser!.id.isNotEmpty ? RouteHelper.dashboard
+        initialRoute: authUser!.id.isNotEmpty
+            ? RouteHelper.dashboard
             : RouteHelper.welcome,
       ),
     );

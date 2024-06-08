@@ -15,6 +15,8 @@ import 'package:sate_social/features/home/presentation/screens/home_screen.dart'
 import 'package:sate_social/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:sate_social/features/settings/presentation/screens/settings_screen.dart';
 
+import '../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
+
 class DashboardScreen extends StatelessWidget {
   final bool openNotification;
   const DashboardScreen({super.key, required this.openNotification});
@@ -47,6 +49,7 @@ class _DashboardViewState extends State<DashboardView> with WidgetsBindingObserv
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     getAndSaveLocation();
+    context.read<UpdateActivityCubit>().updateActivity();
     if (widget.openNotification) {
       _selectedIndex = 1;
     }

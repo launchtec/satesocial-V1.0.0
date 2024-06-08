@@ -13,6 +13,7 @@ import 'package:sate_social/features/notifications/presentation/widgets/notifica
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import '../../data/models/notification_model.dart';
 import '../blocks/get_notifications/notifications_cubit.dart';
 
@@ -28,6 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   void initState() {
+    context.read<UpdateActivityCubit>().updateActivity();
     super.initState();
   }
 

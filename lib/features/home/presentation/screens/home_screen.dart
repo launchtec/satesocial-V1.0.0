@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:sate_social/features/home/presentation/widgets/match_form_dialog.dart';
 import 'package:sate_social/features/home/presentation/widgets/partner_match_dialog.dart';
 
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import '../widgets/self_match_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    context.read<UpdateActivityCubit>().updateActivity();
     super.initState();
     if (widget.isShowMatch) {
       WidgetsBinding.instance

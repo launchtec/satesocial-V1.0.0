@@ -8,6 +8,7 @@ import 'package:sate_social/features/community/presentation/widgets/post_item_wi
 
 import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/images.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import '../../data/models/post_model.dart';
 import '../../domain/repositories/post_repository.dart';
 import '../../domain/use_cases/category_posts_case.dart';
@@ -47,6 +48,7 @@ class _CommunityViewState extends State<CommunityView> {
     try {
       city = Get.find<String>(tag: 'city');
     } catch (exception) {}
+    context.read<UpdateActivityCubit>().updateActivity();
     context
         .read<CategoryPostsCubit>()
         .getCategoryPosts(AppConstants.postCategories[2]);

@@ -22,6 +22,7 @@ import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 
 class ConnectScreen extends StatelessWidget {
   const ConnectScreen({super.key});
@@ -64,6 +65,7 @@ class _ConnectViewState extends State<ConnectView> {
   @override
   void initState() {
     context.read<UserInfoCubit>().getUserInfo();
+    context.read<UpdateActivityCubit>().updateActivity();
     super.initState();
   }
 
