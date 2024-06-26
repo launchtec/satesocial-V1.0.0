@@ -141,7 +141,7 @@ class _ConnectViewState extends State<ConnectView> {
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                              appUser!.avatar!.isEmpty
+                              appUser!.avatar == null
                                   ? Image.asset(Images.avatar,
                                       height: 48, fit: BoxFit.contain)
                                   : SizedBox(
