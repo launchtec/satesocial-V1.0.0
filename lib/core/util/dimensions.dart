@@ -8,7 +8,7 @@ class Dimensions {
   static double fontSizeLarge = Get.context!.width >= 1300 ? 18 : 16;
   static double fontSizeExtraLarge = Get.context!.width >= 1300 ? 20 : 18;
   static double fontSizeOverLarge = Get.context!.width >= 1300 ? 26 : 24;
-  static double fontSizeTitle = 32;
+  static double fontSizeTitle = 30;
 
   static const double paddingSizeMinimal = 2.0;
   static const double paddingSizeExtraSmall = 5.0;
@@ -33,4 +33,5 @@ class Dimensions {
 
   static const double webMaxWidth = 1170;
   static const int messageInputLength = 250;
+  static const double iconSize = 24;
 }

@@ -1,5 +1,4 @@
 import 'package:sate_social/features/community/data/models/post_category.dart';
-import 'package:sate_social/features/notifications/data/models/notification_model.dart';
 
 import 'images.dart';
 
@@ -7,6 +6,7 @@ class AppConstants {
   static const String appName = 'Sate Social';
   static const double appVersion = 1.0;
   static const String termOfUseLink = 'https://satesocial.com/sate-social-terms-of-use/';
+  static const String privacyPolicyLink = 'https://satesocial.com/sate-social-privacy-policy/';
 
   // Sign Up constants
   static const List<String> genderList = ['Male', 'Female', 'Non Binary'];
@@ -146,5 +146,33 @@ class AppConstants {
     'Hiking', 'Spa vacation', 'Group travel'];
   static const List<String> personInterested = ['Profession', 'Financial means', 'Staying healthy and active', 'Kindness and good energies',
     'Attraction', 'Lifestyle', 'Worldly and knowledgeable'];
+
+  static const String aboutUsText = 'Connectedness is key. At Sate Social we aim to seamlessly connect people in their communities. '
+      'We are a social platform that promotes in- person socialization and in the moment connections. Our platform allows users to '
+      'flourish personally and professionally while building a social network.  Single, partnered or somewhere in- between, '
+      'our platform serves and welcomes all. No more wishing you said hello to the person you found special in Connect. '
+      'Easily find friends looking to do what you love to do and what inspires you in Community. By interacting on our '
+      'platform you help teach our tech who is truly compatible for you in Match. We built Sate Social to give users a platform to connect.';
+
+  // Questions and answers
+  static const List<String> questionsList = [
+    'How Do I Setup My Profile?',
+    'Is facial verification saved?',
+    'How do I message and interact in Connect?',
+    'What do the connection types in Connect mean?',
+    'How Do I Post in Community? And how does it work?',
+    'How Does Match Work?',
+    'How do I use Sate Social? What’s the point?'
+  ];
+  static const List<String> answersList = [
+    'After signing up, navigate to the "Connect" section to start setting up your public card/profile. Here, you can create a custom avatar, update your profile, and even link your Instagram account.',
+    'Great question! No, it is not. We use this feature solely to verify that real humans are signing up for our platform. Once verification is complete, no data or images are saved.',
+    'Connect is an interactive feature that lets you engage with nearby users who have been active within the last 15 minutes. By clicking on their icon/avatar on the map and selecting an ice breaker, you can initiate a direct message with them (provided they respond to your ice breaker). You can find these direct messages in the "Connect" screen under "Messages."',
+    'In Connect, you can customize your card/profile settings to reflect one or a combination of the following options:\n- Open to Connecting Romantically\n- Open to Connecting with Friends\n- Open to Connecting Professionally\n\nThis lets others know around you what you are open / not open to connecting to.',
+    'Go to the "Community" section and tap the "Post" button with the plus icon. The first option you\'ll see is "Category." The Community section offers three categories:\n- Romance Postings (Free to Post)\n- Social & Activity Postings (Free to Post)\n- Professional & Gig Economy Posts (\$4.99 per post, for both job seekers and employers)\n\nAll posts are visible to your local community and zip code. Professional & Gig Economy posts are featured prominently in their respective zip codes/areas.',
+    'Match is a premium matchmaking service available for \$2.99 per round of match making. To use this service, tap "Match" on the home screen or the bottom bar of the app. Complete the "Self Match Intake Questions" and "Partner Preferences Questions," pay the \$2.99 fee, and wait for a member of our team to contact you. We will then match you with your top local matches on our app!',
+    'Welcome to Sate Social, your in the moment people and community connect. We have designed Sate Social with our users privacy and safety as top priority. In order to eliminate bots and fake accounts, users will be prompted to verify their humanness by following prompts such as smiling, winking, nodding, etc. Once liveness is detected users will create their profile by way of customizing an avatar that is representative of self. Once created, users will have access to the platform and their local community in more ways than one.'
+  ];
+
 
 }

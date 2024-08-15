@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:fluttermoji/fluttermojiCustomizer.dart';
 import 'package:fluttermoji/fluttermojiFunctions.dart';
-import 'package:fluttermoji/fluttermojiSaveWidget.dart';
 import 'package:get/get.dart';
 
 import '../../../../core/util/dimensions.dart';

@@ -69,22 +69,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       children: [
                         const SizedBox(height: Dimensions.paddingSizeSmall),
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('MY NOTIFICATIONS',
-                                  style: TextStyle(
-                                      fontSize: Dimensions.fontSizeOverLarge,
-                                      shadows: const [
-                                        Shadow(
-                                          color: Colors
-                                              .black, // Choose the color of the shadow
-                                          blurRadius:
-                                              2.0, // Adjust the blur radius for the shadow effect
-                                          offset: Offset(-1.0,
-                                              1.0), // Set the horizontal and vertical offset for the shadow
-                                        ),
-                                      ],
-                                      color: Colors.black))
+                              Image.asset(Images.logo, height: 50),
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: Dimensions.paddingSizeExtraLarge),
+                                  child: Text('NOTIFICATIONS',
+                                      style: TextStyle(
+                                          fontSize: Dimensions.fontSizeTitle,
+                                          shadows: const [
+                                            Shadow(
+                                              color: Colors.black,
+                                              blurRadius: 2.0,
+                                              offset: Offset(-1.0, 1.0),
+                                            ),
+                                          ],
+                                          color: Colors.black)))
                             ]),
                         const Divider(color: Colors.grey, thickness: 5),
                         Expanded(

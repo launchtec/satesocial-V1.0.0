@@ -113,7 +113,7 @@ class _ConnectViewState extends State<ConnectView> {
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
               BlocBuilder<UserInfoCubit, UserInfoState>(
                   builder: (blocContext, state) {
-                if (state.user != null) {
+                if (state.user != null && (appUser == null || appUser?.lastActivity != state.user?.lastActivity)) {
                   appUser = state.user!;
                   context
                       .read<UserUpdateCubit>()

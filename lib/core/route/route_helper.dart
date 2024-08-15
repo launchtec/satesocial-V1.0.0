@@ -11,6 +11,8 @@ import 'package:sate_social/features/dashboard/dashboard_screen.dart';
 import 'package:sate_social/features/messages/presentation/screens/chat_screen.dart';
 import 'package:sate_social/features/messages/presentation/screens/connect_chats_screen.dart';
 import 'package:sate_social/features/messages/presentation/screens/post_chats_screen.dart';
+import 'package:sate_social/features/settings/presentation/screens/about_us_screen.dart';
+import 'package:sate_social/features/settings/presentation/screens/questions_screen.dart';
 
 import '../../features/auth/presentation/screens/sign_up_screen.dart';
 
@@ -29,6 +31,8 @@ class RouteHelper {
   static const String openChat = '/open-chat';
   static const String mapConnect = '/map-connect';
   static const String avatar = '/avatar';
+  static const String aboutUs = '/about_us';
+  static const String questions = '/questions';
 
   static String getWelcomeRoute() => welcome;
   static String getSignInRoute() => signIn;
@@ -46,6 +50,8 @@ class RouteHelper {
   }
   static String getMapConnectRoute() => mapConnect;
   static String getAvatarRoute() => avatar;
+  static String getAboutUsRoute() => aboutUs;
+  static String getQuestionsRoute() => questions;
 
   static List<GetPage> routes = [
     GetPage(name: welcome, page: () => const WelcomeScreen()),
@@ -65,5 +71,7 @@ class RouteHelper {
     }),
     GetPage(name: mapConnect, page: () => const MapConnectScreen()),
     GetPage(name: avatar, page: () => const AvatarScreen()),
+    GetPage(name: aboutUs, page: () => const AboutUsScreen()),
+    GetPage(name: questions, page: () => const QuestionsScreen()),
   ];
 }
