@@ -49,6 +49,8 @@ dependencies:
   url_launcher: ^6.2.6
   uuid: ^4.3.3
   fluttermoji: ^1.0.2
+  shared_preferences: ^2.2.3
+  in_app_purchase: ^3.2.0
 
 dependency_overrides:
   flutter_colorpicker:

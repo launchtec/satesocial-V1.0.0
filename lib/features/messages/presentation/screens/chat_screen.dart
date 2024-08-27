@@ -21,6 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import '../../data/models/chat.dart';
 import '../blocks/get_chat/get_chat_state.dart';
 
@@ -74,6 +75,7 @@ class _ChatViewState extends State<ChatView> {
       city = Get.find<String>(tag: 'city');
     } catch (exception) {}
     context.read<GetChatCubit>().getChat(widget.chatId);
+    context.read<UpdateActivityCubit>().updateActivity();
     super.initState();
   }
 

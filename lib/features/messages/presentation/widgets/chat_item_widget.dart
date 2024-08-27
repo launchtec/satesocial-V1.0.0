@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sate_social/features/messages/data/models/chat.dart';
@@ -5,6 +6,7 @@ import 'package:sate_social/features/messages/data/models/chat.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../auth/data/models/app_user.dart';
 
 class ChatItemWidget extends StatelessWidget {
   final Chat chat;
@@ -71,7 +73,7 @@ class ChatItemWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                        Text(chat.receiver?.name ?? '',
+                        Text(currentUser(chat).name ?? '',
                             style: TextStyle(
                                 fontSize: Dimensions.fontSizeExtraLarge,
                                 color: Colors.white,
@@ -100,5 +102,13 @@ class ChatItemWidget extends StatelessWidget {
                             ])
                       ]))
                 ])))));
+  }
+
+  AppUser currentUser(Chat chat) {
+    if (chat.senderId == FirebaseAuth.instance.currentUser!.uid) {
+      return chat.receiver!;
+    } else {
+      return chat.sender!;
+    }
   }
 }

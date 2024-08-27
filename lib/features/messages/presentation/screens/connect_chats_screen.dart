@@ -12,6 +12,7 @@ import '../../../../core/route/route_helper.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 
 class ConnectChatScreen extends StatelessWidget {
   const ConnectChatScreen({super.key});
@@ -43,6 +44,7 @@ class _ConnectChatsViewState extends State<ConnectChatsView> {
     try {
       city = Get.find<String>(tag: 'city');
     } catch (exception) {}
+    context.read<UpdateActivityCubit>().updateActivity();
     super.initState();
   }
 

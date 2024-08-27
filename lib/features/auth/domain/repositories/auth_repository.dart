@@ -14,6 +14,8 @@ abstract class AuthRepository {
 
   Future<void> updateUserLocation({required String userId, required UserLocationFcm userLocation});
 
+  Future<void> updateUserActivity({required String userId, required String lastActivity});
+
   Future<void> updateUserAvatar({required String userId, required AvatarUser avatarUser});
 
   Future<void> updateUserInfo({required AppUser user});

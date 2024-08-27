@@ -10,6 +10,7 @@ import 'package:sate_social/features/community/presentation/widgets/manage_item_
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import '../../data/models/post_model.dart';
 import '../../domain/repositories/post_repository.dart';
 import '../blocks/get_my_posts/get_my_posts_cubit.dart';
@@ -52,6 +53,7 @@ class _ManageListingsViewState extends State<ManageListingsView> {
 
   @override
   void initState() {
+    context.read<UpdateActivityCubit>().updateActivity();
     super.initState();
   }
 

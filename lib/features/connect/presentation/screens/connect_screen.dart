@@ -22,6 +22,7 @@ import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 
 class ConnectScreen extends StatelessWidget {
   const ConnectScreen({super.key});
@@ -64,6 +65,7 @@ class _ConnectViewState extends State<ConnectView> {
   @override
   void initState() {
     context.read<UserInfoCubit>().getUserInfo();
+    context.read<UpdateActivityCubit>().updateActivity();
     super.initState();
   }
 
@@ -111,7 +113,7 @@ class _ConnectViewState extends State<ConnectView> {
               const SizedBox(height: Dimensions.paddingSizeExtraSmall),
               BlocBuilder<UserInfoCubit, UserInfoState>(
                   builder: (blocContext, state) {
-                if (state.user != null) {
+                if (state.user != null && (appUser == null || appUser?.lastActivity != state.user?.lastActivity)) {
                   appUser = state.user!;
                   context
                       .read<UserUpdateCubit>()
@@ -139,7 +141,7 @@ class _ConnectViewState extends State<ConnectView> {
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                              appUser!.avatar!.isEmpty
+                              appUser!.avatar == null
                                   ? Image.asset(Images.avatar,
                                       height: 48, fit: BoxFit.contain)
                                   : SizedBox(

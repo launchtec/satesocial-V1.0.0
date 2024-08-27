@@ -18,6 +18,7 @@ import '../../../../core/util/app_constants.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import '../../domain/use_cases/add_post_use_case.dart';
 
 class PostingScreen extends StatelessWidget {
@@ -57,6 +58,7 @@ class _PostingViewState extends State<PostingView> {
     } catch (exception) {
       city = '';
     }
+    context.read<UpdateActivityCubit>().updateActivity();
     super.initState();
   }
 

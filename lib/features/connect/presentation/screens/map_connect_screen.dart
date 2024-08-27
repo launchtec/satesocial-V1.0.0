@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -14,6 +13,7 @@ import 'package:sate_social/features/auth/domain/repositories/auth_repository.da
 import 'package:sate_social/features/auth/domain/use_cases/get_users_case.dart';
 import 'package:sate_social/features/auth/presentation/blocks/get_users/get_users_cubit.dart';
 import 'package:sate_social/features/auth/presentation/blocks/get_users/get_users_state.dart';
+import 'package:sate_social/features/auth/presentation/blocks/update_activity/update_activity_cubit.dart';
 import 'package:sate_social/features/connect/presentation/widgets/user_info_dialog.dart';
 import 'package:sate_social/features/messages/data/models/chat.dart';
 import 'package:sate_social/features/messages/domain/repositories/chat_repository.dart';
@@ -26,6 +26,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/util/dimensions.dart';
 import '../../../../core/util/images.dart';
 import '../../../../core/util/styles.dart';
+import '../../../../core/util/utils.dart';
 
 class MapConnectScreen extends StatelessWidget {
   const MapConnectScreen({super.key});
@@ -83,6 +84,7 @@ class _MapConnectViewState extends State<MapConnectView> {
       );
     }
     context.read<GetUsersCubit>().getUsers();
+    context.read<UpdateActivityCubit>().updateActivity();
     context
         .read<GetChatsCubit>()
         .getChats(FirebaseAuth.instance.currentUser!.uid, false);
@@ -101,7 +103,10 @@ class _MapConnectViewState extends State<MapConnectView> {
                 if (markers.isEmpty && state.users.isNotEmpty) {
                   users.clear();
                   for (AppUser appUser in state.users) {
-                    if (appUser.id != FirebaseAuth.instance.currentUser!.uid) {
+                    if (appUser.id != FirebaseAuth.instance.currentUser!.uid &&
+                        appUser.lastActivity != null &&
+                        Utils.lastActiveLessTenMinutes(
+                            DateTime.parse(appUser.lastActivity!))) {
                       users.add(appUser);
                     }
                   }
@@ -194,6 +199,7 @@ class _MapConnectViewState extends State<MapConnectView> {
           ),
           icon: await getCustomIcon(user),
           onTap: () {
+            context.read<UpdateActivityCubit>().updateActivity();
             showDialog(
                 barrierDismissible: true,
                 context: context,
@@ -216,9 +222,10 @@ class _MapConnectViewState extends State<MapConnectView> {
       width: 100,
       child: user.gender == AppConstants.genderList[0]
           ? (user.avatar!.isEmpty
-              ? Image.asset(Images.maleMarker, fit: BoxFit.contain)
+              ? Image.asset(Images.maleMarker, height: 100, fit: BoxFit.contain)
               : Stack(alignment: Alignment.topCenter, children: [
-                  Image.asset(Images.emptyMaleMarker, height: 100, fit: BoxFit.contain),
+                  Image.asset(Images.emptyMaleMarker,
+                      height: 100, fit: BoxFit.contain),
                   SvgPicture.string(
                     user.avatar!,
                     width: 65,
@@ -227,8 +234,9 @@ class _MapConnectViewState extends State<MapConnectView> {
                 ]))
           : user.gender == AppConstants.genderList[1]
               ? (user.avatar!.isEmpty
-                  ? Image.asset(Images.femaleMarker, height: 100, fit: BoxFit.contain)
-                  : Stack(children: [
+                  ? Image.asset(Images.femaleMarker,
+                      height: 100, fit: BoxFit.contain)
+                  : Stack(alignment: Alignment.topCenter, children: [
                       Image.asset(Images.emptyFemaleMarker,
                           fit: BoxFit.contain),
                       SvgPicture.string(
@@ -238,10 +246,11 @@ class _MapConnectViewState extends State<MapConnectView> {
                       )
                     ]))
               : (user.avatar!.isEmpty
-                  ? Image.asset(Images.nonbinaryMarker, height: 100, fit: BoxFit.contain)
-                  : Stack(children: [
+                  ? Image.asset(Images.nonbinaryMarker,
+                      height: 100, fit: BoxFit.contain)
+                  : Stack(alignment: Alignment.topCenter, children: [
                       Image.asset(Images.emptyNonbinaryMarker,
-                          fit: BoxFit.contain),
+                          height: 100, fit: BoxFit.contain),
                       SvgPicture.string(
                         user.avatar!,
                         width: 65,

@@ -130,6 +130,7 @@ class UserUpdateCubit extends Cubit<UserUpdateState> {
           activeRelationship: state.activeRelationship ?? user.activeRelationship,
           userLinkInstagram: state.userLinkInstagram ?? user.userLinkInstagram,
           activeInstagram: state.activeInstagram ?? user.activeInstagram,
+          avatar: user.avatar,
           confirmRealPerson: user.confirmRealPerson
       ));
       emit(state.copyWith(requestStatus: RequestStatus.submissionSuccess));
