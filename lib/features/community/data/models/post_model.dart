@@ -17,6 +17,7 @@ class PostModel extends Equatable {
   final String? rate;
   final String? employmentType;
   final String? urlDoc;
+  final bool? paid;
   Location? location;
   String? strLocation;
 
@@ -33,6 +34,7 @@ class PostModel extends Equatable {
     this.rate,
     this.employmentType,
     this.urlDoc,
+    this.paid,
     this.location,
     this.strLocation
   });
@@ -50,7 +52,8 @@ class PostModel extends Equatable {
       'isConfirmed': isConfirmed,
       'rate': rate,
       'employmentType': employmentType,
-      'urlDoc': urlDoc
+      'urlDoc': urlDoc,
+      "paid": paid
     };
   }
 

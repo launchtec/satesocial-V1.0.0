@@ -63,6 +63,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> updateUserBuyMatch({required String userId, required bool buyMatch}) async {
+    return firestoreDataSource.updateUserBuyMatch(userId, buyMatch);
+  }
+
+  @override
   Future<void> updateUserAvatar({required String userId, required AvatarUser avatarUser}) async {
     return firestoreDataSource.updateUserAvatar(userId, avatarUser);
   }

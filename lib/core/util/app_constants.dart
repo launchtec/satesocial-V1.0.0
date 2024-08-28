@@ -7,6 +7,8 @@ class AppConstants {
   static const double appVersion = 1.0;
   static const String termOfUseLink = 'https://satesocial.com/sate-social-terms-of-use/';
   static const String privacyPolicyLink = 'https://satesocial.com/sate-social-privacy-policy/';
+  static const String gigProductId = 'gig_post';
+  static const String matchProductId = 'match_form';
 
   // Sign Up constants
   static const List<String> genderList = ['Male', 'Female', 'Non Binary'];

@@ -35,6 +35,10 @@ class FirestoreDataSource {
     return instance.collection('users').doc(userId).update({"lastActivity" : lastActivity});
   }
 
+  Future<void> updateUserBuyMatch(String userId, bool buyMatch) {
+    return instance.collection('users').doc(userId).update({"buyMatch" : buyMatch});
+  }
+
   Future<void> updateUserAvatar(String userId, AvatarUser avatarUser) {
     return instance.collection('users').doc(userId).update(avatarUser.toMap());
   }

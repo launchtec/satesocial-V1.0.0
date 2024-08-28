@@ -20,6 +20,7 @@ class AppUser {
   final double? latitude;
   final double? longitude;
   final String? lastActivity;
+  final bool? buyMatch;
 
   const AppUser({
     required this.id,
@@ -40,7 +41,8 @@ class AppUser {
     this.activeInstagram,
     this.latitude,
     this.longitude,
-    this.lastActivity
+    this.lastActivity,
+    this.buyMatch
   });
 
   factory AppUser.fromSnapshot(DocumentSnapshot snapshot) {
@@ -91,6 +93,9 @@ class AppUser {
       lastActivity: snapshot.data().toString().contains('lastActivity')
           ? snapshot.get('lastActivity')
           : null,
+      buyMatch: snapshot.data().toString().contains('buyMatch')
+          ? snapshot.get('buyMatch')
+          : false,
     );
   }
 
@@ -112,7 +117,8 @@ class AppUser {
       'activeRelationship': activeRelationship,
       'userLinkInstagram': userLinkInstagram,
       'activeInstagram': activeInstagram,
-      'lastActivity': lastActivity
+      'lastActivity': lastActivity,
+      'buyMatch': buyMatch
     };
   }
 
