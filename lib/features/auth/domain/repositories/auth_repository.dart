@@ -16,6 +16,8 @@ abstract class AuthRepository {
 
   Future<void> updateUserActivity({required String userId, required String lastActivity});
 
+  Future<void> updateUserBuyMatch({required String userId, required bool buyMatch});
+
   Future<void> updateUserAvatar({required String userId, required AvatarUser avatarUser});
 
   Future<void> updateUserInfo({required AppUser user});
